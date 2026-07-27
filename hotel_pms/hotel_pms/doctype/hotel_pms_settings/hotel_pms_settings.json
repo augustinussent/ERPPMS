@@ -67,7 +67,21 @@
   "require_captain_confirmation_for_qr",
   "auto_post_laundry_on_return",
   "laundry_overdue_notifications",
-  "enable_guest_experience_booking"
+  "enable_guest_experience_booking",
+  "platform_section",
+  "enable_outbound_webhooks",
+  "webhook_max_attempts",
+  "webhook_initial_backoff_seconds",
+  "api_idempotency_hours",
+  "migration_max_rows",
+  "backup_freshness_hours",
+  "disk_warning_percent",
+  "disk_critical_percent",
+  "platform_log_retention_days",
+  "enable_health_alerts",
+  "last_worker_heartbeat",
+  "health_alert_recipients",
+  "security_runbook_note"
  ],
  "fields": [
   {
@@ -447,6 +461,89 @@
    "label": "Enable Guest Experience Booking",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "platform_section",
+   "label": "Platform Hardening",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_outbound_webhooks",
+   "label": "Enable Outbound Webhooks",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "webhook_max_attempts",
+   "label": "Webhook Max Attempts",
+   "fieldtype": "Int",
+   "default": "8"
+  },
+  {
+   "fieldname": "webhook_initial_backoff_seconds",
+   "label": "Webhook Initial Backoff Seconds",
+   "fieldtype": "Int",
+   "default": "60"
+  },
+  {
+   "fieldname": "api_idempotency_hours",
+   "label": "API Idempotency Retention Hours",
+   "fieldtype": "Int",
+   "default": "24"
+  },
+  {
+   "fieldname": "migration_max_rows",
+   "label": "Migration Maximum Rows per Batch",
+   "fieldtype": "Int",
+   "default": "10000"
+  },
+  {
+   "fieldname": "backup_freshness_hours",
+   "label": "Backup Freshness Warning Hours",
+   "fieldtype": "Int",
+   "default": "24"
+  },
+  {
+   "fieldname": "disk_warning_percent",
+   "label": "Disk Warning %",
+   "fieldtype": "Percent",
+   "default": "80"
+  },
+  {
+   "fieldname": "disk_critical_percent",
+   "label": "Disk Critical %",
+   "fieldtype": "Percent",
+   "default": "90"
+  },
+  {
+   "fieldname": "platform_log_retention_days",
+   "label": "Platform Log Retention Days",
+   "fieldtype": "Int",
+   "default": "90"
+  },
+  {
+   "fieldname": "enable_health_alerts",
+   "label": "Enable Health Alerts",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "health_alert_recipients",
+   "label": "Health Alert Recipients",
+   "fieldtype": "Small Text",
+   "description": "One email address per line."
+  },
+  {
+   "fieldname": "security_runbook_note",
+   "label": "Security Headers and Secrets",
+   "fieldtype": "HTML",
+   "options": "<div class=\"alert alert-warning\">Configure CSP, HSTS, Referrer-Policy, TLS and request limits at the reverse proxy. Rotate API keys and webhook secrets according to the security runbook.</div>"
+  },
+  {
+   "fieldname": "last_worker_heartbeat",
+   "label": "Last Worker Heartbeat",
+   "fieldtype": "Datetime",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

@@ -12,11 +12,15 @@ def infer_reservation_from_references(doc):
                 doc.db_set("custom_hotel_reservation",reservation,update_modified=False); doc.custom_hotel_reservation=reservation; return
 
 def on_submit(doc, method=None):
+    from hotel_pms.webhooks import emit_document_event
+    emit_document_event(doc, method or "on_submit")
     infer_reservation_from_references(doc)
     on_reservation_payment_change(doc, method)
     on_cashier_payment_change(doc, method)
 
 def on_cancel(doc, method=None):
+    from hotel_pms.webhooks import emit_document_event
+    emit_document_event(doc, method or "on_cancel")
     infer_reservation_from_references(doc)
     on_reservation_payment_change(doc, method)
     on_cashier_payment_change(doc, method)

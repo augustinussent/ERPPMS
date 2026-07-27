@@ -306,6 +306,10 @@
    "role": "Guest Services",
    "read": 1,
    "report": 1
+  },
+  {
+   "role": "Hotel API User",
+   "read": 1
   }
  ],
  "sort_field": "modified",

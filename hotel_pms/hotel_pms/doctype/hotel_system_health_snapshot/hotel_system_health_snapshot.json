@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:HHS-.YYYY.-.#####",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "captured_at",
+  "overall_status",
+  "database_status",
+  "scheduler_status",
+  "queue_status",
+  "websocket_status",
+  "disk_used_percent",
+  "disk_free_gb",
+  "latest_backup_at",
+  "backup_age_hours",
+  "failed_sync_count",
+  "dead_webhook_count",
+  "error_log_count_24h",
+  "details_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "captured_at",
+   "label": "Captured At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "overall_status",
+   "label": "Overall Status",
+   "fieldtype": "Select",
+   "options": "Healthy\nWarning\nCritical",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "database_status",
+   "label": "Database",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "scheduler_status",
+   "label": "Scheduler",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "queue_status",
+   "label": "Queues",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "websocket_status",
+   "label": "Websocket",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "disk_used_percent",
+   "label": "Disk Used %",
+   "fieldtype": "Percent",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disk_free_gb",
+   "label": "Disk Free GB",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "latest_backup_at",
+   "label": "Latest Backup At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "backup_age_hours",
+   "label": "Backup Age Hours",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "failed_sync_count",
+   "label": "Failed Sync Count",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "dead_webhook_count",
+   "label": "Dead Webhook Count",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "error_log_count_24h",
+   "label": "Error Logs 24h",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "details_json",
+   "label": "Details",
+   "fieldtype": "Code",
+   "options": "JSON"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel System Health Snapshot",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "captured_at"
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+- Multi-property access control and property switcher.
+- Resumable onboarding and configuration export.
+- CSV migration dry run, commit, audit, and safe rollback.
+- Versioned API v1, OpenAPI, Postman, idempotency, and channel adapter boundary.
+- HMAC webhook queue with retry and dead-letter replay.
+- Health snapshots, disk/backup/sync monitoring, and backup checksum verification.
+- CI, bench-test and Playwright scaffolding, plus security runbook.
+
 ## 0.8.0 - 2026-07-21
 
 - Added restaurant outlets, dining areas, physical tables, table reservations, table-state management, outlet menu items, and a responsive Restaurant POS console.

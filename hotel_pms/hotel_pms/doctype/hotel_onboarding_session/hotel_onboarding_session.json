@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:idempotency_key",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "session_title",
+  "company",
+  "property",
+  "property_name",
+  "abbreviation",
+  "status",
+  "current_step",
+  "configuration_json",
+  "readiness_json",
+  "plan_json",
+  "applied_steps_json",
+  "last_error",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "session_title",
+   "label": "Session Title",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property_name",
+   "label": "New Property Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "abbreviation",
+   "label": "Abbreviation",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nScanned\nPlanned\nApplying\nCompleted\nFailed",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "current_step",
+   "label": "Current Step",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "configuration_json",
+   "label": "Configuration JSON",
+   "fieldtype": "Code",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "readiness_json",
+   "label": "Readiness Scan",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "plan_json",
+   "label": "Apply Plan",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "applied_steps_json",
+   "label": "Applied Steps",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Last Error",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "reqd": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Onboarding Session",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1,
+   "print": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "session_title"
+}

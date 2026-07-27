@@ -1,0 +1,140 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:unique_key",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "batch",
+  "property",
+  "row_number",
+  "entity_type",
+  "source_key",
+  "action",
+  "target_doctype",
+  "target_name",
+  "status",
+  "data_json",
+  "error_message",
+  "unique_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "batch",
+   "label": "Batch",
+   "fieldtype": "Link",
+   "options": "Hotel Migration Batch",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "row_number",
+   "label": "Row Number",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "entity_type",
+   "label": "Entity Type",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_key",
+   "label": "Source Key",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Select",
+   "options": "Insert\nUpdate\nSkip\nReject\nReview",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "target_doctype",
+   "label": "Target DocType",
+   "fieldtype": "Link",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "target_name",
+   "label": "Target Name",
+   "fieldtype": "Dynamic Link",
+   "options": "target_doctype"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Planned\nImported\nRejected\nRolled Back\nFailed",
+   "default": "Planned",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "data_json",
+   "label": "Normalized Data",
+   "fieldtype": "Code",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "error_message",
+   "label": "Error",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "unique_key",
+   "label": "Unique Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "reqd": 1,
+   "hidden": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Migration Row",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "source_key"
+}

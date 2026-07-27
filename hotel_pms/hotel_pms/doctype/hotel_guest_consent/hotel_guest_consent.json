@@ -9,6 +9,7 @@
   "guest_profile",
   "customer",
   "reservation",
+  "property",
   "consent_type",
   "status",
   "policy_version",
@@ -48,6 +49,14 @@
    "label": "Reservation",
    "fieldtype": "Link",
    "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "consent_type",

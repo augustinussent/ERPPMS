@@ -1,0 +1,2 @@
+source_reference,customer,arrival_date,departure_date,room_type,rate_plan,nightly_rate
+LEG-001,CUST-0001,2026-08-01,2026-08-03,Deluxe,Direct BAR,750000

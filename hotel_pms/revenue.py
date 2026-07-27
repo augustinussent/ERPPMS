@@ -394,7 +394,7 @@ def reserve_voucher_for_reservation(reservation) -> str | None:
     if existing:
         return existing
     doc = frappe.get_doc({
-        "doctype": "Hotel Voucher Redemption", "voucher": reservation.voucher_code.strip().upper(),
+        "doctype": "Hotel Voucher Redemption", "voucher": reservation.voucher_code.strip().upper(), "property": reservation.property,
         "reservation": reservation.name, "customer": reservation.guest,
         "discount_amount": reservation.voucher_discount, "status": "Reserved", "idempotency_key": key,
     })

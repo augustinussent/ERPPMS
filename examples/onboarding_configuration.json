@@ -1,0 +1,12 @@
+{
+  "company": "Example Hotel",
+  "property_name": "Example Property",
+  "abbreviation": "EXP",
+  "create_cost_center": true,
+  "create_warehouse": true,
+  "assign_current_user": true,
+  "room_types": [],
+  "rooms": [],
+  "rate_plans": [],
+  "outlets": []
+}

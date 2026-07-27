@@ -1,0 +1,189 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:idempotency_key",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "batch_title",
+  "property",
+  "source_type",
+  "entity_type",
+  "source_file",
+  "mapping_json",
+  "allow_updates",
+  "status",
+  "total_rows",
+  "insert_count",
+  "update_count",
+  "reject_count",
+  "skip_count",
+  "dry_run_summary",
+  "import_summary",
+  "started_at",
+  "completed_at",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "batch_title",
+   "label": "Batch Title",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_type",
+   "label": "Source Type",
+   "fieldtype": "Select",
+   "options": "eZee\nCloudbeds\nGeneric PMS\nSpreadsheet",
+   "default": "Spreadsheet",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "entity_type",
+   "label": "Entity Type",
+   "fieldtype": "Select",
+   "options": "Customer\nRoom Type\nRoom\nReservation\nRate Calendar\nDeposit Review",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_file",
+   "label": "Source CSV",
+   "fieldtype": "Attach",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mapping_json",
+   "label": "Column Mapping",
+   "fieldtype": "Code",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "allow_updates",
+   "label": "Allow Safe Updates",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nDry Run Complete\nImporting\nCompleted\nCompleted with Errors\nRolled Back\nFailed",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "total_rows",
+   "label": "Total Rows",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "insert_count",
+   "label": "Insert",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "update_count",
+   "label": "Update",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reject_count",
+   "label": "Reject",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "skip_count",
+   "label": "Skip",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dry_run_summary",
+   "label": "Dry Run Summary",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "import_summary",
+   "label": "Import Summary",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "started_at",
+   "label": "Started At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "reqd": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Migration Batch",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1,
+   "print": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "batch_title"
+}

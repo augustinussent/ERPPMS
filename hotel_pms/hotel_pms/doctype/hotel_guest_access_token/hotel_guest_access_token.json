@@ -9,6 +9,7 @@
   "token_hash",
   "purpose",
   "reservation",
+  "property",
   "customer",
   "guest_profile",
   "status",
@@ -54,6 +55,14 @@
    "label": "Reservation",
    "fieldtype": "Link",
    "options": "Hotel Reservation",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "read_only": 1,
    "in_list_view": 1
   },
   {

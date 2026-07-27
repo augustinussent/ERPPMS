@@ -8,6 +8,7 @@
   "naming_series",
   "action",
   "reservation",
+  "property",
   "customer",
   "token_record",
   "source_ip",
@@ -37,6 +38,14 @@
    "label": "Reservation",
    "fieldtype": "Link",
    "options": "Hotel Reservation",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "read_only": 1,
    "in_list_view": 1
   },
   {

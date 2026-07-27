@@ -10,9 +10,10 @@ from hotel_pms.setup_operations import setup_operations
 from hotel_pms.setup_revenue_billing import setup_revenue_billing
 from hotel_pms.setup_guest_facing import setup_guest_facing
 from hotel_pms.setup_services import setup_services
+from hotel_pms.setup_platform import setup_platform
 
 
-ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager", "Restaurant Cashier", "Restaurant Captain", "Kitchen", "Laundry", "Guest Services"]
+ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager", "Restaurant Cashier", "Restaurant Captain", "Kitchen", "Laundry", "Guest Services", "Hotel API User", "Hotel Cross Property Manager"]
 
 
 def before_install() -> None:
@@ -68,3 +69,4 @@ def after_install() -> None:
     setup_revenue_billing()
     setup_guest_facing()
     setup_services()
+    setup_platform()

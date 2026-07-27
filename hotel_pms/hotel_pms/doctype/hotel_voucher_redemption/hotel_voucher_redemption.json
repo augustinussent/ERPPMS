@@ -8,6 +8,7 @@
  "field_order": [
   "naming_series",
   "voucher",
+  "property",
   "reservation",
   "customer",
   "redeemed_at",
@@ -30,6 +31,14 @@
    "fieldtype": "Link",
    "options": "Hotel Voucher",
    "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "read_only": 1,
    "in_list_view": 1
   },
   {

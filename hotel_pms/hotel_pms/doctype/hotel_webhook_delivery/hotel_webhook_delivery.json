@@ -1,0 +1,167 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:idempotency_key",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "subscription",
+  "property",
+  "event_name",
+  "source_doctype",
+  "source_name",
+  "payload_json",
+  "idempotency_key",
+  "status",
+  "attempts",
+  "next_attempt_at",
+  "last_attempt_at",
+  "sent_at",
+  "response_code",
+  "response_excerpt",
+  "last_error",
+  "signature"
+ ],
+ "fields": [
+  {
+   "fieldname": "subscription",
+   "label": "Subscription",
+   "fieldtype": "Link",
+   "options": "Hotel Webhook Subscription",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "event_name",
+   "label": "Event",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_doctype",
+   "label": "Source DocType",
+   "fieldtype": "Link",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "source_name",
+   "label": "Source Name",
+   "fieldtype": "Dynamic Link",
+   "options": "source_doctype"
+  },
+  {
+   "fieldname": "payload_json",
+   "label": "Payload",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "reqd": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nProcessing\nRetry\nSent\nDead Letter\nCancelled",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "attempts",
+   "label": "Attempts",
+   "fieldtype": "Int",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_attempt_at",
+   "label": "Next Attempt At",
+   "fieldtype": "Datetime",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_attempt_at",
+   "label": "Last Attempt At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sent_at",
+   "label": "Sent At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "response_code",
+   "label": "Response Code",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "response_excerpt",
+   "label": "Response Excerpt",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Last Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signature",
+   "label": "Last Signature",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Webhook Delivery",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "event_name"
+}

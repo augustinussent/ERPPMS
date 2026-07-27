@@ -1,0 +1,127 @@
+{
+  "info": {
+    "name": "Hotel PMS API v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://your-site.example"
+    }
+  ],
+  "item": [
+    {
+      "name": "Assigned properties",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.properties",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.properties"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Room-type availability",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.availability",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.availability"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create reservation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Idempotency-Key",
+            "value": "{{$guid}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.create_reservation",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.create_reservation"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Reservation detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.reservation",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.reservation"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Room status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.room_status",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.room_status"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Platform health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/method/hotel_pms.api.v1.health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "hotel_pms.api.v1.health"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+name: Hotel PMS CI
+on:
+  push:
+  pull_request:
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.14'}
+      - run: python ci/run_static_checks.py
+      - run: python ci/run_contract_checks.py
+      - run: python ci/generate_api_docs.py --check
+      - run: python -m pytest -q hotel_pms/tests/test_front_desk_rules.py hotel_pms/tests/test_guest_rules.py hotel_pms/tests/test_operations_rules.py hotel_pms/tests/test_revenue_rules.py hotel_pms/tests/test_services_rules.py hotel_pms/tests/test_platform_rules.py
+  bench-integration:
+    if: vars.RUN_FRAPPE_INTEGRATION == 'true'
+    runs-on: [self-hosted, frappe-v16]
+    steps:
+      - uses: actions/checkout@v4
+      - run: ci/run_bench_tests.sh

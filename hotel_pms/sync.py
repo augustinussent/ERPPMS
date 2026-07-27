@@ -13,6 +13,18 @@ from frappe.utils import now_datetime
 SYNC_FIELD = "custom_hotel_sync_key"
 MAX_SYNC_KEY_LENGTH = 130
 
+def _infer_source_property(source_doctype: str, source_name: str):
+    try:
+        meta = frappe.get_meta(source_doctype)
+        if meta.has_field("property"):
+            return frappe.db.get_value(source_doctype, source_name, "property")
+        if source_doctype == "Hotel Property":
+            return source_name
+    except Exception:
+        return None
+    return None
+
+
 
 def make_sync_key(operation: str, *parts: Any) -> str:
     raw = ":".join([operation, *[str(part or "-") for part in parts]])
@@ -106,6 +118,7 @@ def create_document_once(
                 "idempotency_key": sync_key,
                 "status": "In Progress",
                 "operation": operation,
+                "property": _infer_source_property(source_doctype, source_name),
                 "source_doctype": source_doctype,
                 "source_name": source_name,
                 "target_doctype": target_doctype,

@@ -7,6 +7,7 @@
  "field_order": [
   "naming_series",
   "guest_profile",
+  "property",
   "customer",
   "request_type",
   "status",
@@ -37,6 +38,14 @@
    "fieldtype": "Link",
    "options": "Hotel Guest Profile",
    "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "read_only": 1,
    "in_list_view": 1
   },
   {

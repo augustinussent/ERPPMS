@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:idempotency_key",
+ "creation": "2026-07-22 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "site_name",
+  "backup_path",
+  "backup_created_at",
+  "file_size_mb",
+  "sha256",
+  "verification_status",
+  "verified_at",
+  "restore_drill_at",
+  "restore_site",
+  "rpo_hours",
+  "rto_minutes",
+  "notes",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "site_name",
+   "label": "Site",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "backup_path",
+   "label": "Backup Path",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "backup_created_at",
+   "label": "Backup Created At",
+   "fieldtype": "Datetime",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "file_size_mb",
+   "label": "File Size MB",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "sha256",
+   "label": "SHA-256",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "verification_status",
+   "label": "Verification Status",
+   "fieldtype": "Select",
+   "options": "Pending\nVerified\nFailed\nRestore Drill Passed\nRestore Drill Failed",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "verified_at",
+   "label": "Verified At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "restore_drill_at",
+   "label": "Restore Drill At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "restore_site",
+   "label": "Restore Test Site",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "rpo_hours",
+   "label": "RPO Hours",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "rto_minutes",
+   "label": "RTO Minutes",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "reqd": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-22 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Backup Verification",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "backup_path"
+}

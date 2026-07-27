@@ -45,7 +45,7 @@ def issue_guest_token(*,reservation:str|None=None,customer:str|None=None,purpose
         return {"token_record":existing.name,"raw_token":None,"already_created":True,"expires_at":existing.expires_at}
     raw=secrets.token_urlsafe(32)
     profile=ensure_guest_profile(customer) if customer else None
-    doc=frappe.get_doc({"doctype":"Hotel Guest Access Token","token_hash":_hash(raw),"purpose":purpose,"reservation":reservation,"customer":customer,"guest_profile":profile,"expires_at":now_datetime()+timedelta(days=days),"max_uses":max_uses,"request_key":key})
+    doc=frappe.get_doc({"doctype":"Hotel Guest Access Token","token_hash":_hash(raw),"purpose":purpose,"reservation":reservation,"property":frappe.db.get_value("Hotel Reservation",reservation,"property") if reservation else None,"customer":customer,"guest_profile":profile,"expires_at":now_datetime()+timedelta(days=days),"max_uses":max_uses,"request_key":key})
     doc.insert(ignore_permissions=True)
     if reservation: frappe.db.set_value("Hotel Reservation",reservation,{"guest_portal_status":"Active","guest_profile":profile},update_modified=False)
     return {"token_record":doc.name,"raw_token":raw,"already_created":False,"expires_at":doc.expires_at}
@@ -64,7 +64,7 @@ def validate_guest_token(raw_token:str,purpose:str|None=None,reservation:str|Non
 def _log(action:str,token=None,reservation=None,customer=None,status="Success",details=None,request_key=None):
     key=make_sync_key("GACT",action,reservation or customer,request_key or secrets.token_hex(6))
     if frappe.db.exists("Hotel Guest Action Log",{"request_key":key}): return
-    frappe.get_doc({"doctype":"Hotel Guest Action Log","action":action,"reservation":reservation,"customer":customer,"token_record":getattr(token,"name",None) if token else None,"source_ip":_client_ip(),"user_agent":_user_agent(),"request_key":key,"status":status,"details":details}).insert(ignore_permissions=True)
+    frappe.get_doc({"doctype":"Hotel Guest Action Log","action":action,"reservation":reservation,"property":frappe.db.get_value("Hotel Reservation",reservation,"property") if reservation else None,"customer":customer,"token_record":getattr(token,"name",None) if token else None,"source_ip":_client_ip(),"user_agent":_user_agent(),"request_key":key,"status":status,"details":details}).insert(ignore_permissions=True)
 
 def _settings_for_slug(slug:str|None):
     filters={"enabled":1,"public_booking_enabled":1}
@@ -208,7 +208,7 @@ def create_public_booking(payload)->dict:
 def _record_consent(profile,customer,reservation,consent_type,granted,request_key):
     key=make_sync_key("CONSENT",profile,consent_type,request_key)
     if frappe.db.exists("Hotel Guest Consent",{"idempotency_key":key}):return
-    frappe.get_doc({"doctype":"Hotel Guest Consent","guest_profile":profile,"customer":customer,"reservation":reservation,"consent_type":consent_type,"status":"Granted" if granted else "Revoked","captured_via":"Guest Portal","source_ip":_client_ip(),"user_agent":_user_agent(),"idempotency_key":key}).insert(ignore_permissions=True)
+    frappe.get_doc({"doctype":"Hotel Guest Consent","guest_profile":profile,"customer":customer,"reservation":reservation,"property":frappe.db.get_value("Hotel Reservation",reservation,"property") if reservation else None,"consent_type":consent_type,"status":"Granted" if granted else "Revoked","captured_via":"Guest Portal","source_ip":_client_ip(),"user_agent":_user_agent(),"idempotency_key":key}).insert(ignore_permissions=True)
     if consent_type.startswith("Marketing") or consent_type=="Privacy Notice":
         frappe.db.set_value("Hotel Guest Profile",profile,{"marketing_consent":1 if granted and consent_type.startswith("Marketing") else frappe.db.get_value("Hotel Guest Profile",profile,"marketing_consent"),"last_consent_at":now_datetime()},update_modified=False)
 
@@ -374,7 +374,7 @@ def submit_privacy_request(raw_token:str,request_type:str,details:str|None=None,
     _rate_limit("privacy",5,600); token=validate_guest_token(raw_token,purpose="Privacy Request",consume=True); key=make_sync_key("PRIVREQ",token.customer,request_type,request_key)
     existing=frappe.db.get_value("Hotel Guest Privacy Request",{"idempotency_key":key},"name")
     if existing:return {"privacy_request":existing,"already_created":True}
-    doc=frappe.get_doc({"doctype":"Hotel Guest Privacy Request","guest_profile":token.guest_profile or ensure_guest_profile(token.customer),"customer":token.customer,"request_type":request_type,"request_details":details,"portal_token":token.name,"idempotency_key":key}).insert(ignore_permissions=True)
+    doc=frappe.get_doc({"doctype":"Hotel Guest Privacy Request","guest_profile":token.guest_profile or ensure_guest_profile(token.customer),"customer":token.customer,"request_type":request_type,"request_details":details,"portal_token":token.name,"property":frappe.db.get_value("Hotel Reservation",token.reservation,"property") if token.reservation else None,"idempotency_key":key}).insert(ignore_permissions=True)
     _log("Privacy Request",token=token,customer=token.customer,request_key=key)
     return {"privacy_request":doc.name,"status":doc.status,"eligible_after":doc.eligible_after,"already_created":False}
 

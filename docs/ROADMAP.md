@@ -68,3 +68,7 @@
 - Department UAT is signed by Front Office, Housekeeping, Engineering, Sales/Banquet, Finance, Restaurant, Laundry, and Management
 - Parallel run is completed
 - Operational SOP, training, support, rollback, RPO, and RTO documentation are complete
+
+
+## v0.9.0 Platform Hardening
+Implemented property isolation, onboarding, migration dry run, API governance, webhook queue, observability, backup verification, and CI/security scaffolding. Remaining production gate is v1.0.0 validation on a real bench and operational environment.

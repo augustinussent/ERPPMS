@@ -27,7 +27,7 @@ def get_locked_reservation(name: str):
 
 
 def _require_front_desk_access() -> None:
-    frappe.only_for(["System Manager", "Hotel Manager", "Front Desk", "Night Auditor"])
+    frappe.only_for(["System Manager", "Hotel Manager", "Front Desk", "Night Auditor", "Hotel API User"])
 
 
 def _json_payload(payload: str | dict) -> dict:

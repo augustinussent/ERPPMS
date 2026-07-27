@@ -205,6 +205,10 @@
   },
   {
    "role": "Hotel Manager"
+  },
+  {
+   "role": "Hotel API User",
+   "read": 1
   }
  ],
  "sort_field": "modified",

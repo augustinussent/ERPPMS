@@ -611,6 +611,15 @@
    "role": "Guest Services",
    "read": 1,
    "report": 1
+  },
+  {
+   "role": "Hotel API User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 0,
+   "report": 1
   }
  ],
  "sort_field": "modified",

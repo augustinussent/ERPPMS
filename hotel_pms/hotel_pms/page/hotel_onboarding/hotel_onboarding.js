@@ -1,0 +1,10 @@
+frappe.pages["hotel-onboarding"].on_page_load=function(wrapper){
+ const page=frappe.ui.make_app_page({parent:wrapper,title:__("Hotel Onboarding"),single_column:true});
+ const session=page.add_field({label:__("Session"),fieldtype:"Link",fieldname:"session",options:"Hotel Onboarding Session",change:load});
+ page.set_primary_action(__("New Session"),newSession,'add'); page.add_inner_button(__("Scan"),()=>act('scan')); page.add_inner_button(__("Build Plan"),()=>act('plan')); page.add_inner_button(__("Apply Safely"),()=>act('apply')); page.add_inner_button(__("Export Config"),exportConfig);
+ const body=$(`<div><div class="alert alert-info">${__("The wizard is resumable and uses natural keys. Review the dry-run plan before applying anything.")}</div><pre class="onb-output"></pre></div>`).appendTo(page.main); const out=x=>body.find('.onb-output').text(JSON.stringify(x,null,2));
+ async function load(){if(!session.get_value())return; const r=await frappe.call({method:'hotel_pms.onboarding.get_session',args:{session:session.get_value()}});out(r.message)}
+ function newSession(){const d=new frappe.ui.Dialog({title:__("New Onboarding Session"),fields:[{fieldname:'company',label:__('Company'),fieldtype:'Link',options:'Company',reqd:1},{fieldname:'property_name',label:__('Property Name'),fieldtype:'Data',reqd:1},{fieldname:'abbreviation',label:__('Abbreviation'),fieldtype:'Data',reqd:1}],primary_action_label:__('Create'),primary_action:async v=>{const r=await frappe.call({method:'hotel_pms.onboarding.create_session',args:v,freeze:true});d.hide();session.set_value(r.message.name);load();}});d.show()}
+ async function act(action){if(!session.get_value())return frappe.msgprint(__("Select a session.")); const r=await frappe.call({method:`hotel_pms.onboarding.${action}_session`,args:{session:session.get_value()},freeze:true});out(r.message)}
+ async function exportConfig(){if(!session.get_value())return;const r=await frappe.call({method:'hotel_pms.onboarding.export_configuration',args:{session:session.get_value()}});out(r.message)}
+};

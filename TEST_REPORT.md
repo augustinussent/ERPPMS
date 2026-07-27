@@ -1,136 +1,72 @@
-# Hotel PMS ERPNext v0.8.0 — Test Report
+# Hotel PMS ERPNext v0.9.0 — Test Report
 
-Tanggal pemeriksaan: 21 Juli 2026  
-Scope: static source validation dan pure-rule tests  
-Platform target: Frappe Framework v16 dan ERPNext v16
+## Validation completed in build environment
 
-## Ringkasan hasil
+| Check | Result |
+|---|---:|
+| Python files parsed/compiled | 319 |
+| JavaScript files checked with Node | 53 |
+| JSON files parsed | 129 |
+| DocTypes audited | 100 |
+| Desk pages audited | 13 |
+| Property-scoped operational DocTypes | 63 |
+| API v1 endpoints in generated schema | 6 |
+| Pure business-rule tests passed | 29 |
+| DocType duplicate-field errors | 0 |
+| Field-order contract errors | 0 |
+| Property-scope coverage errors | 0 |
+| OpenAPI/Postman drift errors | 0 |
+| JavaScript syntax errors | 0 |
 
-```text
-Python files compiled              275
-JavaScript files checked            47
-JSON files validated               110
-DocTypes audited                    90
-JS/Python endpoint contracts        62
-Pure-rule tests passed              25
-Audit errors                         0
-Audit warnings                       0
-```
+## Rules tested
 
-## Pemeriksaan yang dijalankan
+- Revenue and cancellation calculations inherited from earlier releases.
+- Housekeeping and service rules inherited from earlier releases.
+- Webhook event-pattern matching.
+- Webhook exponential retry cap.
+- Deterministic request hashing.
+- HMAC signature determinism.
+- Migration natural-key normalization.
+- Property-scope declaration coverage.
+- API documentation generation consistency.
 
-### Python compilation
+## Security checks implemented
 
-```bash
-python -m compileall -q hotel_pms
-```
+- Hashed API idempotency record keys.
+- Server-side property assignment enforcement.
+- Read-only property assignments.
+- API role guard.
+- Mandatory idempotency key for reservation creation.
+- HTTPS-only webhooks.
+- Private, loopback, link-local, reserved, and multicast webhook address rejection.
+- HMAC signature and delivery idempotency header.
+- Guest/privacy operational records receive property references for permission filtering.
+- Onboarding restricted to System Manager.
+- Accounting deposits remain review-only during migration.
 
-Hasil: berhasil tanpa syntax error.
+## Not executed in this build environment
 
-### JavaScript syntax
+The package was not installed into a running Frappe/ERPNext v16 bench here. The following remain mandatory in staging:
 
-```bash
-find hotel_pms -type f -name '*.js' -print0 | xargs -0 -n1 node --check
-```
+- `bench --site <site> migrate` from v0.8.0.
+- MariaDB row-level permission and concurrency tests.
+- ERPNext Company/Cost Center/Warehouse permission interaction.
+- Real worker and scheduler heartbeat.
+- Redis/RQ jobs and websocket availability.
+- Outbound HTTPS webhook delivery.
+- Email health alerts.
+- Real backup location and isolated restore drill.
+- Accounting, stock, tax, POS, and city-ledger reconciliation.
+- Playwright journeys against live Desk and guest pages.
+- Reverse-proxy CSP, HSTS, rate-limit, and upload-limit testing.
 
-Hasil: 47 file lolos.
+## CI status
 
-### Pure-rule tests
+The repository contains:
 
-```bash
-pytest -q hotel_pms/tests
-```
+- Static GitHub Actions job runnable on GitHub-hosted Ubuntu.
+- Conditional bench integration job requiring a self-hosted runner labelled `frappe-v16`.
+- `ci/run_bench_tests.sh` for migrate, Frappe tests, heartbeat, health snapshot, backup, and checksum verification.
+- Playwright scaffold for browser journeys.
 
-Hasil:
-
-```text
-25 passed
-```
-
-Test meliputi aturan front desk, guest security/privacy, housekeeping/maintenance, revenue/tax/rate, restaurant allocation, table state, laundry overdue, dan experience capacity helper.
-
-### JSON validation
-
-Seluruh DocType, Page, Report, Workspace, dan fixture JSON diparsing dengan Python `json.loads`.
-
-Hasil: 110 file valid.
-
-### Application contract audit
-
-Audit internal memeriksa:
-
-- duplicate fieldname;
-- field_order consistency;
-- Link/Dynamic Link/Table options;
-- child DocType controller presence;
-- Python import/module presence;
-- JavaScript call terhadap whitelisted Python method;
-- Hotel PMS Settings field references;
-- route/page/report structure;
-- versioned patch registration.
-
-Hasil:
-
-```json
-{
-  "doctypes": 90,
-  "python_modules": 275,
-  "js_endpoints": 62,
-  "errors": [],
-  "warnings": []
-}
-```
-
-## v0.8.0 invariants yang diperiksa secara source-level
-
-- Restaurant table dan experience capacity memakai database row lock pada controlled create path.
-- Restaurant order mempunyai deterministic request key.
-- QR order token scoped ke satu table dan retry tidak membuat order kedua.
-- Table hanya mempunyai satu active non-billed/non-cancelled order.
-- KOT request key mencakup order, station, dan request.
-- Bill split quantity harus tepat mengalokasikan source order quantity.
-- Bill split tidak dapat melewati source quantity.
-- Direct settlement membuat ERPNext POS Invoice, bukan ledger PMS baru.
-- Room/city posting membuat ERPNext Sales Invoice dan linked operational lines.
-- Restaurant order tidak dapat completed sebelum non-complimentary invoice submitted.
-- Invoice cancellation membuka ulang Restaurant Order billing state.
-- Complimentary creation/change membutuhkan manager authorization.
-- Laundry dan experience folio posting memakai deterministic idempotency key.
-- Shift carry-forward memakai deterministic key.
-- Public image tetap mengikuti global photo policy.
-- Status operasional utama dibuat read-only dan diubah melalui controlled method.
-
-## Artefak lama yang diperbaiki
-
-Dua child DocType lama yang sebelumnya tidak mempunyai controller stub sekarang memiliki controller:
-
-- Hotel Booking Gallery Image;
-- Hotel Cleaning Checklist Template Item.
-
-Audit warning turun menjadi nol.
-
-## Yang belum diuji dalam lingkungan ini
-
-Pemeriksaan ini belum menggantikan staging ERPNext nyata. Hal berikut masih wajib diuji:
-
-1. `bench migrate` dan patch v0.8.0.
-2. ERPNext POS Profile dan POS Opening Entry.
-3. POS Invoice/Sales Invoice submit, cancel, return, tax, GL, dan Stock Ledger.
-4. Payment rows dan Cashier Shift reconciliation.
-5. MariaDB concurrent QR/table/order/split/experience operations.
-6. Redis, worker, scheduler, realtime/socket, dan notifications.
-7. Public QR route melalui reverse proxy dan rate limiting.
-8. Mobile/tablet browser behavior.
-9. KOT thermal printer 80 mm.
-10. Role and property permission matrix.
-11. Room/city posting checkout reconciliation.
-12. Laundry auto-post dan overdue scheduler.
-13. Backup, restore, rollback, and disaster recovery.
-14. End-to-end accounting and inventory reconciliation.
-
-## Go-live verdict
-
-**Static source gate: PASS.**  
-**Production gate: NOT YET PASSED.**
-
-Rilis harus dipasang pada staging ERPNext v16, diuji dengan data dan akun hotel, lalu melewati UAT Restaurant, Kitchen, Front Office, Laundry, Guest Services, Finance, dan Management sebelum produksi.
+A successful static build is not equivalent to production approval. v1.0 requires the real-bench and operational acceptance gates listed in the roadmap.

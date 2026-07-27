@@ -1,0 +1,1 @@
+const {test,expect}=require('@playwright/test'); test('public booking loads',async({page})=>{await page.goto('/hotel-book');await expect(page.locator('body')).toBeVisible();});

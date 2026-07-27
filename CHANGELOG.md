@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.0 - 2026-07-21
+
+- Added a public direct-booking page with property profile, gallery, room-type presentation, live deterministic rates, restrictions, vouchers, and real inventory shared with Front Office and group room blocks.
+- Added duplicate-safe public multi-room booking with database-backed reservation idempotency and server-controlled deposit requirements.
+- Added secure guest portal and self check-in routes using random tokens stored only as SHA-256 hashes, with expiry, usage limits, purpose scope, rate limiting, and append-only action logs.
+- Moved guest tokens from query strings to URL fragments and POST bodies to reduce exposure in browser history, referrers, and access logs.
+- Added guest booking confirmation, cancellation confirmation, invoice/outstanding view, payment-request creation, self check-in, and privacy-request controls.
+- Added Hotel Guest Profile 360 with stay statistics, preferences, complaint/Lost & Found context, consent history, and controlled blacklist status.
+- Added returning-guest resolution through ERPNext Customer and Contact instead of creating a duplicate guest master.
+- Added duplicate-candidate detection and manager-controlled ERPNext Customer merge workflow.
+- Added consent records, retention dates, data-access exports, correction requests, marketing opt-out, and governed anonymization that blocks active stays, receivables, and retention holds.
+- Added controlled warning, review, online block, and full block rules with manager override audit fields.
+- Added public-profile SEO fields, slug validation, public-file image validation, HTML escaping, and a booking-form honeypot.
+- Added booking confirmation Print Format and manager tools for issuing one-time-visible guest portal links.
+- Added daily guest-token and blacklist expiry jobs.
+
 ## 0.6.0 - 2026-07-21
 
 - Added deterministic stay quoting with rate seasons, date-level rate calendar overrides, derived rate plans, floors, and stay/arrival/departure restrictions.

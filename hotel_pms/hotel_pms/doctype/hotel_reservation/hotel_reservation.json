@@ -13,6 +13,11 @@
   "guest_section",
   "guest",
   "guest_contact",
+  "guest_profile",
+  "guest_portal_status",
+  "public_booking_reference",
+  "blacklist_override_by",
+  "blacklist_override_reason",
   "booked_by_contact",
   "communication_contact",
   "billing_customer",
@@ -456,6 +461,39 @@
    "fieldtype": "Link",
    "options": "Hotel Direct Bill Approval",
    "read_only": 1
+  },
+  {
+   "fieldname": "guest_profile",
+   "label": "Guest Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Guest Profile",
+   "read_only": 1
+  },
+  {
+   "fieldname": "guest_portal_status",
+   "label": "Guest Portal Status",
+   "fieldtype": "Select",
+   "options": "Not Issued\nActive\nExpired\nRevoked",
+   "default": "Not Issued",
+   "read_only": 1
+  },
+  {
+   "fieldname": "public_booking_reference",
+   "label": "Public Booking Reference",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "blacklist_override_by",
+   "label": "Blacklist Override By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "blacklist_override_reason",
+   "label": "Blacklist Override Reason",
+   "fieldtype": "Small Text"
   }
  ],
  "index_web_pages_for_search": 1,

@@ -22,7 +22,24 @@
   "default_sales_taxes_template",
   "default_hotel_tax_profile",
   "default_payment_gateway_account",
-  "default_cancellation_policy"
+  "default_cancellation_policy",
+  "public_section",
+  "public_booking_enabled",
+  "public_slug",
+  "public_name",
+  "public_tagline",
+  "public_meta_description",
+  "public_meta_title",
+  "public_description",
+  "public_contact_email",
+  "public_contact_phone",
+  "public_map_url",
+  "public_policies",
+  "public_faq",
+  "public_terms",
+  "public_privacy_notice",
+  "public_hero_image",
+  "public_gallery"
  ],
  "fields": [
   {
@@ -128,6 +145,97 @@
    "label": "Default Payment Gateway Account",
    "fieldtype": "Link",
    "options": "Payment Gateway Account"
+  },
+  {
+   "fieldname": "public_section",
+   "label": "Public Booking Profile",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "public_booking_enabled",
+   "label": "Published in Booking Engine",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "public_slug",
+   "label": "Public Slug",
+   "fieldtype": "Data",
+   "unique": 1,
+   "description": "URL-safe identifier, for example the-batu-hotel."
+  },
+  {
+   "fieldname": "public_name",
+   "label": "Public Property Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "public_tagline",
+   "label": "Public Tagline",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "public_meta_description",
+   "label": "Public SEO Description",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "public_meta_title",
+   "label": "Public SEO Title",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "public_description",
+   "label": "Public Description",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_contact_email",
+   "label": "Public Contact Email",
+   "fieldtype": "Data",
+   "options": "Email"
+  },
+  {
+   "fieldname": "public_contact_phone",
+   "label": "Public Contact Phone",
+   "fieldtype": "Data",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "public_map_url",
+   "label": "Map / Directions URL",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "public_policies",
+   "label": "Public Hotel Policies",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_faq",
+   "label": "Public FAQ",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_terms",
+   "label": "Public Booking Terms",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_privacy_notice",
+   "label": "Public Privacy Notice",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_hero_image",
+   "label": "Public Hero Image",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "public_gallery",
+   "label": "Public Gallery",
+   "fieldtype": "Table",
+   "options": "Hotel Booking Gallery Image"
   }
  ],
  "index_web_pages_for_search": 1,

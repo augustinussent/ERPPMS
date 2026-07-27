@@ -15,7 +15,15 @@
   "housekeeping_minutes",
   "revenue_section",
   "base_rate",
-  "room_revenue_item"
+  "room_revenue_item",
+  "public_section",
+  "public_enabled",
+  "public_title",
+  "public_description",
+  "public_image",
+  "public_amenities",
+  "public_rate_plan",
+  "public_display_order"
  ],
  "fields": [
   {
@@ -80,6 +88,49 @@
    "fieldtype": "Link",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "public_section",
+   "label": "Public Booking Display",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "public_enabled",
+   "label": "Show in Booking Engine",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "public_title",
+   "label": "Public Title",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "public_description",
+   "label": "Public Description",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "public_image",
+   "label": "Public Image",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "public_amenities",
+   "label": "Public Amenities",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "public_rate_plan",
+   "label": "Public Rate Plan",
+   "fieldtype": "Link",
+   "options": "Hotel Rate Plan"
+  },
+  {
+   "fieldname": "public_display_order",
+   "label": "Display Order",
+   "fieldtype": "Int",
+   "default": "0"
   }
  ],
  "index_web_pages_for_search": 1,

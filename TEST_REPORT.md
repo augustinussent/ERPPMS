@@ -1,83 +1,104 @@
-# Hotel PMS v0.6.0 Validation Report
+# Hotel PMS ERPNext v0.7.0 — Test Report
 
-Validation date: 21 July 2026
+Tanggal pemeriksaan: 21 Juli 2026
 
-## Release scope
+## Hasil
 
-Revenue calendar, deterministic quoting, seasons, derived rates, restrictions, rate approvals, vouchers, travel-agent commission, tax/service-charge profile, folio split/transfer/reversal, unified checkout, Payment Request, city ledger/direct bill, cashier shift, and finance reconciliation hooks.
+```text
+Python files parsed/compiled         222
+JavaScript files checked              32
+JSON files validated                  86
+DocTypes structurally audited         72
+Pure-rule tests passed                21
+Potential undefined globals            0
+Duplicate DocType fields               0
+Field-order errors                     0
+Missing Hotel child DocTypes           0
+Missing JavaScript API contracts        0
+Missing Hotel PMS Settings fields       0
+Security invariant errors              0
+ZIP integrity errors                    0
+```
 
-## Static validation completed
+## Pemeriksaan yang dijalankan
 
-| Check | Result |
-|---|---:|
-| Python files compiled | 197 passed |
-| JavaScript files checked with Node | 28 passed |
-| JSON files parsed | 77 passed |
-| DocTypes audited | 64 passed |
-| Duplicate DocType fields | 0 |
-| Field-order mismatches | 0 |
-| Missing non-child permissions | 0 |
-| Invalid child-table references | 0 |
-| JavaScript calls to missing Hotel PMS Python methods | 0 of 39 |
-| Release metadata checks | Passed |
+### Python
 
-## Pure-rule tests
+- `compileall` untuk seluruh source.
+- Symbol-table scan untuk potensi global variable yang tidak didefinisikan.
+- Import/function syntax.
+- Controller and scheduler path presence.
 
-18 tests passed across:
+### JavaScript
 
-- Revenue rules.
-- Derived rates and adjustments.
-- Voucher discounts.
-- Inclusive/exclusive service-charge and tax algebra.
-- Stay restriction validation.
-- Exact folio split conservation.
-- Quote hashing.
-- Front-desk room-night and cancellation calculations.
-- Housekeeping priority, timing, inspection, SLA, and SOP thresholds.
+- `node --check` untuk seluruh file JavaScript.
+- Pencocokan method string UI terhadap fungsi Python yang tersedia.
+- Public-page output escaping.
+- Token fragment/session handling.
 
-## Duplicate-entry controls reviewed
+### JSON dan DocType
 
-- Rate approvals use deterministic idempotency keys.
-- Voucher redemption is unique per reservation and retry-safe.
-- Travel-agent settlement and Purchase Invoice creation use sync keys.
-- Folio transfer and reversal use immutable audit documents and unique request keys.
-- Payment Request creation uses a unique Hotel PMS sync key and ERPNext's native request validation.
-- City-ledger invoice creation uses per-charge deterministic keys.
-- Cashier movements use request-level idempotency keys.
-- Submitted Sales Invoice, Payment Entry, and POS Invoice events reconcile PMS links and totals.
+- Semua JSON dapat diparse.
+- Tidak ada duplicate fieldname.
+- Semua field terdapat pada field_order.
+- Semua Hotel child-table references tersedia.
+- Settings references dari Python tersedia pada Hotel PMS Settings.
 
-## Accounting architecture review
+### Pure-rule tests
 
-The PMS does not create a second general ledger. The following remain authoritative in ERPNext:
+Total 21 test seluruh project, termasuk:
 
-- Sales Invoice and accounts receivable.
-- Purchase Invoice and accounts payable.
-- Payment Entry and cash/bank movement.
-- POS Invoice and posted sales/payment data.
-- Payment Request and gateway status.
-- Sales Taxes and Charges Template and GL tax posting.
-- Customer, Supplier, Item, Cost Center, Account, and Mode of Payment.
+- room-night dan stay calculations;
+- cancellation fee calculations;
+- housekeeping priority, timing, inspection, SLA, dan SOP threshold;
+- revenue rate, voucher, tax, and split conservation rules;
+- email/phone normalization;
+- token expiry/usage rules;
+- blacklist channel behavior;
+- anonymization eligibility.
 
-Hotel folios, city-ledger folios, rate quotes, cashier shifts, and commission settlements are operational control documents linked to those ERPNext records.
+### Security invariants
 
-## Not executed in this environment
+Pemeriksaan memastikan:
 
-The following require a real Frappe/ERPNext v16 staging site:
+- tidak ada public booking deposit yang diambil dari guest payload;
+- tidak ada dokumentasi/code token baru dalam query string;
+- raw token tidak disimpan sebagai token database;
+- public token endpoints menggunakan reservation/customer scope;
+- guest cancellation tidak dapat memproses no-show atau fee waiver;
+- guest action logs bersifat append-only melalui normal permissions;
+- public property/room images harus berupa `/files/` attachments;
+- public text di-escape sebelum masuk DOM;
+- availability publik memakai group room block dan Reservation validation.
 
-1. `bench migrate` and patch execution.
-2. Custom-field creation against the exact ERPNext v16 schema.
-3. Page rendering in Desk and mobile browsers.
-4. Role and User Permission enforcement.
-5. MariaDB concurrent booking, transfer, voucher, and cashier operations.
-6. Sales Invoice, Purchase Invoice, Payment Entry, POS Invoice, and Payment Request submit/cancel lifecycle.
-7. Payment gateway URL creation, callback, duplicate callback, refund, and failure recovery.
-8. ERPNext tax-template calculations against the selected Indonesian configuration.
-9. Advance allocation and invoice outstanding reconciliation.
-10. Cashier POS child-table/account reconciliation on the deployed ERPNext build.
-11. Scheduler and worker execution.
-12. Backup, restore, and upgrade rehearsal.
-13. End-to-end accounting reconciliation and signed UAT.
+### ZIP
 
-## Production recommendation
+- 375 file.
+- `ZipFile.testzip()` tidak menemukan file rusak.
+- SHA-256 dicatat terpisah.
 
-Do not deploy v0.6.0 directly to production. Install it on a staging site, configure accountant-reviewed tax templates and payment accounts, run every UAT scenario in `docs/REVENUE_BILLING_V060.md`, and verify zero unexplained difference between PMS operational totals and ERPNext accounting reports.
+## Belum diuji pada bench nyata
+
+Pengujian berikut wajib dilakukan pada staging ERPNext/Frappe v16:
+
+1. `bench migrate` dan patch v0.7.0.
+2. Website route melalui Nginx/reverse proxy.
+3. MariaDB simultaneous last-room booking.
+4. Group room block concurrency.
+5. Email queue dan fragment links.
+6. Payment Gateway Account dan callback.
+7. Payment Request submit/cancel/retry.
+8. Customer/Contact creation dan duplicate resolution.
+9. Frappe Customer merge pada data nyata.
+10. Customer rename pada naming rule site saat anonymization.
+11. Print/PDF rendering.
+12. Permissions untuk Front Desk, Hotel Manager, Accounts Manager, dan Guest.
+13. Token expiry scheduler dan blacklist expiry.
+14. Backup dan restore.
+15. End-to-end accounting reconciliation.
+16. Browser Android, iOS, desktop, dan accessibility checks.
+17. Load, rate-limit, reverse-proxy, dan penetration testing.
+
+## Kesimpulan
+
+Rilis lolos pemeriksaan source statis dan pure-rule tests. Statusnya adalah **siap untuk deployment staging dan UAT**, bukan langsung production. Klaim produksi sebelum concurrency, payment callback, permission, merge, anonymization, dan restore test selesai akan lebih bersifat optimisme daripada quality assurance.

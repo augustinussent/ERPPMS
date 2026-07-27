@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "guest_profile",
+  "customer",
+  "reservation",
+  "consent_type",
+  "status",
+  "policy_version",
+  "captured_at",
+  "captured_via",
+  "source_ip",
+  "user_agent",
+  "revoked_at",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HCONS-.YYYY.-.#####",
+   "default": "HCONS-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "guest_profile",
+   "label": "Guest Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Guest Profile",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "consent_type",
+   "label": "Consent Type",
+   "fieldtype": "Select",
+   "options": "Privacy Notice\nHotel Terms\nMarketing Email\nMarketing WhatsApp\nID Verification",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Granted\nRevoked",
+   "default": "Granted",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "policy_version",
+   "label": "Policy Version",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "captured_at",
+   "label": "Captured At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "captured_via",
+   "label": "Captured Via",
+   "fieldtype": "Select",
+   "options": "Guest Portal\nFront Desk\nImport\nOther",
+   "default": "Guest Portal"
+  },
+  {
+   "fieldname": "source_ip",
+   "label": "Source IP",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "user_agent",
+   "label": "User Agent",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "revoked_at",
+   "label": "Revoked At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Guest Consent",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "customer",
+ "search_fields": "customer,guest_profile,consent_type"
+}

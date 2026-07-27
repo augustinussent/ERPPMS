@@ -7,6 +7,9 @@ from frappe import _
 from frappe.utils import cint
 
 PHOTO_FIELDS_BY_DOCTYPE = {
+    "Hotel Property": {"public_hero_image"},
+    "Hotel Room Type": {"public_image"},
+    "Hotel Booking Gallery Image": {"image"},
     "Hotel Housekeeping Task": {"before_photo", "after_photo"},
     "Hotel Maintenance Ticket": {"before_photo", "after_photo"},
     # Future modules can use the same global policy without changing the File hook.

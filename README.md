@@ -33,6 +33,9 @@ The PMS and ERPNext share one Frappe site and one database. Hotel documents rema
 - Configurable hotel tax/service-charge profiles mapped to ERPNext tax templates
 - Folio split, transfer, reversal, unified checkout, Payment Request links, and city ledger
 - Cashier shifts, drawer movements, ERPNext cash/POS reconciliation, and variance review
+- Direct booking engine and secure guest portal using hashed expiring tokens
+- Self check-in, guest cancellation, online Payment Request, and booking confirmation
+- Guest Profile 360, consent ledger, duplicate merge workflow, privacy requests, anonymization, and controlled blacklist
 
 ## Important accounting rule
 
@@ -106,7 +109,6 @@ This repository is a serious starter, not a finished replacement for OPERA, eZee
 - OTA/channel-manager rate and inventory distribution
 - Revenue forecasting and automated pricing recommendations
 - Minibar stock issue workflow and physical reconciliation
-- Booking engine, guest portal, and online payment
 - Privacy retention, anonymization, and access-control tests
 - Automated backups, monitoring, restore drills, and disaster recovery
 - Full bench-based unit, integration, concurrency, permission, migration, and user-acceptance tests
@@ -114,3 +116,7 @@ This repository is a serious starter, not a finished replacement for OPERA, eZee
 ## Do not edit ERPNext core
 
 All hotel-specific behavior belongs in this app. Use hooks, custom fields, document events, whitelisted methods, and patches. Core edits make upgrades expensive and turn future maintainers into amateur archaeologists.
+
+
+### Public booking deposit
+The required deposit percentage is configured only in **Hotel PMS Settings → Public Booking Deposit Percent**. The public API never accepts a guest-supplied deposit percentage.

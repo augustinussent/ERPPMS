@@ -16,6 +16,8 @@ class HotelReservation(Document):
         self._validate_dates()
         self._prevent_direct_policy_bypass()
         self._set_defaults()
+        from hotel_pms.guest_portal import validate_reservation_guest_status
+        validate_reservation_guest_status(self)
         self._apply_revenue_quote()
         self._validate_room_rows()
         self._validate_room_availability()
@@ -149,7 +151,7 @@ class HotelReservation(Document):
             return
         if not rows_with_plan:
             return
-        from hotel_pms.revenue import quote_booking
+        from hotel_pms.revenue import _quote_booking_core
         payload = {
             "property": self.property,
             "reservation": self.name if not self.is_new() else None,
@@ -171,7 +173,7 @@ class HotelReservation(Document):
                 for row in self.rooms
             ],
         }
-        quote = quote_booking(payload)
+        quote = _quote_booking_core(payload)
         nights = max((getdate(self.departure_date) - getdate(self.arrival_date)).days, 1)
         for row, room_quote in zip(self.rooms, quote["rooms"]):
             row.quoted_stay_total = room_quote["advertised_total"]

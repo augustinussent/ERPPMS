@@ -1,0 +1,275 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "customer",
+  "primary_contact",
+  "status",
+  "identity_section",
+  "preferred_name",
+  "preferred_language",
+  "nationality",
+  "date_of_birth",
+  "preferred_room_type",
+  "preferred_floor",
+  "bed_preference",
+  "smoking_preference",
+  "dietary_notes",
+  "allergies",
+  "accessibility_notes",
+  "service_notes",
+  "privacy_section",
+  "privacy_status",
+  "retention_until",
+  "marketing_consent",
+  "last_consent_at",
+  "blacklist_status",
+  "blacklist_record",
+  "stats_section",
+  "lifetime_stays",
+  "lifetime_room_nights",
+  "lifetime_revenue",
+  "last_stay_date",
+  "next_stay_date",
+  "last_refreshed_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HGP-.YYYY.-.#####",
+   "default": "HGP-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "ERPNext Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "primary_contact",
+   "label": "Primary Contact",
+   "fieldtype": "Link",
+   "options": "Contact",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Active\nRestricted\nAnonymized",
+   "default": "Active",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "identity_section",
+   "label": "Identity & Preferences",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "preferred_name",
+   "label": "Preferred Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "preferred_language",
+   "label": "Preferred Language",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "nationality",
+   "label": "Nationality",
+   "fieldtype": "Link",
+   "options": "Country"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "label": "Date of Birth",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "preferred_room_type",
+   "label": "Preferred Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type"
+  },
+  {
+   "fieldname": "preferred_floor",
+   "label": "Preferred Floor",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "bed_preference",
+   "label": "Bed Preference",
+   "fieldtype": "Select",
+   "options": "\nKing\nQueen\nTwin\nNo Preference"
+  },
+  {
+   "fieldname": "smoking_preference",
+   "label": "Smoking Preference",
+   "fieldtype": "Select",
+   "options": "\nNon-smoking\nSmoking\nNo Preference"
+  },
+  {
+   "fieldname": "dietary_notes",
+   "label": "Dietary Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "allergies",
+   "label": "Allergies",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "accessibility_notes",
+   "label": "Accessibility Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "service_notes",
+   "label": "Service Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "privacy_section",
+   "label": "Privacy & Risk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "privacy_status",
+   "label": "Privacy Status",
+   "fieldtype": "Select",
+   "options": "Active\nRetention Hold\nPending Anonymization\nAnonymized",
+   "default": "Active"
+  },
+  {
+   "fieldname": "retention_until",
+   "label": "Retention Until",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "marketing_consent",
+   "label": "Marketing Consent",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "last_consent_at",
+   "label": "Last Consent At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "blacklist_status",
+   "label": "Blacklist Status",
+   "fieldtype": "Select",
+   "options": "Clear\nWarning\nReview\nBlocked Online\nBlocked All",
+   "default": "Clear",
+   "read_only": 1
+  },
+  {
+   "fieldname": "blacklist_record",
+   "label": "Active Blacklist Record",
+   "fieldtype": "Link",
+   "options": "Hotel Guest Blacklist",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stats_section",
+   "label": "Stay Statistics",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lifetime_stays",
+   "label": "Lifetime Stays",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lifetime_room_nights",
+   "label": "Lifetime Room Nights",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lifetime_revenue",
+   "label": "Lifetime Revenue",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_stay_date",
+   "label": "Last Stay Date",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_stay_date",
+   "label": "Next Stay Date",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_refreshed_at",
+   "label": "Last Refreshed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Guest Profile",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "customer",
+ "search_fields": "customer,primary_contact,preferred_name"
+}

@@ -14,6 +14,14 @@ frappe.ui.form.on("Hotel Reservation", {
       frm.add_custom_button(__("Extend / Early Departure"), () => stayAmendDialog(frm), __("Stay Changes"));
     }
     if (frm.doc.docstatus === 1 && !["Cancelled", "No Show"].includes(frm.doc.status)) {
+      frm.add_custom_button(__("Issue Guest Portal Link"), async () => {
+        const response = await frappe.call({method:"hotel_pms.guest_portal.issue_portal_link_for_staff",args:{reservation:frm.doc.name,request_key:`STAFF-${Date.now()}`},freeze:true});
+        const token=response.message.raw_token;
+        if (!token) return frappe.msgprint(__("A link already exists, but raw tokens are never stored. Revoke it and issue a new link."));
+        const url=`${window.location.origin}/hotel-guest#token=${encodeURIComponent(token)}`;
+        frappe.msgprint(`<p>${__("Copy this link now. It cannot be recovered later.")}</p><textarea class="form-control" rows="3">${frappe.utils.escape_html(url)}</textarea>`);
+      }, __("Guest"));
+      frm.add_custom_button(__("Guest Profile 360"), () => { frappe.route_options={customer:frm.doc.guest}; frappe.set_route("hotel-guest-profile-360"); }, __("Guest"));
       frm.add_custom_button(__("Registration Card"), async () => {
         const response = await frappe.call({ method:"hotel_pms.front_desk.ensure_guest_registration", args:{reservation:frm.doc.name}, freeze:true });
         frappe.set_route("Form", "Hotel Guest Registration", response.message.registration);

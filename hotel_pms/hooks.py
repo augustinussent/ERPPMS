@@ -55,6 +55,8 @@ scheduler_events = {
         "hotel_pms.reconcile.reconcile_erpnext_links",
         "hotel_pms.revenue.expire_rate_approvals",
         "hotel_pms.revenue.update_travel_agent_settlement_statuses",
+        "hotel_pms.guest_portal.expire_guest_tokens",
+        "hotel_pms.guest_portal.expire_blacklist_records",
     ]
 }
 

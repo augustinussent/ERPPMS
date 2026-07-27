@@ -193,8 +193,7 @@ def _tax_profile(property_name: str, tax_profile: str | None = None) -> dict:
     return doc.as_dict()
 
 
-@frappe.whitelist()
-def quote_stay(
+def _quote_stay_core(
     property: str,
     room_type: str,
     rate_plan: str,
@@ -210,7 +209,6 @@ def quote_stay(
     tax_profile: str | None = None,
     reservation: str | None = None,
 ) -> dict:
-    _require_revenue_read()
     arrival = getdate(arrival_date)
     departure = getdate(departure_date)
     if departure <= arrival:
@@ -310,6 +308,17 @@ def quote_stay(
     }
     payload["quote_hash"] = stable_quote_hash(payload)
     return payload
+
+
+@frappe.whitelist()
+def quote_stay(
+    property: str, room_type: str, rate_plan: str, arrival_date: str, departure_date: str,
+    adults: int = 1, children: int = 0, customer: str | None = None, voucher_code: str | None = None,
+    travel_agent_contract: str | None = None, requested_rate: float | None = None, rate_approval: str | None = None,
+    tax_profile: str | None = None, reservation: str | None = None,
+) -> dict:
+    _require_revenue_read()
+    return _quote_stay_core(property, room_type, rate_plan, arrival_date, departure_date, adults, children, customer, voucher_code, travel_agent_contract, requested_rate, rate_approval, tax_profile, reservation)
 
 
 @frappe.whitelist()
@@ -477,10 +486,8 @@ def create_travel_agent_purchase_invoice(settlement: str) -> dict:
         frappe.db.set_value("Hotel Reservation", row.reservation, "travel_agent_commission_status", "Invoiced")
     return {"purchase_invoice": invoice.name, "already_created": already}
 
-@frappe.whitelist()
-def quote_booking(payload) -> dict:
+def _quote_booking_core(payload) -> dict:
     """Quote multiple room requests and apply one voucher to the booking total."""
-    _require_revenue_read()
     data = _as_dict(payload)
     requests = data.get("room_requests") or []
     if not requests:
@@ -490,7 +497,7 @@ def quote_booking(payload) -> dict:
     subtotal = Decimal("0")
     for request in requests:
         quantity = max(cint(request.get("quantity") or 1), 1)
-        quote = quote_stay(
+        quote = _quote_stay_core(
             property=data["property"], room_type=request["room_type"], rate_plan=request["rate_plan"],
             arrival_date=data["arrival_date"], departure_date=data["departure_date"],
             adults=request.get("adults") or 1, children=request.get("children") or 0,
@@ -562,3 +569,9 @@ def update_travel_agent_settlement_statuses() -> dict:
                 frappe.db.set_value("Hotel Reservation", line, "travel_agent_commission_status", "Paid", update_modified=False)
             updated += 1
     return {"updated": updated}
+
+
+@frappe.whitelist()
+def quote_booking(payload) -> dict:
+    _require_revenue_read()
+    return _quote_booking_core(payload)

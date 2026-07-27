@@ -1,0 +1,29 @@
+{
+  "hotel_pms_settings": {
+    "enable_public_booking": 0,
+    "public_booking_default_status": "Confirmed",
+    "guest_portal_token_days": 30,
+    "enable_guest_cancellation": 1,
+    "enable_guest_self_checkin": 1,
+    "public_booking_horizon_days": 365,
+    "public_booking_max_rooms": 5,
+    "public_booking_deposit_percent": 30,
+    "privacy_retention_days": 1825,
+    "privacy_request_cooling_days": 7,
+    "auto_expire_guest_tokens": 1
+  },
+  "hotel_property": {
+    "public_booking_enabled": 1,
+    "public_slug": "the-batu-hotel",
+    "public_name": "The Batu Hotel & Villas",
+    "public_meta_title": "Book Direct - The Batu Hotel & Villas",
+    "public_meta_description": "Book rooms directly with live availability and hotel rates.",
+    "public_terms": "Configure approved booking terms before enabling public booking.",
+    "public_privacy_notice": "Configure the approved privacy notice before enabling public booking."
+  },
+  "room_type": {
+    "public_enabled": 1,
+    "public_title": "Deluxe Room",
+    "public_rate_plan": "PROPERTY-DELUXE-BAR"
+  }
+}

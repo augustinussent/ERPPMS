@@ -513,6 +513,10 @@ def get_deposit_summary(reservation: str) -> dict:
 @frappe.whitelist()
 def preview_cancellation(reservation: str, transaction_type: str = "Cancellation") -> dict:
     _require_front_desk_access()
+    return preview_cancellation_internal(reservation, transaction_type)
+
+
+def preview_cancellation_internal(reservation: str, transaction_type: str = "Cancellation") -> dict:
     doc = frappe.get_doc("Hotel Reservation", reservation)
     policy = _policy_for_reservation(doc)
     rates = [row.nightly_rate for row in doc.rooms]
@@ -568,12 +572,26 @@ def cancel_reservation(
     waiver_reason: str | None = None,
 ) -> dict:
     _require_front_desk_access()
+    return process_cancellation_internal(reservation, reason, idempotency_key, transaction_type, waive_fee, waiver_reason, guest_authorized=False)
+
+
+def process_cancellation_internal(
+    reservation: str, reason: str, idempotency_key: str, transaction_type: str = "Cancellation",
+    waive_fee: int = 0, waiver_reason: str | None = None, guest_authorized: bool = False,
+) -> dict:
     if transaction_type not in ("Cancellation", "No Show"):
         frappe.throw(_("Transaction type must be Cancellation or No Show."))
     if not reason:
         frappe.throw(_("A cancellation or no-show reason is required."))
     doc = get_locked_reservation(reservation)
-    doc.check_permission("write")
+    if guest_authorized:
+        if transaction_type != "Cancellation":
+            frappe.throw(_("Guest links cannot process no-shows."), frappe.PermissionError)
+        # The caller must first validate a reservation-scoped guest token.
+        # This internal function is intentionally not whitelisted.
+        doc.flags.ignore_permissions = True
+    else:
+        doc.check_permission("write")
     expected = ACTIVE_CANCELLATION_STATUSES if transaction_type == "Cancellation" else ("Tentative", "Confirmed")
     if doc.status not in expected:
         if doc.status in ("Cancelled", "No Show") and doc.cancellation_document:
@@ -584,7 +602,7 @@ def cancel_reservation(
             frappe.throw(_("The no-show cutoff has not been reached. A Hotel Manager is required to override."))
     if cint(waive_fee) and not waiver_reason:
         frappe.throw(_("Waiver reason is required when waiving a fee."))
-    preview = preview_cancellation(doc.name, transaction_type)
+    preview = preview_cancellation_internal(doc.name, transaction_type)
     policy = _policy_for_reservation(doc)
     waive = cint(waive_fee)
     if waive and policy and policy.require_manager_approval_for_waiver:

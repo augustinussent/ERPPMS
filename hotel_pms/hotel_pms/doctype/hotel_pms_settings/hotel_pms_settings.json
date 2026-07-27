@@ -44,6 +44,20 @@
   "allow_manual_rate_without_plan",
   "require_direct_bill_approval",
   "cashier_variance_approval_threshold",
+  "guest_section",
+  "enable_public_booking",
+  "public_booking_default_status",
+  "public_booking_horizon_days",
+  "public_booking_max_rooms",
+  "guest_portal_token_days",
+  "public_booking_deposit_percent",
+  "default_booking_deposit_item",
+  "send_public_booking_email",
+  "enable_guest_cancellation",
+  "enable_guest_self_checkin",
+  "privacy_retention_days",
+  "privacy_request_cooling_days",
+  "auto_expire_guest_tokens",
   "night_audit_section",
   "night_audit_hour",
   "night_audit_minute"
@@ -298,6 +312,93 @@
    "fieldtype": "Link",
    "options": "Item",
    "description": "Non-stock service item used for a negative folio charge when a voucher is applied."
+  },
+  {
+   "fieldname": "guest_section",
+   "label": "Guest-facing & Privacy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_public_booking",
+   "label": "Enable Public Booking Engine",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Keep disabled until public rates, policy text, email, payment gateway, and UAT are complete."
+  },
+  {
+   "fieldname": "public_booking_default_status",
+   "label": "Public Booking Status",
+   "fieldtype": "Select",
+   "options": "Tentative\nConfirmed",
+   "default": "Confirmed"
+  },
+  {
+   "fieldname": "public_booking_horizon_days",
+   "label": "Public Booking Horizon Days",
+   "fieldtype": "Int",
+   "default": "365"
+  },
+  {
+   "fieldname": "public_booking_max_rooms",
+   "label": "Maximum Rooms per Public Booking",
+   "fieldtype": "Int",
+   "default": "5"
+  },
+  {
+   "fieldname": "guest_portal_token_days",
+   "label": "Guest Portal Token Validity Days",
+   "fieldtype": "Int",
+   "default": "30"
+  },
+  {
+   "fieldname": "public_booking_deposit_percent",
+   "label": "Public Booking Deposit Percent",
+   "fieldtype": "Percent",
+   "default": "0",
+   "description": "Server-controlled deposit percentage for public bookings. Guest input is never trusted for this value."
+  },
+  {
+   "fieldname": "default_booking_deposit_item",
+   "label": "Booking Deposit Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "description": "Non-stock service item used for deposit Sales Orders and online payment requests."
+  },
+  {
+   "fieldname": "send_public_booking_email",
+   "label": "Send Public Booking Confirmation Email",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "enable_guest_cancellation",
+   "label": "Allow Guest Cancellation Portal",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_guest_self_checkin",
+   "label": "Allow Guest Self Check-in",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "privacy_retention_days",
+   "label": "Default Guest Data Retention Days",
+   "fieldtype": "Int",
+   "default": "1825"
+  },
+  {
+   "fieldname": "privacy_request_cooling_days",
+   "label": "Privacy Request Cooling Period Days",
+   "fieldtype": "Int",
+   "default": "7"
+  },
+  {
+   "fieldname": "auto_expire_guest_tokens",
+   "label": "Automatically Expire Guest Tokens",
+   "fieldtype": "Check",
+   "default": "1"
   }
  ],
  "index_web_pages_for_search": 1,

@@ -14,6 +14,7 @@ from hotel_pms.setup_platform import setup_platform
 from hotel_pms.setup_production_gate import setup_production_gate
 from hotel_pms.setup_adoption import setup_adoption
 from hotel_pms.setup_fnb_depth import setup_fnb_depth
+from hotel_pms.setup_production_validation import setup_production_validation
 
 
 ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager", "Restaurant Cashier", "Restaurant Captain", "Kitchen", "Laundry", "Guest Services", "Hotel API User", "Hotel Cross Property Manager"]
@@ -76,3 +77,4 @@ def after_install() -> None:
     setup_production_gate()
     setup_adoption()
     setup_fnb_depth()
+    setup_production_validation()

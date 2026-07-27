@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-rc4 - Production Validation Pack
+
+- Added frozen release manifests with normalized source fingerprints, pinned Frappe/ERPNext versions, image digest, artifact checksum, and controlled promotion target.
+- Added immutable blank-install, upgrade, restore, rollback, concurrency, performance, and security rehearsal records.
+- Added parallel-run reconciliation batches with CSV import, tolerances, mandatory metric coverage, and immutable row evidence.
+- Added immutable validation evidence records linked to Production Gate checks.
+- Extended the Production Gate with manifest integrity, exact-artifact rehearsal checks, parallel-run reconciliation, and controlled release promotion.
+- Added standalone RC promotion and parallel-run validation tools without creating any ERPNext financial or stock document.
+- Kept the release as an RC because bench, restore, concurrency, performance, security, and departmental evidence must still be executed in the target environment.
+
 ## 1.0.0-rc3 - F&B Operational Depth
 
 - Added KDS v2 with accept/start, progress, course, allergy, late aging, recall, sound, and realtime updates.

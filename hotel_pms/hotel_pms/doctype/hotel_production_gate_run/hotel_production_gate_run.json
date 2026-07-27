@@ -9,7 +9,14 @@
   "naming_series",
   "property",
   "environment_name",
+  "reconciliation_from_date",
+  "reconciliation_to_date",
   "release_version",
+  "release_manifest",
+  "expected_source_fingerprint",
+  "actual_source_fingerprint",
+  "expected_artifact_sha256",
+  "actual_artifact_sha256",
   "expected_frappe_version",
   "actual_frappe_version",
   "expected_erpnext_version",
@@ -36,7 +43,11 @@
   "go_live_decision",
   "decision_by",
   "decision_at",
-  "decision_notes"
+  "decision_notes",
+  "promotion_section",
+  "promotion_status",
+  "promoted_at",
+  "promoted_by"
  ],
  "fields": [
   {
@@ -231,6 +242,72 @@
   {
    "fieldname": "actual_image_digest",
    "label": "Actual Container Image Digest",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "release_manifest",
+   "label": "Release Manifest",
+   "fieldtype": "Link",
+   "options": "Hotel Release Manifest"
+  },
+  {
+   "fieldname": "expected_source_fingerprint",
+   "label": "Expected Source Fingerprint",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_source_fingerprint",
+   "label": "Actual Source Fingerprint",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reconciliation_from_date",
+   "label": "Reconciliation From Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "reconciliation_to_date",
+   "label": "Reconciliation To Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "promotion_section",
+   "label": "Release Promotion",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "promotion_status",
+   "label": "Promotion Status",
+   "fieldtype": "Select",
+   "options": "Not Eligible\nEligible\nPromotion Prepared\nPromoted",
+   "default": "Not Eligible",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_at",
+   "label": "Promoted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_by",
+   "label": "Promoted By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_artifact_sha256",
+   "label": "Expected Candidate Package SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_artifact_sha256",
+   "label": "Actual Candidate Package SHA-256",
    "fieldtype": "Data",
    "read_only": 1
   }

@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "gate_run",
+  "property",
+  "check_code",
+  "evidence_type",
+  "evidence_section",
+  "evidence_file",
+  "external_url",
+  "description",
+  "checksum_sha256",
+  "metadata_json",
+  "captured_at",
+  "captured_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HVE-.YYYY.-.#####",
+   "default": "HVE-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "gate_run",
+   "label": "Production Gate Run",
+   "fieldtype": "Link",
+   "options": "Hotel Production Gate Run",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "check_code",
+   "label": "Check Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "evidence_type",
+   "label": "Evidence Type",
+   "fieldtype": "Select",
+   "options": "File\nURL\nText\nCommand Output",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "evidence_section",
+   "label": "Immutable Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "evidence_file",
+   "label": "Evidence File",
+   "fieldtype": "Attach",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_url",
+   "label": "External URL",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checksum_sha256",
+   "label": "SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "metadata_json",
+   "label": "Metadata JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "captured_at",
+   "label": "Captured At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "captured_by",
+   "label": "Captured By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Validation Evidence",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "check_code"
+}

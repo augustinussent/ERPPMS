@@ -74,3 +74,7 @@ def hotel_channel_connection_query(user=None): return permission_query("Hotel Ch
 def hotel_guest_message_query(user=None): return permission_query("Hotel Guest Message",user)
 
 def hotel_menu_import_batch_query(user=None): return permission_query("Hotel Menu Import Batch",user)
+
+def hotel_rehearsal_run_query(user=None): return permission_query("Hotel Rehearsal Run",user)
+def hotel_parallel_run_batch_query(user=None): return permission_query("Hotel Parallel Run Batch",user)
+def hotel_validation_evidence_query(user=None): return permission_query("Hotel Validation Evidence",user)

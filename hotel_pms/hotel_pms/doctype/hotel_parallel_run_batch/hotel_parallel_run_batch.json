@@ -1,0 +1,211 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "source_system",
+  "from_date",
+  "to_date",
+  "status",
+  "summary_section",
+  "total_rows",
+  "passed_rows",
+  "warning_rows",
+  "failed_rows",
+  "missing_metrics",
+  "default_tolerance",
+  "column_break_summary",
+  "created_at",
+  "created_by",
+  "reviewed_at",
+  "reviewed_by",
+  "evidence_section",
+  "source_file",
+  "evidence_sha256",
+  "notes",
+  "rows"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPR-.YYYY.-.#####",
+   "default": "HPR-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_system",
+   "label": "Legacy / Comparison System",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "from_date",
+   "label": "From Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "label": "To Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Passed\nWarning\nFailed",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "summary_section",
+   "label": "Reconciliation Summary",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total_rows",
+   "label": "Rows",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "passed_rows",
+   "label": "Passed",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "warning_rows",
+   "label": "Warnings",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "failed_rows",
+   "label": "Failed",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "default_tolerance",
+   "label": "Default Tolerance",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_summary",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "created_at",
+   "label": "Created At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_by",
+   "label": "Created By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_at",
+   "label": "Reviewed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reviewed_by",
+   "label": "Reviewed By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_section",
+   "label": "Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "source_file",
+   "label": "Source File",
+   "fieldtype": "Attach",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_sha256",
+   "label": "Evidence SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rows",
+   "label": "Rows",
+   "fieldtype": "Table",
+   "options": "Hotel Parallel Run Row",
+   "read_only": 1
+  },
+  {
+   "fieldname": "missing_metrics",
+   "label": "Missing Mandatory Metrics",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Parallel Run Batch",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "source_system"
+}

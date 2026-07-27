@@ -155,6 +155,12 @@ Rilis ini menambahkan country-pack Indonesia, validasi pemetaan pajak ke ERPNext
 
 ERPNext tetap menjadi satu-satunya sumber transaksi keuangan dan stok. Modul localization, komunikasi, dan dokumen tamu tidak membuat Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, atau Stock Entry. Rincian implementasi terdapat di `docs/ADOPTION_V100_RC2.md`.
 
+## v1.0.0-rc4 Production Validation Pack
+
+RC4 freezes the exact source and container identity in a Release Manifest, records immutable environment rehearsals, imports parallel-run reconciliation evidence, and blocks release promotion until the Production Gate is Approved with a Go decision. The module is evidence-only: it does not create Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, or Stock Entry documents.
+
+Operational page: `/app/hotel-production-gate`.
+
 ## v1.0.0-rc3 F&B Operational Depth
 
 Operational pages:

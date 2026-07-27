@@ -7,6 +7,7 @@ from frappe.utils import add_to_date, cint, flt, getdate, now_datetime, nowdate
 from hotel_pms import __version__
 from hotel_pms.platform import assigned_properties, is_privileged
 from hotel_pms.production_gate_rules import gate_status, money_variance, summarize_checks, threshold_status
+from hotel_pms.production_validation import create_validation_evidence, validation_gate_results
 
 REQUIRED_SIGNOFFS=("Front Office","Housekeeping","Engineering","Sales & Banquet","F&B","Finance","IT","Management")
 SIGNOFF_ROLES={
@@ -21,6 +22,9 @@ SIGNOFF_ROLES={
 }
 CHECKS=(
  ("Platform","APP_VERSION","Release version and installed applications","Automated",1),
+ ("Platform","MANIFEST_INTEGRITY","Frozen release manifest matches installed source and image","Automated",1),
+ ("Platform","BLANK_INSTALL_REHEARSAL","Blank-install rehearsal matches frozen release","Automated",1),
+ ("Platform","UPGRADE_REHEARSAL","Upgrade rehearsal matches frozen release","Automated",1),
  ("Platform","DATABASE","Database connectivity","Automated",1),
  ("Platform","SCHEDULER","Worker and scheduler heartbeat","Automated",1),
  ("Platform","BACKUP_FRESHNESS","Recent backup exists","Automated",1),
@@ -32,17 +36,23 @@ CHECKS=(
  ("Accounting","CASHIER_RECON","Cashier shifts reconciled","Automated",1),
  ("Accounting","ACCOUNTANT_REVIEW","Tax, service charge, and chart mapping reviewed","Manual",1),
  ("Inventory & Operations","STOCK_RECON","Restaurant invoice and stock-ledger reconciliation","Automated",1),
+ ("Inventory & Operations","CONCURRENCY_REHEARSAL","Concurrency rehearsal matches frozen release","Automated",1),
  ("Inventory & Operations","OPERATIONS_UAT","End-to-end departmental operation tests","Manual",1),
  ("Security","PUBLIC_SECURITY","Public feature security prerequisites","Automated",1),
+ ("Security","SECURITY_REHEARSAL","Security rehearsal matches frozen release","Automated",1),
  ("Security","PEN_TEST","Property isolation and application penetration test","Manual",1),
  ("Security","DEPENDENCY_SCAN","Dependency and container vulnerability scan","Manual",1),
  ("Security","SECRET_ROTATION","Secret rotation drill","Manual",1),
+ ("Reliability & DR","RESTORE_REHEARSAL","Restore rehearsal matches frozen release","Automated",1),
+ ("Reliability & DR","ROLLBACK_REHEARSAL","Rollback rehearsal matches frozen release","Automated",1),
  ("Reliability & DR","RESTORE_DRILL","Isolated database and file restore drill","Manual",1),
  ("Reliability & DR","DR_DRILL","Disaster recovery and failover drill","Manual",1),
  ("Reliability & DR","ROLLBACK_DRILL","Release rollback drill","Manual",1),
+ ("Performance","PERFORMANCE_REHEARSAL","Performance rehearsal matches frozen release","Automated",1),
  ("Performance","LOAD_TEST","Peak booking, checkout, and POS load test","Manual",1),
  ("Performance","SLOW_QUERY_REVIEW","Slow query and index review","Manual",1),
- ("Operational Readiness","PARALLEL_RUN","Parallel run completed with reconciled results","Manual",1),
+ ("Operational Readiness","PARALLEL_RECON","Parallel-run batch reconciles without warning or failure","Automated",1),
+ ("Operational Readiness","PARALLEL_RUN","Parallel run reviewed and accepted by departments","Manual",1),
  ("Operational Readiness","TRAINING","Department training completed","Manual",1),
  ("Operational Readiness","SOP_ESCALATION","SOP, support roster, and escalation approved","Manual",1),
  ("Operational Readiness","GO_LIVE_PLAN","Freeze, cutover, rollback, and decision points approved","Manual",1),
@@ -56,12 +66,21 @@ def _validate_property(property_name):
     if property_name and property_name not in assigned_properties():
         frappe.throw(_("Not permitted for this property."), frappe.PermissionError)
 
+def _ensure_gate_open(doc):
+    if (doc.go_live_decision or "Pending") != "Pending":
+        frappe.throw(_("This gate run already has a final decision. Create a new gate run for additional validation."))
+
 def _seed(doc):
-    if not doc.checks:
-        for category,code,title,kind,mandatory in CHECKS:
+    existing_checks={row.check_code:row for row in doc.checks}
+    for category,code,title,kind,mandatory in CHECKS:
+        row=existing_checks.get(code)
+        if not row:
             doc.append("checks",{"category":category,"check_code":code,"title":title,"execution_type":kind,"mandatory":mandatory,"status":"Pending"})
-    if not doc.signoffs:
-        for department in REQUIRED_SIGNOFFS:
+        elif row.status=="Pending":
+            row.category=category; row.title=title; row.execution_type=kind; row.mandatory=mandatory
+    existing_signoffs={row.department for row in doc.signoffs}
+    for department in REQUIRED_SIGNOFFS:
+        if department not in existing_signoffs:
             doc.append("signoffs",{"department":department,"status":"Pending"})
 
 def _check(doc, code, status, measured=None, threshold=None, details=None):
@@ -74,18 +93,23 @@ def _property_filter(alias, property_name):
     return (f" and {alias}.property=%s", [property_name]) if property_name else ("",[])
 
 @frappe.whitelist()
-def create_gate_run(property=None, environment_name="Staging", expected_frappe_version=None, expected_erpnext_version=None, expected_image_digest=None):
+def create_gate_run(property=None, environment_name="Staging", release_manifest=None, reconciliation_from_date=None, reconciliation_to_date=None, expected_frappe_version=None, expected_erpnext_version=None, expected_image_digest=None):
     _require_manager(); _validate_property(property)
     if not property and not is_privileged(): frappe.throw(_("Only System Manager may create a consolidated production gate."),frappe.PermissionError)
+    if not release_manifest: frappe.throw(_("A frozen release manifest is required."))
+    manifest=frappe.get_doc("Hotel Release Manifest",release_manifest)
+    if manifest.status!="Frozen": frappe.throw(_("Release manifest must be frozen before creating a gate run."))
+    if manifest.release_version!=__version__: frappe.throw(_("Release manifest does not match the installed application version."))
     settings=frappe.get_single("Hotel PMS Settings")
-    doc=frappe.get_doc({"doctype":"Hotel Production Gate Run","property":property,"environment_name":environment_name,"release_version":__version__,"expected_frappe_version":expected_frappe_version,"expected_erpnext_version":expected_erpnext_version,"expected_image_digest":expected_image_digest,"target_rpo_minutes":cint(settings.get("production_target_rpo_minutes") or 1440),"target_rto_minutes":cint(settings.get("production_target_rto_minutes") or 240)})
+    doc=frappe.get_doc({"doctype":"Hotel Production Gate Run","property":property,"environment_name":environment_name,"release_version":__version__,"release_manifest":manifest.name,"expected_source_fingerprint":manifest.source_fingerprint,"expected_artifact_sha256":manifest.artifact_sha256,"expected_frappe_version":manifest.frappe_version,"expected_erpnext_version":manifest.erpnext_version,"expected_image_digest":manifest.image_digest,"reconciliation_from_date":reconciliation_from_date,"reconciliation_to_date":reconciliation_to_date,"target_rpo_minutes":cint(settings.get("production_target_rpo_minutes") or 1440),"target_rto_minutes":cint(settings.get("production_target_rto_minutes") or 240)})
     _seed(doc); doc.insert(ignore_permissions=True); return doc.as_dict()
 
 @frappe.whitelist()
 def execute_automated_checks(run_name, from_date=None, to_date=None):
-    _require_manager(); doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property)
+    _require_manager(); doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property); _ensure_gate_open(doc)
     _seed(doc); doc.status="Running"; doc.started_at=doc.started_at or now_datetime()
     settings=frappe.get_single("Hotel PMS Settings"); max_variance=flt(settings.get("production_max_accounting_variance") or 1)
+    from_date=from_date or doc.reconciliation_from_date; to_date=to_date or doc.reconciliation_to_date
     try:
         import frappe as frappe_pkg, erpnext as erpnext_pkg
         apps=frappe.get_installed_apps(); doc.actual_frappe_version=getattr(frappe_pkg,"__version__",""); doc.actual_erpnext_version=getattr(erpnext_pkg,"__version__",""); doc.actual_image_digest=getattr(frappe.conf,"hotel_pms_image_digest",None) or os.getenv("HOTEL_PMS_IMAGE_DIGEST") or ""
@@ -95,6 +119,19 @@ def execute_automated_checks(run_name, from_date=None, to_date=None):
         details={"apps":apps,"frappe":{"expected":doc.expected_frappe_version,"actual":doc.actual_frappe_version},"erpnext":{"expected":doc.expected_erpnext_version,"actual":doc.actual_erpnext_version},"image_digest":{"expected":doc.expected_image_digest,"actual":doc.actual_image_digest}}
         _check(doc,"APP_VERSION","Passed" if required and match else "Failed",__version__,"exact pinned versions and image digest",json.dumps(details))
     except Exception as e:_check(doc,"APP_VERSION","Failed",details=str(e))
+    validation=validation_gate_results(doc)
+    manifest=validation["manifest"]
+    doc.actual_source_fingerprint=(manifest.get("environment") or {}).get("source_fingerprint")
+    doc.actual_artifact_sha256=(manifest.get("environment") or {}).get("artifact_sha256")
+    _check(doc,"MANIFEST_INTEGRITY","Passed" if manifest.get("passed") else "Failed",doc.actual_source_fingerprint,doc.expected_source_fingerprint,json.dumps(manifest,default=str))
+    rehearsal_codes={"Blank Install":"BLANK_INSTALL_REHEARSAL","Upgrade":"UPGRADE_REHEARSAL","Concurrency":"CONCURRENCY_REHEARSAL","Security":"SECURITY_REHEARSAL","Restore":"RESTORE_REHEARSAL","Rollback":"ROLLBACK_REHEARSAL","Performance":"PERFORMANCE_REHEARSAL"}
+    for run_type,code in rehearsal_codes.items():
+        result=validation["rehearsals"].get(run_type) or {}
+        record=result.get("record") or {}
+        _check(doc,code,"Passed" if result.get("passed") else "Failed",record.get("name") or "missing",f"Passed {run_type} for exact source/image",json.dumps(record,default=str))
+    parallel=validation.get("parallel") or {}
+    parallel_status=validation.get("parallel_status")
+    _check(doc,"PARALLEL_RECON","Passed" if parallel_status=="Passed" else ("Warning" if parallel_status=="Warning" else "Failed"),parallel.get("name") or "missing","latest batch Passed with no warnings/failures",json.dumps(parallel,default=str))
     try: frappe.db.sql("select 1"); _check(doc,"DATABASE","Passed","OK","select 1")
     except Exception as e:_check(doc,"DATABASE","Failed",details=str(e))
     heartbeat=settings.get("last_worker_heartbeat"); age=(now_datetime()-frappe.utils.get_datetime(heartbeat)).total_seconds()/60 if heartbeat else 999999
@@ -209,12 +246,13 @@ def public_security_check(property_name=None):
 
 @frappe.whitelist()
 def record_manual_check(run_name,check_code,status,evidence_url=None,details=None,measured_value=None):
-    _require_manager(); doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property)
+    _require_manager(); doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property); _ensure_gate_open(doc)
     if status not in ("Passed","Warning","Failed","Not Applicable"): frappe.throw(_("Invalid status."))
     row=next((x for x in doc.checks if x.check_code==check_code and x.execution_type=="Manual"),None)
     if not row: frappe.throw(_("Manual check not found."))
     if status in ("Passed","Not Applicable") and not (evidence_url or details): frappe.throw(_("Evidence or details are required."))
-    row.status=status; row.evidence_url=evidence_url; row.details=details; row.measured_value=measured_value; row.checked_at=now_datetime(); row.checked_by=frappe.session.user
+    evidence=create_validation_evidence(run_name,check_code,"URL" if evidence_url else "Text",external_url=evidence_url,description=details,metadata_json={"status":status,"measured_value":measured_value})
+    row.status=status; row.evidence_url=f"/app/hotel-validation-evidence/{evidence.name}"; row.details=details; row.measured_value=measured_value; row.checked_at=now_datetime(); row.checked_by=frappe.session.user
     if check_code=="RESTORE_DRILL" and measured_value:
         try:
             doc.measured_rto_minutes=flt(measured_value)
@@ -226,7 +264,7 @@ def record_manual_check(run_name,check_code,status,evidence_url=None,details=Non
 def submit_signoff(run_name,department,status,comments=None):
     roles=set(frappe.get_roles())
     if not is_privileged() and not roles.intersection(SIGNOFF_ROLES.get(department,set())): frappe.throw(_("Your role cannot sign for this department."),frappe.PermissionError)
-    doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property)
+    doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property); _ensure_gate_open(doc)
     row=next((x for x in doc.signoffs if x.department==department),None)
     if not row: frappe.throw(_("Department sign-off not found."))
     if status not in ("Approved","Rejected"): frappe.throw(_("Invalid sign-off status."))
@@ -237,20 +275,31 @@ def submit_signoff(run_name,department,status,comments=None):
 def decide_go_live(run_name,decision,notes=None):
     if not is_privileged(): frappe.throw(_("Only System Manager may make the final go-live decision."),frappe.PermissionError)
     doc=frappe.get_doc("Hotel Production Gate Run",run_name)
+    previous=doc.go_live_decision or "Pending"
+    if decision not in ("Go","No-Go","Rollback"): frappe.throw(_("Invalid decision."))
+    if previous!="Pending" and not (previous=="Go" and decision=="Rollback"):
+        frappe.throw(_("The final decision is immutable. Only a Rollback may follow a Go decision."))
     _update_summary(doc)
     if decision=="Go" and doc.status!="Approved": frappe.throw(_("All mandatory checks and department sign-offs must be approved before Go."))
-    if decision not in ("Go","No-Go","Rollback"): frappe.throw(_("Invalid decision."))
-    doc.go_live_decision=decision; doc.decision_by=frappe.session.user; doc.decision_at=now_datetime(); doc.decision_notes=notes
+    if decision=="Rollback" and previous!="Go": frappe.throw(_("Rollback can only follow a Go decision."))
+    evidence=create_validation_evidence(run_name,"FINAL_DECISION","Text",description=notes or decision,metadata_json={"previous":previous,"decision":decision})
+    doc.go_live_decision=decision; doc.decision_by=frappe.session.user; doc.decision_at=now_datetime(); doc.decision_notes=f"{notes or ''}\nEvidence: {evidence.name}".strip()
+    doc.promotion_status="Eligible" if decision=="Go" and doc.status=="Approved" else "Not Eligible"
+    if decision=="Rollback" and doc.release_manifest:
+        manifest=frappe.get_doc("Hotel Release Manifest",doc.release_manifest)
+        if manifest.status in ("Frozen","Promotion Prepared","Promoted"):
+            manifest.status="Revoked"; manifest.notes="\n".join(filter(None,[manifest.notes,f"Revoked after rollback decision on {doc.name}: {notes or ''}"]))
+            manifest.flags.validation_internal_update=True; manifest.save(ignore_permissions=True)
     doc.completed_at=now_datetime(); doc.flags.production_gate_internal_update=True; doc.save(ignore_permissions=True); return doc.as_dict()
 
 def _update_summary(doc):
-    s=summarize_checks([x.as_dict() for x in doc.checks]); doc.blocker_count=s['blockers']; doc.warning_count=s['warnings']; doc.passed_count=s['passed']; doc.status=gate_status([x.as_dict() for x in doc.checks],[x.as_dict() for x in doc.signoffs])
+    s=summarize_checks([x.as_dict() for x in doc.checks]); doc.blocker_count=s['blockers']; doc.warning_count=s['warnings']; doc.passed_count=s['passed']; doc.status=gate_status([x.as_dict() for x in doc.checks],[x.as_dict() for x in doc.signoffs]); doc.promotion_status=doc.promotion_status if doc.promotion_status in ('Promotion Prepared','Promoted') else ('Eligible' if doc.status=='Approved' and doc.go_live_decision=='Go' else 'Not Eligible')
 
 @frappe.whitelist()
 def get_gate_dashboard(run_name=None):
     _require_manager()
     if not run_name:
-        rows=frappe.get_all("Hotel Production Gate Run",fields=["name","property","environment_name","release_version","status","blocker_count","warning_count","go_live_decision","modified"],order_by="modified desc",limit=20)
+        rows=frappe.get_all("Hotel Production Gate Run",fields=["name","property","environment_name","release_version","release_manifest","status","blocker_count","warning_count","go_live_decision","promotion_status","modified"],order_by="modified desc",limit=20)
         return {"runs":rows}
     doc=frappe.get_doc("Hotel Production Gate Run",run_name); _validate_property(doc.property); return doc.as_dict()
 

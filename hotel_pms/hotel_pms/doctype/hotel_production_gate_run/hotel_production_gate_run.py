@@ -8,7 +8,7 @@ class HotelProductionGateRun(Document):
         old=self.get_doc_before_save()
         if not old:
             return
-        protected=("status","blocker_count","warning_count","passed_count","measured_rpo_minutes","measured_rto_minutes","go_live_decision","decision_by","decision_at","actual_frappe_version","actual_erpnext_version","actual_image_digest")
+        protected=("property","environment_name","release_version","release_manifest","reconciliation_from_date","reconciliation_to_date","expected_source_fingerprint","actual_source_fingerprint","expected_artifact_sha256","actual_artifact_sha256","expected_frappe_version","actual_frappe_version","expected_erpnext_version","actual_erpnext_version","expected_image_digest","actual_image_digest","status","started_at","completed_at","blocker_count","warning_count","passed_count","measured_rpo_minutes","measured_rto_minutes","go_live_decision","decision_by","decision_at","decision_notes","promotion_status","promoted_at","promoted_by")
         if any(self.get(f)!=old.get(f) for f in protected):
             frappe.throw("Production gate results and decision must be changed through controlled actions.",frappe.PermissionError)
         def snapshot(doc,table,fields):

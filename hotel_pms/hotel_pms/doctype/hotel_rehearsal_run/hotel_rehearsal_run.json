@@ -1,0 +1,215 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "run_type",
+  "environment_name",
+  "release_version",
+  "source_version",
+  "status",
+  "timing_section",
+  "started_at",
+  "completed_at",
+  "duration_seconds",
+  "measured_rto_minutes",
+  "column_break_timing",
+  "executed_by",
+  "source_fingerprint",
+  "image_digest",
+  "evidence_section",
+  "command_hash",
+  "result_summary",
+  "evidence_file",
+  "evidence_url",
+  "evidence_sha256",
+  "metadata_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HRH-.YYYY.-.#####",
+   "default": "HRH-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "run_type",
+   "label": "Rehearsal Type",
+   "fieldtype": "Select",
+   "options": "Blank Install\nUpgrade\nRestore\nRollback\nConcurrency\nPerformance\nSecurity",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "environment_name",
+   "label": "Environment",
+   "fieldtype": "Select",
+   "options": "Development\nStaging\nPre-production\nProduction",
+   "default": "Staging",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "release_version",
+   "label": "Target Release",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_version",
+   "label": "Source Version",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Passed\nFailed",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "timing_section",
+   "label": "Execution",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "started_at",
+   "label": "Started At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "duration_seconds",
+   "label": "Duration Seconds",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "measured_rto_minutes",
+   "label": "Measured RTO Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_timing",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "executed_by",
+   "label": "Executed By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_fingerprint",
+   "label": "Source Fingerprint",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "image_digest",
+   "label": "Image Digest",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_section",
+   "label": "Immutable Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "command_hash",
+   "label": "Command SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "result_summary",
+   "label": "Result Summary",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_file",
+   "label": "Evidence File",
+   "fieldtype": "Attach",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_url",
+   "label": "Evidence URL",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_sha256",
+   "label": "Evidence SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "metadata_json",
+   "label": "Metadata JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Rehearsal Run",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "run_type"
+}

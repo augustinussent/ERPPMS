@@ -149,6 +149,9 @@ permission_query_conditions = {
     'Hotel Channel Connection': "hotel_pms.permissions.hotel_channel_connection_query",
     'Hotel Guest Message': "hotel_pms.permissions.hotel_guest_message_query",
     'Hotel Menu Import Batch': "hotel_pms.permissions.hotel_menu_import_batch_query",
+    'Hotel Rehearsal Run': "hotel_pms.permissions.hotel_rehearsal_run_query",
+    'Hotel Parallel Run Batch': "hotel_pms.permissions.hotel_parallel_run_batch_query",
+    'Hotel Validation Evidence': "hotel_pms.permissions.hotel_validation_evidence_query",
 }
 
 has_permission = {
@@ -219,4 +222,7 @@ has_permission = {
     'Hotel Channel Connection': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Guest Message': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Menu Import Batch': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Rehearsal Run': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Parallel Run Batch': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Validation Evidence': "hotel_pms.permissions.property_document_has_permission",
 }

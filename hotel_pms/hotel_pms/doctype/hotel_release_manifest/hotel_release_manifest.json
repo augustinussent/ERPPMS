@@ -1,0 +1,221 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "release_version",
+  "promotion_target_version",
+  "status",
+  "release_section",
+  "source_fingerprint",
+  "artifact_sha256",
+  "package_url",
+  "git_commit",
+  "column_break_release",
+  "frappe_version",
+  "erpnext_version",
+  "image_digest",
+  "created_at",
+  "created_by",
+  "freeze_section",
+  "frozen_at",
+  "frozen_by",
+  "promoted_at",
+  "promoted_by",
+  "promoted_artifact_sha256",
+  "promoted_package_url",
+  "promoted_image_digest",
+  "gate_run",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HRM-.YYYY.-.#####",
+   "default": "HRM-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "release_version",
+   "label": "Release Version",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "promotion_target_version",
+   "label": "Promotion Target Version",
+   "fieldtype": "Data",
+   "default": "1.0.0",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nFrozen\nPromotion Prepared\nPromoted\nRevoked",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "release_section",
+   "label": "Release Identity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "source_fingerprint",
+   "label": "Source Fingerprint SHA-256",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "artifact_sha256",
+   "label": "Package SHA-256",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "package_url",
+   "label": "Package / Artifact URL",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "git_commit",
+   "label": "Git Commit",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "column_break_release",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "frappe_version",
+   "label": "Pinned Frappe Version",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "erpnext_version",
+   "label": "Pinned ERPNext Version",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "image_digest",
+   "label": "Pinned Image Digest",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "created_at",
+   "label": "Created At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "created_by",
+   "label": "Created By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "freeze_section",
+   "label": "Controlled Promotion",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "frozen_at",
+   "label": "Frozen At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "frozen_by",
+   "label": "Frozen By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_at",
+   "label": "Promoted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_by",
+   "label": "Promoted By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gate_run",
+   "label": "Production Gate Run",
+   "fieldtype": "Link",
+   "options": "Hotel Production Gate Run",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Long Text"
+  },
+  {
+   "fieldname": "promoted_artifact_sha256",
+   "label": "Promoted Package SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_package_url",
+   "label": "Promoted Package URL",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "promoted_image_digest",
+   "label": "Promoted Image Digest",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Release Manifest",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "release_version"
+}

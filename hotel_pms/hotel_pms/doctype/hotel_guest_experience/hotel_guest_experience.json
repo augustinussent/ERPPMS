@@ -1,0 +1,165 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:experience_name",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "experience_name",
+  "property",
+  "item_code",
+  "description",
+  "location",
+  "duration_minutes",
+  "capacity",
+  "price",
+  "active",
+  "public_enabled",
+  "advance_booking_hours",
+  "image",
+  "terms"
+ ],
+ "fields": [
+  {
+   "fieldname": "experience_name",
+   "label": "Experience Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_code",
+   "label": "ERPNext Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "duration_minutes",
+   "label": "Duration Minutes",
+   "fieldtype": "Int",
+   "default": "60"
+  },
+  {
+   "fieldname": "capacity",
+   "label": "Capacity per Session",
+   "fieldtype": "Int",
+   "default": "10"
+  },
+  {
+   "fieldname": "price",
+   "label": "Price per Person",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "active",
+   "label": "Active",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "public_enabled",
+   "label": "Visible to Guests",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "advance_booking_hours",
+   "label": "Advance Booking Hours",
+   "fieldtype": "Int",
+   "default": "2"
+  },
+  {
+   "fieldname": "image",
+   "label": "Image",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "terms",
+   "label": "Terms",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Guest Experience",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "experience_name",
+ "search_fields": "property,location"
+}

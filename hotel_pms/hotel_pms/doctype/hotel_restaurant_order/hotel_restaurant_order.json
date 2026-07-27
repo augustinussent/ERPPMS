@@ -1,0 +1,350 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "outlet",
+  "service_type",
+  "status",
+  "source",
+  "guest_section",
+  "table",
+  "reservation",
+  "room",
+  "folio",
+  "customer",
+  "guest_name",
+  "pax",
+  "delivery_address",
+  "items_section",
+  "items",
+  "totals_section",
+  "subtotal",
+  "service_charge_amount",
+  "tax_amount",
+  "grand_total",
+  "tax_profile",
+  "workflow_section",
+  "ordered_at",
+  "confirmed_at",
+  "ready_at",
+  "served_at",
+  "bill_requested_at",
+  "notes",
+  "request_key",
+  "is_complimentary",
+  "complimentary_reason",
+  "authorized_by",
+  "cancel_reason",
+  "pos_invoice_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "RORD-.YYYY.-.#####",
+   "default": "RORD-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "outlet",
+   "label": "Outlet",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "service_type",
+   "label": "Service Type",
+   "fieldtype": "Select",
+   "options": "Dine In\nRoom Service\nTakeaway\nDelivery",
+   "default": "Dine In",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nPending Confirmation\nConfirmed\nIn Kitchen\nReady\nServed\nBill Requested\nBilled\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "source",
+   "label": "Source",
+   "fieldtype": "Select",
+   "options": "Captain\nQR Ordering\nGuest Portal\nFront Desk\nPhone",
+   "default": "Captain"
+  },
+  {
+   "fieldname": "guest_section",
+   "label": "Guest / Table",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "table",
+   "label": "Table",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table"
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Hotel Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "folio",
+   "label": "Hotel Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Folio"
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "guest_name",
+   "label": "Guest Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "pax",
+   "label": "Pax",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "delivery_address",
+   "label": "Delivery Address",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "items_section",
+   "label": "Order Items",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "label": "Items",
+   "fieldtype": "Table",
+   "options": "Hotel Restaurant Order Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "totals_section",
+   "label": "Totals",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "subtotal",
+   "label": "Subtotal",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_charge_amount",
+   "label": "Service Charge",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_amount",
+   "label": "Tax",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "grand_total",
+   "label": "Grand Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_profile",
+   "label": "Hotel Tax Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Tax Profile"
+  },
+  {
+   "fieldname": "workflow_section",
+   "label": "Workflow",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ordered_at",
+   "label": "Ordered At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "confirmed_at",
+   "label": "Confirmed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ready_at",
+   "label": "Ready At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "served_at",
+   "label": "Served At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bill_requested_at",
+   "label": "Bill Requested At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Order Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Request Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "is_complimentary",
+   "label": "Complimentary / NC",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "complimentary_reason",
+   "label": "Complimentary Reason",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:doc.is_complimentary"
+  },
+  {
+   "fieldname": "authorized_by",
+   "label": "Authorized By",
+   "fieldtype": "Link",
+   "options": "User",
+   "depends_on": "eval:doc.is_complimentary"
+  },
+  {
+   "fieldname": "cancel_reason",
+   "label": "Cancellation Reason",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "pos_invoice_count",
+   "label": "ERPNext Invoices",
+   "fieldtype": "Int",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Restaurant Order",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Kitchen",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "guest_name",
+ "search_fields": "outlet,table,reservation,room,status"
+}

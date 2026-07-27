@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.0 - 2026-07-21
+
+- Added restaurant outlets, dining areas, physical tables, table reservations, table-state management, outlet menu items, and a responsive Restaurant POS console.
+- Added duplicate-safe restaurant orders for dine-in, room service, takeaway, delivery, and public QR ordering.
+- Added captain confirmation for QR orders, daily KOT numbering per outlet, kitchen-station routing, thermal KOT print format, Kitchen Display System, and per-item preparation states.
+- Added controlled bill request, exact quantity-conserving item splits, equal direct-payment splits, and deterministic split invoice creation.
+- Added draft ERPNext POS Invoice creation for cash/card/UPI and draft Sales Invoice creation for room or city-ledger posting.
+- Added invoice submit/cancel synchronization so restaurant orders cannot be completed without submitted ERPNext documents and cancelled invoices reopen the billing workflow.
+- Added manager-governed complimentary orders that do not create revenue documents.
+- Added public table QR menus with token-scoped access, request throttling, idempotency keys, captain confirmation, active-table locking, and public-image controls.
+- Added guest laundry rate cards, guest/self-service requests, pickup/count/process/ready/return workflow, promised-ready tracking, overdue monitoring, printable dockets, and duplicate-safe folio posting.
+- Added guest experiences with capacity checks, guest-portal booking, staff confirmation, and duplicate-safe folio posting.
+- Added cross-department shift handover with submission, acknowledgment, close, and carry-forward of open items.
+- Added Restaurant Sales and Laundry Performance reports plus restaurant, kitchen, laundry, and handover operational pages.
+- Extended the global photo policy to restaurant menu and guest-experience images.
+- Added service-operation roles, ERPNext POS/Sales Invoice linkage fields, setup fixtures, examples, pure-rule tests, and v0.8 implementation documentation.
+
 ## 0.7.0 - 2026-07-21
 
 - Added a public direct-booking page with property profile, gallery, room-type presentation, live deterministic rates, restrictions, vouchers, and real inventory shared with Front Office and group room blocks.

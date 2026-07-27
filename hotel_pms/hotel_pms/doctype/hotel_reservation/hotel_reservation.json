@@ -591,6 +591,26 @@
    "read": 1,
    "write": 1,
    "report": 1
+  },
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Laundry",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",

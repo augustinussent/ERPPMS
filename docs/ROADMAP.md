@@ -30,31 +30,41 @@
 - City ledger, direct-bill credit governance, and outstanding report
 - Cashier shift, drawer movement, reconciliation, variance review, and reports
 
-## Next release: v0.7.0 Guest-facing
+## Completed guest-facing release: v0.7.0
 
-- Direct booking engine
-- Guest portal and secure self check-in
-- Online payment and confirmation/cancellation portal
-- Guest profile 360, duplicate merge, privacy retention, and anonymization
+- Direct booking engine using the same inventory and pricing rules as Front Office
+- Secure guest portal, self check-in, payment request, booking/cancellation confirmation, and privacy requests
+- Guest Profile 360, duplicate merge, consent, retention, anonymization, and controlled blacklist
 
-## v0.8.0 Restaurant and Guest Services
+## Completed restaurant and guest-services release: v0.8.0
 
-- Restaurant table map, KOT, kitchen display, split bills, QR ordering, and room service
-- Guest laundry and experiences
+- Restaurant outlets, dining areas, tables, reservations, operational table states, and mobile-friendly POS console
+- Restaurant orders, captain confirmation, KOT routing, kitchen display, bill request, quantity split, and ERPNext invoice creation
+- Public table QR menu and ordering with captain confirmation and transaction locking
+- Room service and room/city-ledger posting without duplicate revenue
+- Guest laundry workflow, promised-ready SLA, docket, guest request, and folio posting
+- Guest experiences with capacity control and folio posting
+- Cross-department shift handover and carry-forward
 
-## v0.9.0 Platform hardening
+## Next release: v0.9.0 Platform hardening
 
-- Multi-property user scoping and consolidated dashboard
-- Onboarding wizard and migration importers
-- Versioned REST API, Postman/OpenAPI documentation, webhooks, and retry queues
-- Full automated unit, integration, concurrency, permission, migration, and end-to-end test suite
+- Multi-property user scoping, property switcher, and consolidated manager dashboard
+- Setup/onboarding wizard and guided master-data validation
+- CSV migration wizard with mapping, dry run, duplicate detection, rollback batch, and source presets
+- Versioned REST API, OpenAPI/Postman documentation, webhook signature, outbound queue, retry, and dead-letter handling
+- Full bench-based unit, integration, accounting, concurrency, permission, migration, browser, and end-to-end tests
+- Observability: error reporting, queue/worker health, disk and database alerts, audit-log review, and backup verification
+- Security hardening, dependency scan, secret rotation, penetration testing, and privacy-access test suite
+- Automated backup, restore verification, disaster-recovery runbook, and measured RPO/RTO
+- Restaurant follow-up: multi-table merge/move, waiting list, stock-aware sellout, return/credit-note workflow, alcohol-aware routing, and offline/retry queue
+- Guest-services follow-up: supplier-cost capture, transport dispatch, spa resource scheduling, and guest acknowledgment for laundry count/return
 
 ## v1.0.0 production gate
 
-- Accounting reconciliation has zero unexplained difference
-- Reservation concurrency and duplicate-entry tests pass
+- Accounting reconciliation has zero unexplained material difference
+- Reservation, restaurant, laundry, payment, and duplicate-entry concurrency tests pass
 - Backup and restore drill passes
-- Role and privacy tests pass
-- Department UAT is signed
+- Role, property-scope, guest-token, and privacy tests pass
+- Department UAT is signed by Front Office, Housekeeping, Engineering, Sales/Banquet, Finance, Restaurant, Laundry, and Management
 - Parallel run is completed
-- Operational SOP and training are complete
+- Operational SOP, training, support, rollback, RPO, and RTO documentation are complete

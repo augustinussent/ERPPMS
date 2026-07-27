@@ -1,0 +1,1 @@
+frappe.ui.form.on('Hotel Kitchen Ticket',{refresh(frm){if(!frm.is_new())frm.add_custom_button(__('Kitchen Display'),()=>frappe.set_route('hotel-kitchen-display'));}});

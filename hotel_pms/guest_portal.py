@@ -437,6 +437,53 @@ def get_privacy_request_result(raw_token:str,request_name:str)->dict:
     return result
 
 
+
+@frappe.whitelist(allow_guest=True, methods=["POST"])
+def guest_request_laundry(raw_token: str, notes: str, request_key: str) -> dict:
+    _rate_limit("guest-laundry", 12, 300)
+    token = validate_guest_token(raw_token, purpose="Guest Portal", consume=True)
+    reservation = frappe.get_doc("Hotel Reservation", token.reservation)
+    if reservation.status != "Checked In":
+        frappe.throw(_("Laundry pickup requests are available during an active stay."))
+    key = make_sync_key("GUEST-LAUNDRY", reservation.name, request_key)
+    existing = frappe.db.get_value("Hotel Laundry Order", {"request_key": key}, "name")
+    if existing:
+        return {"laundry_order": existing, "already_created": True}
+    folio = frappe.db.get_value("Hotel Folio", {"reservation": reservation.name}, "name")
+    room = reservation.rooms[0].room if reservation.rooms else None
+    doc = frappe.get_doc({"doctype":"Hotel Laundry Order","property":reservation.property,"reservation":reservation.name,"room":room,"folio":folio,"customer":reservation.guest,"order_type":"Guest","source":"Guest Portal","status":"Requested","notes":_plain(notes),"request_key":key})
+    doc.insert(ignore_permissions=True)
+    _log("Laundry Pickup Requested", token, reservation.name, reservation.guest, details=doc.name, request_key=request_key)
+    return {"laundry_order": doc.name, "already_created": False}
+
+
+@frappe.whitelist(allow_guest=True, methods=["POST"])
+def guest_list_experiences(raw_token: str) -> dict:
+    _rate_limit("guest-experience-list", 30, 60)
+    token = validate_guest_token(raw_token, purpose="Guest Portal", consume=False)
+    reservation = frappe.get_doc("Hotel Reservation", token.reservation)
+    if not cint(frappe.db.get_single_value("Hotel PMS Settings", "enable_guest_experience_booking")):
+        return {"experiences": []}
+    rows = frappe.get_all("Hotel Guest Experience", filters={"property":reservation.property,"active":1,"public_enabled":1}, fields=["name","experience_name","description","location","duration_minutes","capacity","price","image","terms"], order_by="experience_name")
+    return {"experiences": rows}
+
+
+@frappe.whitelist(allow_guest=True, methods=["POST"])
+def guest_book_experience(raw_token: str, experience: str, scheduled_at: str, participants: int, notes: str | None, request_key: str) -> dict:
+    _rate_limit("guest-experience-book", 12, 300)
+    token = validate_guest_token(raw_token, purpose="Guest Portal", consume=True)
+    reservation = frappe.get_doc("Hotel Reservation", token.reservation)
+    key = make_sync_key("GUEST-EXPERIENCE", reservation.name, experience, scheduled_at, request_key)
+    existing = frappe.db.get_value("Hotel Experience Booking", {"request_key": key}, "name")
+    if existing:
+        return {"experience_booking": existing, "already_created": True}
+    folio = frappe.db.get_value("Hotel Folio", {"reservation": reservation.name}, "name")
+    doc = frappe.get_doc({"doctype":"Hotel Experience Booking","experience":experience,"reservation":reservation.name,"customer":reservation.guest,"participants":participants,"scheduled_at":scheduled_at,"status":"Requested","folio":folio,"source":"Guest Portal","notes":_plain(notes),"request_key":key})
+    doc.insert(ignore_permissions=True)
+    _log("Experience Requested", token, reservation.name, reservation.guest, details=doc.name, request_key=request_key)
+    return {"experience_booking": doc.name, "already_created": False}
+
+
 def expire_guest_tokens():
     if not cint(frappe.db.get_single_value("Hotel PMS Settings","auto_expire_guest_tokens")):return
     names=frappe.get_all("Hotel Guest Access Token",filters={"status":"Active","expires_at":("<",now_datetime())},pluck="name")

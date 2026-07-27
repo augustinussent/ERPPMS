@@ -4,6 +4,8 @@ import frappe
 
 
 def on_submit(doc, method=None) -> None:
+    from hotel_pms.services import sync_restaurant_billing_document
+    sync_restaurant_billing_document(doc, cancelled=False)
     folio = getattr(doc, "custom_hotel_folio", None)
     if folio and frappe.db.exists("Hotel Folio", folio):
         rows = frappe.get_all(
@@ -47,6 +49,8 @@ def on_submit(doc, method=None) -> None:
 
 
 def on_cancel(doc, method=None) -> None:
+    from hotel_pms.services import sync_restaurant_billing_document
+    sync_restaurant_billing_document(doc, cancelled=True)
     folio = getattr(doc, "custom_hotel_folio", None)
     if folio and frappe.db.exists("Hotel Folio", folio):
         rows = frappe.get_all(

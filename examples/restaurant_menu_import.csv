@@ -1,0 +1,3 @@
+outlet,item_code,menu_name,rate,kitchen_station,preparation_minutes,available,allow_qr_ordering
+Main Restaurant,FOOD-NASGOR,Nasi Goreng,65000,Hot Kitchen,15,1,1
+Main Restaurant,BEV-COFFEE,Coffee,30000,Bar,5,1,1

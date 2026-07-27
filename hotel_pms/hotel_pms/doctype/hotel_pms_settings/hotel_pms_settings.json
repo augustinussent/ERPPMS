@@ -60,7 +60,14 @@
   "auto_expire_guest_tokens",
   "night_audit_section",
   "night_audit_hour",
-  "night_audit_minute"
+  "night_audit_minute",
+  "services_section",
+  "default_restaurant_outlet",
+  "enable_public_qr_ordering",
+  "require_captain_confirmation_for_qr",
+  "auto_post_laundry_on_return",
+  "laundry_overdue_notifications",
+  "enable_guest_experience_booking"
  ],
  "fields": [
   {
@@ -399,6 +406,47 @@
    "label": "Automatically Expire Guest Tokens",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "services_section",
+   "label": "Restaurant & Guest Services",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_restaurant_outlet",
+   "label": "Default Restaurant Outlet",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet"
+  },
+  {
+   "fieldname": "enable_public_qr_ordering",
+   "label": "Enable Public QR Ordering",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "require_captain_confirmation_for_qr",
+   "label": "Require Captain Confirmation for QR Orders",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "auto_post_laundry_on_return",
+   "label": "Auto-post Laundry on Return",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "laundry_overdue_notifications",
+   "label": "Laundry Overdue Notifications",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_guest_experience_booking",
+   "label": "Enable Guest Experience Booking",
+   "fieldtype": "Check",
+   "default": "1"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -447,6 +495,31 @@
   {
    "role": "Accounts Manager",
    "read": 1
+  },
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Kitchen",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Laundry",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",

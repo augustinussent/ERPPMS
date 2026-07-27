@@ -1,0 +1,239 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "reservation",
+  "room",
+  "folio",
+  "customer",
+  "order_type",
+  "source",
+  "status",
+  "timing_section",
+  "requested_at",
+  "pickup_at",
+  "promised_ready_at",
+  "ready_at",
+  "returned_at",
+  "overdue",
+  "items_section",
+  "items",
+  "total_amount",
+  "folio_posted",
+  "notes",
+  "request_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "LND-.YYYY.-.#####",
+   "default": "LND-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Hotel Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "folio",
+   "label": "Hotel Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Folio"
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "order_type",
+   "label": "Order Type",
+   "fieldtype": "Select",
+   "options": "Guest\nHouse\nComplimentary",
+   "default": "Guest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "source",
+   "label": "Source",
+   "fieldtype": "Select",
+   "options": "Laundry Desk\nGuest Portal\nFront Desk\nHousekeeping",
+   "default": "Laundry Desk"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Requested\nPickup Scheduled\nPicked Up\nCounted\nIn Process\nReady\nReturned\nBilled\nCancelled",
+   "default": "Requested",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "timing_section",
+   "label": "Timing",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "requested_at",
+   "label": "Requested At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pickup_at",
+   "label": "Pickup At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "promised_ready_at",
+   "label": "Promised Ready At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "ready_at",
+   "label": "Ready At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "returned_at",
+   "label": "Returned At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overdue",
+   "label": "Overdue",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "items_section",
+   "label": "Items",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "label": "Laundry Items",
+   "fieldtype": "Table",
+   "options": "Hotel Laundry Order Item"
+  },
+  {
+   "fieldname": "total_amount",
+   "label": "Total Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "folio_posted",
+   "label": "Posted to Folio",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Pickup / Guest Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Request Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Laundry Order",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Laundry",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "reservation",
+ "search_fields": "reservation,room,status,customer"
+}

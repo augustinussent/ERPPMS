@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "outlet",
+  "table",
+  "reservation_datetime",
+  "duration_minutes",
+  "pax",
+  "guest_name",
+  "contact_phone",
+  "hotel_reservation",
+  "status",
+  "notes",
+  "request_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "TRES-.YYYY.-.#####",
+   "default": "TRES-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "outlet",
+   "label": "Outlet",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "table",
+   "label": "Table",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation_datetime",
+   "label": "Reservation Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "duration_minutes",
+   "label": "Duration Minutes",
+   "fieldtype": "Int",
+   "default": "120",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pax",
+   "label": "Pax",
+   "fieldtype": "Int",
+   "default": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "guest_name",
+   "label": "Guest Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "contact_phone",
+   "label": "Contact Phone",
+   "fieldtype": "Data",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "hotel_reservation",
+   "label": "Hotel Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Tentative\nConfirmed\nSeated\nCompleted\nNo Show\nCancelled",
+   "default": "Confirmed",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Request Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Table Reservation",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Kitchen",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "guest_name",
+ "search_fields": "outlet,table,contact_phone,status"
+}

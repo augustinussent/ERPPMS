@@ -45,7 +45,7 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas"],
+        "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas", "hotel_pms.services.monitor_guest_services"],
     },
     "daily": [
         "hotel_pms.tasks.create_housekeeping_tasks",

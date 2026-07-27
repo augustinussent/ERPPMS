@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "priority",
+  "subject",
+  "details",
+  "source_doctype",
+  "source_name",
+  "owner_user",
+  "due_at",
+  "status",
+  "carried_to"
+ ],
+ "fields": [
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Critical\nHigh\nMedium\nLow",
+   "default": "Medium",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "subject",
+   "label": "Subject",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "details",
+   "label": "Details",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "source_doctype",
+   "label": "Source DocType",
+   "fieldtype": "Link",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "source_name",
+   "label": "Source Document",
+   "fieldtype": "Dynamic Link",
+   "options": "source_doctype"
+  },
+  {
+   "fieldname": "owner_user",
+   "label": "Owner",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "due_at",
+   "label": "Due At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Open\nMonitoring\nCompleted\nCarried Forward",
+   "default": "Open",
+   "reqd": 1
+  },
+  {
+   "fieldname": "carried_to",
+   "label": "Carried To Handover",
+   "fieldtype": "Link",
+   "options": "Hotel Shift Handover",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Shift Handover Item",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

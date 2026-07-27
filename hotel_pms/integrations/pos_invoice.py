@@ -4,6 +4,8 @@ import frappe
 
 
 def on_submit(doc, method=None) -> None:
+    from hotel_pms.services import sync_restaurant_billing_document
+    sync_restaurant_billing_document(doc, cancelled=False)
     from hotel_pms.billing import on_payment_entry_change as update_cashier
     update_cashier(doc, method)
     """Mirror a submitted POS Invoice into the folio for visibility only.
@@ -42,6 +44,8 @@ def on_submit(doc, method=None) -> None:
 
 
 def on_cancel(doc, method=None) -> None:
+    from hotel_pms.services import sync_restaurant_billing_document
+    sync_restaurant_billing_document(doc, cancelled=True)
     from hotel_pms.billing import on_payment_entry_change as update_cashier
     update_cashier(doc, method)
     folio_name = getattr(doc, "custom_hotel_folio", None)

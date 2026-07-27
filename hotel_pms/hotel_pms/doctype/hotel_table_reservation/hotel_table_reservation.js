@@ -1,0 +1,1 @@
+frappe.ui.form.on('Hotel Table Reservation',{refresh(frm){if(frm.is_new())return;['Confirmed','Seated','Completed','No Show','Cancelled'].forEach(status=>frm.add_custom_button(__(status),()=>frappe.call('hotel_pms.services.update_table_reservation',{reservation:frm.doc.name,status}).then(()=>frm.reload_doc()),__('Status')));}});

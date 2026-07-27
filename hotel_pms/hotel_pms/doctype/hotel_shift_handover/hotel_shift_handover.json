@@ -1,0 +1,223 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "department",
+  "shift_date",
+  "shift_name",
+  "outgoing_user",
+  "incoming_user",
+  "status",
+  "summary",
+  "items",
+  "cashier_shift",
+  "submitted_at",
+  "acknowledged_at",
+  "acknowledged_by",
+  "request_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HND-.YYYY.-.#####",
+   "default": "HND-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "department",
+   "label": "Department",
+   "fieldtype": "Select",
+   "options": "Front Office\nHousekeeping\nEngineering\nF&B\nLaundry\nGuest Services\nManagement",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "shift_date",
+   "label": "Shift Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "shift_name",
+   "label": "Shift",
+   "fieldtype": "Select",
+   "options": "Morning\nAfternoon\nNight\nCustom",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "outgoing_user",
+   "label": "Outgoing User",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "incoming_user",
+   "label": "Incoming User",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nSubmitted\nAcknowledged\nClosed",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "summary",
+   "label": "Shift Summary",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "items",
+   "label": "Handover Items",
+   "fieldtype": "Table",
+   "options": "Hotel Shift Handover Item"
+  },
+  {
+   "fieldname": "cashier_shift",
+   "label": "Cashier Shift",
+   "fieldtype": "Link",
+   "options": "Hotel Cashier Shift"
+  },
+  {
+   "fieldname": "submitted_at",
+   "label": "Submitted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acknowledged_at",
+   "label": "Acknowledged At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acknowledged_by",
+   "label": "Acknowledged By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Request Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Shift Handover",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering Supervisor",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Laundry",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "department",
+ "search_fields": "property,department,shift_name,status"
+}

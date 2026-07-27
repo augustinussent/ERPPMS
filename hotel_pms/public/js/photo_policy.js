@@ -124,3 +124,10 @@ frappe.ui.form.on("Hotel Lost and Found", {
         hotel_pms.photo_policy.apply_child(frm, "custody_logs", ["handover_photo"]);
     },
 });
+
+frappe.ui.form.on("Hotel Outlet Menu Item", {
+    refresh(frm) { hotel_pms.photo_policy.apply(frm, ["image"], null); },
+});
+frappe.ui.form.on("Hotel Guest Experience", {
+    refresh(frm) { hotel_pms.photo_policy.apply(frm, ["image"], null); },
+});

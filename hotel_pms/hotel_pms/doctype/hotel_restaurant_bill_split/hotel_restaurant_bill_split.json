@@ -1,0 +1,203 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "restaurant_order",
+  "split_label",
+  "customer",
+  "settlement_type",
+  "mode_of_payment",
+  "folio",
+  "city_ledger_folio",
+  "status",
+  "lines",
+  "amount",
+  "erpnext_document_type",
+  "erpnext_document",
+  "request_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "RSPLIT-.YYYY.-.#####",
+   "default": "RSPLIT-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "restaurant_order",
+   "label": "Restaurant Order",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Order",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "split_label",
+   "label": "Split Label",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "settlement_type",
+   "label": "Settlement Type",
+   "fieldtype": "Select",
+   "options": "Cash\nCard\nUPI\nRoom Posting\nCity Ledger\nComplimentary",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "label": "Mode of Payment",
+   "fieldtype": "Link",
+   "options": "Mode of Payment"
+  },
+  {
+   "fieldname": "folio",
+   "label": "Hotel Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Folio"
+  },
+  {
+   "fieldname": "city_ledger_folio",
+   "label": "City Ledger Folio",
+   "fieldtype": "Link",
+   "options": "Hotel City Ledger Folio"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nInvoice Draft Created\nSubmitted\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "lines",
+   "label": "Lines",
+   "fieldtype": "Table",
+   "options": "Hotel Restaurant Bill Split Line",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "label": "Amount",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "erpnext_document_type",
+   "label": "ERPNext Document Type",
+   "fieldtype": "Select",
+   "options": "POS Invoice\nSales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "erpnext_document",
+   "label": "ERPNext Document",
+   "fieldtype": "Dynamic Link",
+   "options": "erpnext_document_type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Request Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Restaurant Bill Split",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Kitchen",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "split_label",
+ "search_fields": "restaurant_order,status,customer"
+}

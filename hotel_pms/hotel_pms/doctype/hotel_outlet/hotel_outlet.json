@@ -1,0 +1,245 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:outlet_name",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "outlet_name",
+  "property",
+  "company",
+  "outlet_type",
+  "enabled",
+  "accounting_section",
+  "pos_profile",
+  "warehouse",
+  "cost_center",
+  "income_account",
+  "selling_price_list",
+  "tax_profile",
+  "default_customer",
+  "default_mode_of_payment",
+  "operation_section",
+  "allow_room_posting",
+  "allow_qr_ordering",
+  "public_slug",
+  "opening_time",
+  "closing_time",
+  "daily_kot_date",
+  "daily_kot_counter"
+ ],
+ "fields": [
+  {
+   "fieldname": "outlet_name",
+   "label": "Outlet Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "outlet_type",
+   "label": "Outlet Type",
+   "fieldtype": "Select",
+   "options": "Restaurant\nBar\nCafe\nRoom Service\nLaundry\nGuest Services",
+   "default": "Restaurant",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "accounting_section",
+   "label": "ERPNext Defaults",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "pos_profile",
+   "label": "POS Profile",
+   "fieldtype": "Link",
+   "options": "POS Profile"
+  },
+  {
+   "fieldname": "warehouse",
+   "label": "Warehouse",
+   "fieldtype": "Link",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "cost_center",
+   "label": "Cost Center",
+   "fieldtype": "Link",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "income_account",
+   "label": "Income Account",
+   "fieldtype": "Link",
+   "options": "Account"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "label": "Selling Price List",
+   "fieldtype": "Link",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "tax_profile",
+   "label": "Hotel Tax Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Tax Profile"
+  },
+  {
+   "fieldname": "default_customer",
+   "label": "Default Walk-in Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "default_mode_of_payment",
+   "label": "Default Mode of Payment",
+   "fieldtype": "Link",
+   "options": "Mode of Payment"
+  },
+  {
+   "fieldname": "operation_section",
+   "label": "Operations",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "allow_room_posting",
+   "label": "Allow Room Posting",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "allow_qr_ordering",
+   "label": "Allow QR Ordering",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "public_slug",
+   "label": "Public Slug",
+   "fieldtype": "Data",
+   "unique": 1
+  },
+  {
+   "fieldname": "opening_time",
+   "label": "Opening Time",
+   "fieldtype": "Time"
+  },
+  {
+   "fieldname": "closing_time",
+   "label": "Closing Time",
+   "fieldtype": "Time"
+  },
+  {
+   "fieldname": "daily_kot_date",
+   "label": "KOT Counter Date",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "daily_kot_counter",
+   "label": "KOT Daily Counter",
+   "fieldtype": "Int",
+   "default": "0",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Outlet",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Kitchen",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Laundry",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Captain",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Restaurant Cashier",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "outlet_name",
+ "search_fields": "property,outlet_type"
+}

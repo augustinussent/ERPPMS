@@ -1,0 +1,1 @@
+frappe.ui.form.on('Hotel Restaurant Table',{refresh(frm){if(!frm.is_new()&&frm.doc.qr_token)frm.add_custom_button(__('Copy QR Ordering Link'),()=>frappe.utils.copy_to_clipboard(`${location.origin}/hotel-dine#table=${encodeURIComponent(frm.doc.qr_token)}`));}});

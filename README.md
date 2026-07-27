@@ -108,8 +108,8 @@ This repository is a serious starter, not a finished replacement for OPERA, eZee
 - Accountant-approved Indonesian tax/service-charge setup and regulatory reporting
 - OTA/channel-manager rate and inventory distribution
 - Revenue forecasting and automated pricing recommendations
-- Minibar stock issue workflow and physical reconciliation
-- Privacy retention, anonymization, and access-control tests
+- Minibar and restaurant stock issue workflow with physical reconciliation
+- Property-scope, privacy, and guest-token access-control tests
 - Automated backups, monitoring, restore drills, and disaster recovery
 - Full bench-based unit, integration, concurrency, permission, migration, and user-acceptance tests
 
@@ -120,3 +120,18 @@ All hotel-specific behavior belongs in this app. Use hooks, custom fields, docum
 
 ### Public booking deposit
 The required deposit percentage is configured only in **Hotel PMS Settings → Public Booking Deposit Percent**. The public API never accepts a guest-supplied deposit percentage.
+
+
+## v0.8.0 Restaurant & Guest Services
+
+Operational pages:
+
+```text
+/app/hotel-restaurant-pos
+/app/hotel-kitchen-display
+/app/hotel-laundry-desk
+/app/hotel-shift-handover
+/hotel-dine#table=<qr-token>
+```
+
+The release adds outlet/table operations, KOT and kitchen display, controlled split billing to ERPNext POS/Sales Invoice, QR ordering, room service, laundry, experiences, and shift handover. See `docs/SERVICES_V080.md`.

@@ -1,0 +1,3 @@
+property,item_code,service_name,service_type,rate,turnaround_hours,active
+The Batu Hotel,LAUNDRY-SHIRT,Shirt Wash,Standard,25000,24,1
+The Batu Hotel,LAUNDRY-SHIRT,Shirt Express,Express,40000,8,1

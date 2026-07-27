@@ -8,3 +8,4 @@ hotel_pms.patches.v0_5.setup_operations
 hotel_pms.patches.v0_6.setup_revenue_billing
 
 hotel_pms.patches.v0_7.setup_guest_facing
+hotel_pms.patches.v0_8.setup_services

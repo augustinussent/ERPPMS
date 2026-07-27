@@ -9,7 +9,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-20 00:00:00.000000",
+ "modified": "2026-07-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "owner": "Administrator",
@@ -37,6 +37,8 @@
   "primary_id_type",
   "primary_id_number",
   "id_file",
+  "address_proof_file",
+  "documents_purged_at",
   "verified_by",
   "verified_at",
   "agreement_section",
@@ -161,7 +163,21 @@
    "fieldname": "id_file",
    "label": "ID Image",
    "fieldtype": "Attach Image",
-   "depends_on": "eval:doc.id_retention_mode=='Store Image'"
+   "depends_on": "eval:doc.id_retention_mode!='Do Not Upload'",
+   "read_only": 1
+  },
+  {
+   "fieldname": "address_proof_file",
+   "label": "Address Proof",
+   "fieldtype": "Attach Image",
+   "read_only": 1,
+   "depends_on": "eval:doc.id_retention_mode!='Do Not Upload'"
+  },
+  {
+   "fieldname": "documents_purged_at",
+   "label": "Documents Purged At",
+   "fieldtype": "Datetime",
+   "read_only": 1
   },
   {
    "fieldname": "verified_by",

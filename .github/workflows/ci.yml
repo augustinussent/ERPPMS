@@ -11,9 +11,10 @@ jobs:
         with: {python-version: '3.14'}
       - run: python ci/run_static_checks.py
       - run: python ci/run_contract_checks.py
+      - run: python ci/run_v110_contract_checks.py
       - run: python -m py_compile ci/run_concurrency_gate.py ci/run_performance_gate.py
       - run: python ci/generate_api_docs.py --check
-      - run: python -m pytest -q hotel_pms/tests/test_front_desk_rules.py hotel_pms/tests/test_guest_rules.py hotel_pms/tests/test_operations_rules.py hotel_pms/tests/test_revenue_rules.py hotel_pms/tests/test_services_rules.py hotel_pms/tests/test_platform_rules.py hotel_pms/tests/test_production_gate_rules.py
+      - run: python -m pytest -q hotel_pms/tests/test_front_desk_rules.py hotel_pms/tests/test_guest_rules.py hotel_pms/tests/test_operations_rules.py hotel_pms/tests/test_revenue_rules.py hotel_pms/tests/test_services_rules.py hotel_pms/tests/test_platform_rules.py hotel_pms/tests/test_production_gate_rules.py hotel_pms/tests/test_adoption_v110.py
   bench-integration:
     if: vars.RUN_FRAPPE_INTEGRATION == 'true'
     runs-on: [self-hosted, frappe-v16]

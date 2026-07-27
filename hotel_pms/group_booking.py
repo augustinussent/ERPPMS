@@ -10,6 +10,7 @@ from frappe.exceptions import DuplicateEntryError
 from frappe.utils import cint, flt, get_datetime, get_time, getdate, nowdate
 
 from hotel_pms.sync import create_document_once, make_sync_key
+from hotel_pms.localization.registry import resolve_invoice_tax_context
 
 from hotel_pms.hotel_pms.doctype.hotel_group_booking.hotel_group_booking import (
     get_available_room_type_capacity,
@@ -473,18 +474,23 @@ def create_group_sales_invoices(group_folio: str) -> dict:
     if not uninvoiced:
         frappe.throw(_("No uninvoiced group folio charges are available."))
 
-    by_customer: dict[str, list] = defaultdict(list)
+    by_customer_and_profile: dict[tuple[str, str], list] = defaultdict(list)
+    default_profile = frappe.db.get_value("Hotel Property", folio.property, "default_hotel_tax_profile") or ""
     for charge in uninvoiced:
-        by_customer[charge.billing_customer or folio.billing_customer].append(charge)
+        customer = charge.billing_customer or folio.billing_customer
+        profile = charge.tax_profile or default_profile
+        by_customer_and_profile[(customer, profile)].append(charge)
 
     invoices = []
     reused = []
-    for customer, charges in by_customer.items():
+    for (customer, profile_name), charges in by_customer_and_profile.items():
+        tax_context = resolve_invoice_tax_context(folio.property, [profile_name] if profile_name else [])
         charge_names = sorted(row.name for row in charges)
-        base_key = make_sync_key("SI", "GROUP-FOLIO", folio.name, customer, *charge_names)
+        base_key = make_sync_key("SI", "GROUP-FOLIO", folio.name, customer, profile_name or "NO-TAX-PROFILE", *charge_names)
         payload = {
             "group_folio": folio.name,
             "customer": customer,
+            "tax_profile": tax_context["tax_profile"],
             "charges": [(row.name, row.item_code, row.qty, row.rate) for row in charges],
         }
 
@@ -501,7 +507,7 @@ def create_group_sales_invoices(group_folio: str) -> dict:
                 invoice.custom_hotel_group_folio = folio.name
             if booking.sales_order and invoice.meta.has_field("custom_hotel_group_sales_order"):
                 invoice.custom_hotel_group_sales_order = booking.sales_order
-            _apply_property_taxes(invoice, booking.property)
+            _apply_property_taxes(invoice, booking.property, tax_context["tax_profile"])
             for charge in charges:
                 invoice.append(
                     "items",
@@ -554,8 +560,11 @@ def confirmation_letter_url(group_booking: str, pdf: int = 0) -> dict:
     return {"url": url, "print_format": format_name}
 
 
-def _apply_property_taxes(document, property_name: str) -> None:
-    taxes_template = frappe.db.get_value("Hotel Property", property_name, "default_sales_taxes_template")
+def _apply_property_taxes(document, property_name: str, tax_profile: str | None = None) -> None:
+    context = resolve_invoice_tax_context(property_name, [tax_profile] if tax_profile else [])
+    taxes_template = context["sales_taxes_template"]
+    if document.meta.has_field("custom_hotel_tax_profile"):
+        document.custom_hotel_tax_profile = context["tax_profile"]
     if taxes_template and document.meta.has_field("taxes_and_charges"):
         document.taxes_and_charges = taxes_template
         if hasattr(document, "set_taxes"):

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Hotel PMS API",
-    "version": "0.9.0"
+    "version": "1.1.0"
   },
   "paths": {
     "/api/method/hotel_pms.api.v1.properties": {

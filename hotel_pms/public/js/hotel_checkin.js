@@ -1,21 +1,4 @@
-(()=>{
-  const q=id=>document.getElementById(id);
-  const esc=value=>String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-  function readToken(){
-    const hashToken=new URLSearchParams(location.hash.slice(1)).get('token');
-    if(hashToken){sessionStorage.setItem('hotel_guest_token',hashToken);history.replaceState(null,'',location.pathname)}
-    return hashToken||sessionStorage.getItem('hotel_guest_token')||window.guestToken||'';
-  }
-  const token=readToken();
-  const msg=text=>{q('message').innerHTML=`<div class="hotel-alert">${esc(text)}</div>`};
-  q('submit').onclick=async()=>{
-    if(!token)return msg('Guest access token is missing.');
-    const payload={vehicle_number:q('vehicle').value,primary_id_type:q('id-type').value,primary_id_number:q('id-number').value,signature_name:q('signature').value,terms_accepted:q('terms').checked?1:0,privacy_consent:q('privacy').checked?1:0,request_key:crypto.randomUUID(),occupants:[{full_name:q('name').value,nationality:q('nationality').value,id_type:q('id-type').value,id_number:q('id-number').value}]};
-    try{
-      const response=await fetch('/api/method/hotel_pms.guest_portal.submit_self_checkin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({raw_token:token,payload})});
-      const json=await response.json();
-      if(!response.ok||json.exc)throw new Error(typeof json.message==='string'?json.message:'Request failed');
-      msg(`Registration ${json.message.registration} submitted.`);
-    }catch(error){msg(error.message)}
-  };
-})();
+(()=>{const q=id=>document.getElementById(id);const esc=value=>String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));function readToken(){const h=new URLSearchParams(location.hash.slice(1)).get('token');if(h){sessionStorage.setItem('hotel_guest_token',h);history.replaceState(null,'',location.pathname)}return h||sessionStorage.getItem('hotel_guest_token')||window.guestToken||''}const token=readToken();
+async function loadPolicy(){if(!token)return;try{const r=await fetch('/api/method/hotel_pms.guest_portal.guest_document_policy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({raw_token:token})});const j=await r.json();if(!j.message?.enabled){q('document-fields').style.display='none'}}catch(e){q('document-fields').style.display='none'}}loadPolicy();
+const msg=text=>{q('message').innerHTML=`<div class="hotel-alert">${esc(text)}</div>`};const dataUrl=file=>new Promise((resolve,reject)=>{if(!file)return resolve(null);const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});
+q('submit').onclick=async()=>{if(!token)return msg('Guest access token is missing.');const payload={vehicle_number:q('vehicle').value,primary_id_type:q('id-type').value,primary_id_number:q('id-number').value,signature_name:q('signature').value,terms_accepted:q('terms').checked?1:0,privacy_consent:q('privacy').checked?1:0,request_key:crypto.randomUUID(),occupants:[{full_name:q('name').value,nationality:q('nationality').value,id_type:q('id-type').value,id_number:q('id-number').value}]};try{const response=await fetch('/api/method/hotel_pms.guest_portal.submit_self_checkin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({raw_token:token,payload})});const json=await response.json();if(!response.ok||json.exc)throw new Error(typeof json.message==='string'?json.message:'Request failed');const registration=json.message.registration;for(const [kind,input] of [['id',q('id-file')],['address',q('address-file')]]){if(!input.files[0])continue;const image_data=await dataUrl(input.files[0]);const upload=await fetch('/api/method/hotel_pms.guest_portal.upload_self_checkin_document',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({raw_token:token,registration,kind,image_data,filename:input.files[0].name})});const uj=await upload.json();if(!upload.ok||uj.exc)throw new Error(typeof uj.message==='string'?uj.message:`${kind} upload failed`)}msg(`Registration ${registration} submitted.`)}catch(error){msg(error.message)}};})();

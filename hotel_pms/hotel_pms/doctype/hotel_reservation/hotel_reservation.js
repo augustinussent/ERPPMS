@@ -22,6 +22,7 @@ frappe.ui.form.on("Hotel Reservation", {
         frappe.msgprint(`<p>${__("Copy this link now. It cannot be recovered later.")}</p><textarea class="form-control" rows="3">${frappe.utils.escape_html(url)}</textarea>`);
       }, __("Guest"));
       frm.add_custom_button(__("Guest Profile 360"), () => { frappe.route_options={customer:frm.doc.guest}; frappe.set_route("hotel-guest-profile-360"); }, __("Guest"));
+      frm.add_custom_button(__("WhatsApp Thread"), () => { frappe.route_options={property:frm.doc.property}; frappe.set_route("hotel-communications"); }, __("Guest"));
       frm.add_custom_button(__("Registration Card"), async () => {
         const response = await frappe.call({ method:"hotel_pms.front_desk.ensure_guest_registration", args:{reservation:frm.doc.name}, freeze:true });
         frappe.set_route("Form", "Hotel Guest Registration", response.message.registration);

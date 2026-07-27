@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - Localization and Communication Adoption
+
+- Added governed localization packs with Indonesia labels/locale and strict ERPNext tax-template validation.
+- Added Meta Cloud API WhatsApp connections, idempotent message ledger, async delivery, status webhook, and inbound message inbox.
+- Added private re-encoded guest ID/address documents with Verify-and-Discard purge.
+- Added one-tax-profile-per-invoice enforcement and automatic group invoice separation by customer plus tax profile.
+- Added CI guard proving localization/communications do not create ERPNext financial or stock documents.
+
 ## 1.0.0-rc1
 - Production gate evidence model, reconciliation checks, departmental sign-off, cutover and rollback tooling.
 - Concurrency, performance, security, restore-drill, and pinned-container scaffolding.

@@ -11,6 +11,9 @@ class HotelPMSSettings(Document):
         self.disk_critical_percent = min(max(cint(self.disk_critical_percent or 90), self.disk_warning_percent + 1), 100)
         self.webhook_max_attempts = min(max(cint(self.webhook_max_attempts or 8), 1), 20)
         self.migration_max_rows = min(max(cint(self.migration_max_rows or 10000), 100), 100000)
+        self.whatsapp_retry_limit = min(max(cint(self.whatsapp_retry_limit or 5), 1), 20)
+        self.guest_document_max_mb = min(max(cint(self.guest_document_max_mb or 3), 1), 10)
+        self.guest_document_max_dimension = min(max(cint(self.guest_document_max_dimension or 2200), 800), 5000)
 
     def on_update(self):
         frappe.publish_realtime(

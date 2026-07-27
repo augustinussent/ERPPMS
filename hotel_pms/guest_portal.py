@@ -203,6 +203,12 @@ def create_public_booking(payload)->dict:
     _log("Public Booking",token=frappe.get_doc("Hotel Guest Access Token",token["token_record"]),reservation=doc.name,customer=guest["customer"],request_key=data["request_key"])
     if cint(frappe.db.get_single_value("Hotel PMS Settings","send_public_booking_email")) and data.get("email") and token.get("raw_token"):
         _send_booking_email(doc,data["email"],token["raw_token"])
+    if token.get("raw_token"):
+        try:
+            from hotel_pms.communications import queue_precheckin_link
+            queue_precheckin_link(doc.name,token["raw_token"],f"public-precheckin:{doc.name}")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(),f"WhatsApp precheckin queue failed: {doc.name}")
     return {"reservation":doc.name,"status":doc.status,"portal_token":token.get("raw_token"),"grand_total":flt(doc.quoted_grand_total),"required_deposit":flt(doc.required_deposit),"already_created":False}
 
 def _record_consent(profile,customer,reservation,consent_type,granted,request_key):
@@ -258,7 +264,7 @@ def submit_self_checkin(raw_token:str,payload)->dict:
     name=frappe.db.get_value("Hotel Guest Registration",{"reservation":reservation.name},"name")
     doc=frappe.get_doc("Hotel Guest Registration",name) if name else frappe.new_doc("Hotel Guest Registration")
     if not name:
-        doc.update({"reservation":reservation.name,"property":reservation.property,"guest":reservation.guest,"guest_contact":reservation.guest_contact,"arrival_date":reservation.arrival_date,"departure_date":reservation.departure_date,"id_retention_mode":"Do Not Upload"})
+        doc.update({"reservation":reservation.name,"property":reservation.property,"guest":reservation.guest,"guest_contact":reservation.guest_contact,"arrival_date":reservation.arrival_date,"departure_date":reservation.departure_date,"id_retention_mode":frappe.db.get_single_value("Hotel PMS Settings","default_id_retention_mode") or "Do Not Upload"})
     doc.vehicle_number=data.get("vehicle_number"); doc.primary_id_type=data.get("primary_id_type"); doc.primary_id_number=data.get("primary_id_number"); doc.signature_name=data.get("signature_name")
     doc.terms_accepted=cint(data.get("terms_accepted")); doc.privacy_consent=cint(data.get("privacy_consent"))
     if not doc.terms_accepted or not doc.privacy_consent: frappe.throw(_("Hotel terms and privacy notice must be accepted."))
@@ -318,6 +324,12 @@ def _make_payment_request(dt,dn,reservation,token,gateway):
     if pr.get("__unsaved"):pr.insert(ignore_permissions=True)
     pr.db_set({"custom_hotel_sync_key":key,"custom_hotel_guest_token":token.name})
     if pr.docstatus==0: pr.flags.mute_email=True; pr.flags.ignore_permissions=True; pr.submit()
+    if pr.payment_url:
+        try:
+            from hotel_pms.communications import queue_payment_request
+            queue_payment_request(reservation.name,pr.payment_url,pr.grand_total or 0,f"payment:{pr.name}")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(),f"WhatsApp payment request queue failed: {pr.name}")
     _log("Payment Request",token=token,reservation=reservation.name,customer=reservation.guest,request_key=key)
     return {"payment_request":pr.name,"payment_url":pr.payment_url,"already_created":False}
 
@@ -515,4 +527,31 @@ def validate_reservation_guest_status(reservation) -> None:
 def issue_portal_link_for_staff(reservation: str, request_key: str) -> dict:
     frappe.only_for(["System Manager","Hotel Manager","Front Desk","Hotel Sales"])
     doc=frappe.get_doc("Hotel Reservation",reservation); doc.check_permission("read")
-    return issue_guest_token(reservation=doc.name,customer=doc.guest,purpose="Guest Portal",request_key=request_key)
+    result=issue_guest_token(reservation=doc.name,customer=doc.guest,purpose="Guest Portal",request_key=request_key)
+    if result.get("raw_token"):
+        try:
+            from hotel_pms.communications import queue_precheckin_link
+            queue_precheckin_link(doc.name,result["raw_token"],f"staff-precheckin:{request_key}")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(),f"WhatsApp precheckin queue failed: {doc.name}")
+    return result
+
+@frappe.whitelist(allow_guest=True,methods=["POST"])
+def guest_document_policy(raw_token:str)->dict:
+    token=validate_guest_token(raw_token,purpose="Self Check-in",consume=False)
+    mode=frappe.db.get_single_value("Hotel PMS Settings","default_id_retention_mode") or "Do Not Upload"
+    return {"enabled":bool(cint(frappe.db.get_single_value("Hotel PMS Settings","enable_photo_uploads") or 0)) and mode!="Do Not Upload","retention_mode":mode}
+
+@frappe.whitelist(allow_guest=True,methods=["POST"])
+def upload_self_checkin_document(raw_token:str,registration:str,kind:str,image_data:str,filename:str|None=None)->dict:
+    _rate_limit("checkin-document",6,600)
+    token=validate_guest_token(raw_token,purpose="Self Check-in",consume=True)
+    doc=frappe.get_doc("Hotel Guest Registration",registration)
+    if doc.reservation!=token.reservation:frappe.throw(_("Registration does not belong to this guest link."),frappe.PermissionError)
+    reservation_status=frappe.db.get_value("Hotel Reservation",doc.reservation,"status")
+    if reservation_status not in ("Tentative","Confirmed"):
+        frappe.throw(_("Guest documents can only be uploaded before check-in."),frappe.PermissionError)
+    from hotel_pms.media import replace_guest_document
+    result=replace_guest_document(doc.name,kind,image_data,filename,ignore_permissions=True)
+    _log("Guest Document Uploaded",token=token,reservation=doc.reservation,customer=doc.guest,details=f"{kind} document replaced",request_key=f"document:{doc.name}:{kind}:{now_datetime()}")
+    return result

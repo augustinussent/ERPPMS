@@ -51,7 +51,7 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        "*/5 * * * *": ["hotel_pms.platform.worker_heartbeat", "hotel_pms.webhooks.process_webhook_queue"],
+        "*/5 * * * *": ["hotel_pms.platform.worker_heartbeat", "hotel_pms.webhooks.process_webhook_queue", "hotel_pms.communications.process_message_queue"],
         "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas", "hotel_pms.services.monitor_guest_services"],
         "17 * * * *": ["hotel_pms.platform.capture_health_snapshot"],
     },
@@ -67,6 +67,7 @@ scheduler_events = {
         "hotel_pms.guest_portal.expire_blacklist_records",
         "hotel_pms.platform.cleanup_platform_records",
         "hotel_pms.platform.review_privacy_retention",
+        "hotel_pms.media.purge_verify_discard_documents",
     ]
 }
 
@@ -141,6 +142,8 @@ permission_query_conditions = {
     'Hotel Webhook Delivery': "hotel_pms.permissions.hotel_webhook_delivery_query",
     'Hotel API Idempotency': "hotel_pms.permissions.hotel_api_idempotency_query",
     'Hotel Production Gate Run': "hotel_pms.permissions.hotel_production_gate_run_query",
+    'Hotel Channel Connection': "hotel_pms.permissions.hotel_channel_connection_query",
+    'Hotel Guest Message': "hotel_pms.permissions.hotel_guest_message_query",
 }
 
 has_permission = {
@@ -208,4 +211,6 @@ has_permission = {
     'Hotel Webhook Delivery': "hotel_pms.permissions.property_document_has_permission",
     'Hotel API Idempotency': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Production Gate Run': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Channel Connection': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Guest Message': "hotel_pms.permissions.property_document_has_permission",
 }

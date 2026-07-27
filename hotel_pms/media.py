@@ -20,7 +20,7 @@ PHOTO_FIELDS_BY_DOCTYPE = {
     "Hotel Room Inspection": {"inspection_photo"},
     "Hotel Room Inspection Item": {"photo"},
     "Hotel Housekeeping Checklist Item": {"photo"},
-    "Hotel Guest Registration": {"id_file"},
+    "Hotel Guest Registration": {"id_file", "address_proof_file"},
     "Hotel Inspection Finding": {"finding_photo", "resolution_photo"},
     "Hotel SOP Candidate": {"before_photo", "after_photo", "reference_photo"},
 }
@@ -120,3 +120,92 @@ def upload_file():
     from frappe.handler import upload_file as frappe_upload_file
 
     return frappe_upload_file()
+
+
+# Guest identity documents use an explicit private, re-encoding pipeline. They never
+# create accounting or operational ledger rows.
+def _decode_image_payload(image_data: str) -> bytes:
+    import base64
+    value=(image_data or "").strip()
+    if "," in value and value.lower().startswith("data:image/"): value=value.split(",",1)[1]
+    try:return base64.b64decode(value,validate=True)
+    except Exception:frappe.throw(_("Invalid image payload."))
+
+def sanitize_guest_document(image_data: str) -> tuple[bytes,str]:
+    if not photo_uploads_enabled():frappe.throw(_("Photo uploads are disabled in Hotel PMS Settings."))
+    from io import BytesIO
+    from PIL import Image,ImageOps,UnidentifiedImageError
+    max_mb=max(1,min(cint(frappe.db.get_single_value("Hotel PMS Settings","guest_document_max_mb") or 3),10))
+    # Base64 is roughly 4/3 of the decoded size. Reject obviously oversized
+    # payloads before allocating decoded bytes.
+    if len(image_data or "") > int(max_mb * 1024 * 1024 * 1.5) + 4096:
+        frappe.throw(_("Guest document exceeds the configured size limit."))
+    raw=_decode_image_payload(image_data)
+    if len(raw)>max_mb*1024*1024:frappe.throw(_("Guest document exceeds the configured size limit."))
+    try:
+        im=Image.open(BytesIO(raw))
+        source_format=im.format
+        if source_format not in ("JPEG","PNG","WEBP"):
+            frappe.throw(_("Unsupported guest document image format."))
+        max_pixels=25_000_000
+        if (im.width or 0) * (im.height or 0) > max_pixels:
+            frappe.throw(_("Guest document dimensions are too large."))
+        im=ImageOps.exif_transpose(im); im.load()
+    except (UnidentifiedImageError,OSError,Image.DecompressionBombError):frappe.throw(_("Guest document must be a valid JPEG, PNG, or WebP image."))
+    max_dim=max(800,min(cint(frappe.db.get_single_value("Hotel PMS Settings","guest_document_max_dimension") or 2200),5000))
+    im.thumbnail((max_dim,max_dim))
+    if im.mode not in ("RGB","L"):im=im.convert("RGB")
+    elif im.mode=="L":im=im.convert("RGB")
+    output=BytesIO(); im.save(output,format="JPEG",quality=88,optimize=True)
+    return output.getvalue(),"jpg"
+
+def replace_guest_document(registration: str, kind: str, image_data: str, filename: str|None=None, *, ignore_permissions: bool=False) -> dict:
+    field={"id":"id_file","address":"address_proof_file"}.get((kind or "").lower())
+    if not field:frappe.throw(_("Document kind must be id or address."))
+    doc=frappe.get_doc("Hotel Guest Registration",registration)
+    if not ignore_permissions:doc.check_permission("write")
+    if doc.id_retention_mode=="Do Not Upload":frappe.throw(_("This registration is configured not to store documents."))
+    content,ext=sanitize_guest_document(image_data)
+    old=doc.get(field)
+    from frappe.utils.file_manager import save_file
+    file_doc=save_file(f"{doc.name}-{kind}.{ext}",content,doc.doctype,doc.name,is_private=1,df=field)
+    doc.db_set(field,file_doc.file_url)
+    if old and old!=file_doc.file_url:
+        old_name=frappe.db.get_value("File",{"file_url":old},"name")
+        if old_name:
+            try:frappe.delete_doc("File",old_name,ignore_permissions=True,force=True)
+            except Exception:frappe.log_error(frappe.get_traceback(),f"Unable to remove replaced guest document {old_name}")
+    return {"registration":doc.name,"field":field,"file_url":file_doc.file_url}
+
+def purge_registration_documents(registration: str, reason: str="Verify and Discard") -> dict:
+    doc=frappe.get_doc("Hotel Guest Registration",registration);removed=[]
+    for field in ("id_file","address_proof_file"):
+        url=doc.get(field)
+        if not url:continue
+        file_name=frappe.db.get_value("File",{"file_url":url},"name")
+        doc.db_set(field,None)
+        if file_name:
+            try:frappe.delete_doc("File",file_name,ignore_permissions=True,force=True);removed.append(file_name)
+            except Exception:frappe.log_error(frappe.get_traceback(),f"Guest document purge failed {file_name}")
+    doc.db_set("documents_purged_at",frappe.utils.now_datetime())
+    return {"registration":doc.name,"removed":removed,"reason":reason}
+
+@frappe.whitelist()
+def upload_guest_document_for_staff(registration: str, kind: str, image_data: str, filename: str|None=None) -> dict:
+    frappe.only_for(["System Manager","Hotel Manager","Front Desk"])
+    return replace_guest_document(registration,kind,image_data,filename,ignore_permissions=False)
+
+@frappe.whitelist()
+def purge_guest_documents_for_staff(registration: str, reason: str="Manual verified purge") -> dict:
+    frappe.only_for(["System Manager","Hotel Manager","Front Desk"])
+    return purge_registration_documents(registration,reason)
+
+def purge_verify_discard_documents() -> dict:
+    if not cint(frappe.db.get_single_value("Hotel PMS Settings","purge_verify_discard_documents_daily") or 0):return {"purged":0,"disabled":True}
+    rows=frappe.get_all("Hotel Guest Registration",filters={"id_retention_mode":"Verify and Discard","documents_purged_at":["is","not set"]},fields=["name","reservation"],limit=500)
+    purged=0
+    for row in rows:
+        status=frappe.db.get_value("Hotel Reservation",row.reservation,"status") if row.reservation else None
+        if status in ("Checked Out","Cancelled","No Show"):
+            purge_registration_documents(row.name,"Scheduled retention purge");purged+=1
+    return {"purged":purged}

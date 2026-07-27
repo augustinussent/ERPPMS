@@ -10,6 +10,7 @@ from frappe.utils import add_days, cint, flt, getdate, now_datetime, nowdate
 
 from hotel_pms.revenue_rules import conserve_split, money
 from hotel_pms.sync import create_document_once, make_sync_key
+from hotel_pms.localization.registry import resolve_invoice_tax_context
 
 FOLIO_CONFIG = {
     "Hotel Folio": {"charge_doctype": "Hotel Folio Charge", "category_field": "charge_type"},
@@ -275,9 +276,11 @@ def create_city_ledger_sales_invoice(folio: str) -> dict:
             invoice.payment_terms_template = account.payment_terms_template
         if invoice.meta.has_field("custom_hotel_city_ledger_folio"):
             invoice.custom_hotel_city_ledger_folio = doc.name
-        tax_template = _property_tax_template(property_doc)
-        if tax_template:
-            invoice.taxes_and_charges = tax_template
+        tax_context = resolve_invoice_tax_context(doc.property, [charge.tax_profile for charge in charges])
+        if invoice.meta.has_field("custom_hotel_tax_profile"):
+            invoice.custom_hotel_tax_profile = tax_context["tax_profile"]
+        if tax_context["sales_taxes_template"]:
+            invoice.taxes_and_charges = tax_context["sales_taxes_template"]
             invoice.set_taxes()
         for charge in charges:
             invoice.append("items", {

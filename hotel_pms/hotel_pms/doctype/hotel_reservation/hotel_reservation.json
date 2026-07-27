@@ -70,6 +70,9 @@
   "deposit_amount",
   "deposit_payment_entry",
   "folio",
+  "communication_section",
+  "booking_confirmation_message",
+  "last_guest_message_at",
   "notes_section",
   "notes"
  ],
@@ -366,6 +369,24 @@
    "read_only": 1
   },
   {
+   "fieldname": "communication_section",
+   "label": "Guest Communications",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "booking_confirmation_message",
+   "label": "Booking Confirmation Message",
+   "fieldtype": "Link",
+   "options": "Hotel Guest Message",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_guest_message_at",
+   "label": "Last Guest Message At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
    "fieldname": "notes_section",
    "label": "Notes",
    "fieldtype": "Section Break"
@@ -501,7 +522,7 @@
  "issingle": 0,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-19 00:00:00.000000",
+ "modified": "2026-07-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Reservation",

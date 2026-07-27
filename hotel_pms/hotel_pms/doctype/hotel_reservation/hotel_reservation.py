@@ -38,6 +38,11 @@ class HotelReservation(Document):
             if redemption and self.voucher_redemption != redemption:
                 self.db_set("voucher_redemption", redemption)
             self._post_voucher_discount()
+        try:
+            from hotel_pms.communications import queue_booking_confirmation
+            queue_booking_confirmation(self.name)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"WhatsApp booking confirmation queue failed: {self.name}")
 
     def on_cancel(self):
         was_checked_in = self.status == "Checked In"
@@ -104,6 +109,12 @@ class HotelReservation(Document):
             )
         self.db_set({"status": "Checked Out", "actual_check_out_at": frappe.utils.now_datetime(), "travel_agent_commission_status": "Pending" if self.travel_agent_commission else self.travel_agent_commission_status})
         self._release_rooms(dirty=True)
+        if self.registration and frappe.db.get_value("Hotel Guest Registration",self.registration,"id_retention_mode")=="Verify and Discard":
+            try:
+                from hotel_pms.media import purge_registration_documents
+                purge_registration_documents(self.registration,"Checkout retention policy")
+            except Exception:
+                frappe.log_error(frappe.get_traceback(),f"Guest document purge failed at checkout: {self.name}")
 
         from hotel_pms.tasks import ensure_housekeeping_task
 

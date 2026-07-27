@@ -1,0 +1,289 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-25 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "connection",
+  "direction",
+  "status",
+  "message_type",
+  "party_section",
+  "to_number",
+  "from_number",
+  "customer",
+  "guest_contact",
+  "reservation",
+  "body_section",
+  "template_name",
+  "content",
+  "provider_message_id",
+  "secure_payload",
+  "request_key",
+  "timing_section",
+  "queued_at",
+  "sent_at",
+  "delivered_at",
+  "read_at",
+  "received_at",
+  "retry_count",
+  "last_attempt_at",
+  "error_section",
+  "error_code",
+  "error_message",
+  "maintenance_ticket"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HMSG-.YYYY.-.#####",
+   "default": "HMSG-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "connection",
+   "label": "Connection",
+   "fieldtype": "Link",
+   "options": "Hotel Channel Connection",
+   "reqd": 1
+  },
+  {
+   "fieldname": "direction",
+   "label": "Direction",
+   "fieldtype": "Select",
+   "options": "Outbound\nInbound",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Queued\nSending\nSent\nDelivered\nRead\nReceived\nFailed\nDead Letter",
+   "default": "Queued",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "message_type",
+   "label": "Message Type",
+   "fieldtype": "Select",
+   "options": "Template\nText\nStatus",
+   "default": "Template"
+  },
+  {
+   "fieldname": "party_section",
+   "label": "Guest and Reservation",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "to_number",
+   "label": "To",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_number",
+   "label": "From",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "guest_contact",
+   "label": "Guest Contact",
+   "fieldtype": "Link",
+   "options": "Contact",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "body_section",
+   "label": "Message",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "template_name",
+   "label": "Template",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "content",
+   "label": "Content / Safe Summary",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "provider_message_id",
+   "label": "Provider Message ID",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "secure_payload",
+   "label": "Encrypted Delivery Payload",
+   "fieldtype": "Password",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "request_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "timing_section",
+   "label": "Timing",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "queued_at",
+   "label": "Queued At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sent_at",
+   "label": "Sent At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delivered_at",
+   "label": "Delivered At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "read_at",
+   "label": "Read At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "received_at",
+   "label": "Received At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "retry_count",
+   "label": "Retry Count",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_attempt_at",
+   "label": "Last Attempt At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_section",
+   "label": "Error",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "error_code",
+   "label": "Error Code",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "label": "Error Message",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "maintenance_ticket",
+   "label": "Maintenance Ticket",
+   "fieldtype": "Link",
+   "options": "Hotel Maintenance Ticket",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Guest Message",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Guest Services",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "content",
+ "search_fields": "reservation,to_number,from_number,provider_message_id"
+}

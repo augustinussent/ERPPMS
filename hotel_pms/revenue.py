@@ -190,6 +190,8 @@ def _tax_profile(property_name: str, tax_profile: str | None = None) -> dict:
     doc = frappe.get_doc("Hotel Tax Profile", profile_name)
     if not doc.enabled or doc.property != property_name:
         frappe.throw(_("Hotel tax profile is disabled or belongs to another property."))
+    from hotel_pms.localization import validate_tax_profile_mapping
+    validate_tax_profile_mapping(doc)
     return doc.as_dict()
 
 
@@ -295,6 +297,8 @@ def _quote_stay_core(
     if agent and agent.pricing_basis == "Gross Rate with Commission":
         commission = money(advertised_total * Decimal(str(agent.commission_rate or 0)) / Decimal("100"))
 
+    from hotel_pms.localization import get_localization_context
+    localization = get_localization_context(property, "Room")
     payload = {
         "property": property, "room_type": room_type, "rate_plan": rate_plan,
         "arrival_date": str(arrival), "departure_date": str(departure), "adults": cint(adults), "children": cint(children),
@@ -305,6 +309,8 @@ def _quote_stay_core(
         "tax": float(breakdown["tax"]), "rounding_adjustment": float(breakdown["rounding_adjustment"]),
         "grand_total": float(breakdown["gross"]), "travel_agent_contract": agent.name if agent else None,
         "agent_commission": float(commission), "rate_approval": approved_name,
+        "localization": localization, "tax_label": localization.get("tax_label"),
+        "currency": localization.get("currency"), "number_locale": localization.get("number_locale"),
     }
     payload["quote_hash"] = stable_quote_hash(payload)
     return payload

@@ -1,72 +1,48 @@
-# Hotel PMS ERPNext v0.9.0 — Test Report
+# Hotel PMS ERPNext v1.1.0 Test Report
 
-## Validation completed in build environment
+## Scope
 
-| Check | Result |
-|---|---:|
-| Python files parsed/compiled | 319 |
-| JavaScript files checked with Node | 53 |
-| JSON files parsed | 129 |
-| DocTypes audited | 100 |
-| Desk pages audited | 13 |
-| Property-scoped operational DocTypes | 63 |
-| API v1 endpoints in generated schema | 6 |
-| Pure business-rule tests passed | 29 |
-| DocType duplicate-field errors | 0 |
-| Field-order contract errors | 0 |
-| Property-scope coverage errors | 0 |
-| OpenAPI/Postman drift errors | 0 |
-| JavaScript syntax errors | 0 |
+Static and pure-rule validation for the Localization & Communication adoption release. This report does not claim that a live Frappe/ERPNext v16 bench, MariaDB, Redis, background workers, Meta Cloud API, or accounting ledger was executed in the build environment.
 
-## Rules tested
+## Results
 
-- Revenue and cancellation calculations inherited from earlier releases.
-- Housekeeping and service rules inherited from earlier releases.
-- Webhook event-pattern matching.
-- Webhook exponential retry cap.
-- Deterministic request hashing.
-- HMAC signature determinism.
-- Migration natural-key normalization.
-- Property-scope declaration coverage.
-- API documentation generation consistency.
+- Python files parsed/compiled: 352
+- JavaScript files syntax-checked: 55
+- JSON files parsed: 138
+- DocTypes audited: 105
+- Desk pages: 15
+- Property-scoped DocTypes checked: 66
+- Pure-rule tests: 39 passed
+- DocType/property contract errors: 0
+- v1.1 financial/stock creation contract errors: 0
+- OpenAPI documentation drift: 0
+- Shell syntax errors: 0
 
-## Security checks implemented
+## v1.1 invariants checked
 
-- Hashed API idempotency record keys.
-- Server-side property assignment enforcement.
-- Read-only property assignments.
-- API role guard.
-- Mandatory idempotency key for reservation creation.
-- HTTPS-only webhooks.
-- Private, loopback, link-local, reserved, and multicast webhook address rejection.
-- HMAC signature and delivery idempotency header.
-- Guest/privacy operational records receive property references for permission filtering.
-- Onboarding restricted to System Manager.
-- Accounting deposits remain review-only during migration.
+- ERPNext Company remains authoritative for property country, default currency, and tax ID.
+- Localization and communication modules do not create Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, or Stock Entry.
+- Localization modules do not append ERPNext tax rows.
+- Individual and city-ledger invoice flows resolve one tax profile to one ERPNext Sales Taxes and Charges Template.
+- Group invoicing separates charges by billing customer and tax profile.
+- WhatsApp outbound rows use unique idempotency keys and asynchronous delivery.
+- Meta inbound rows use provider-derived idempotency keys.
+- Inbound reservation matching is restricted to the channel connection property.
+- Guest files are private, re-encoded, dimension-limited, replace-in-place, and limited to pre-check-in status.
 
-## Not executed in this build environment
+## Required real-bench gates
 
-The package was not installed into a running Frappe/ERPNext v16 bench here. The following remain mandatory in staging:
+- Blank install and upgrade migration from the previous database copy.
+- ERPNext Company, Account, Tax Template, and currency validation.
+- Quote-to-submitted-Sales-Invoice tax reconciliation.
+- GL, Accounts Receivable, Payment Entry, and tax reconciliation.
+- Group invoice separation with real ERPNext taxes.
+- Meta webhook verification, HMAC callback, retry, duplicate delivery, and dead-letter replay.
+- Worker outage and Meta outage during booking/payment-request creation.
+- MariaDB concurrent queue and invoice tests.
+- Property permission tests through Desk, API, and reports.
+- Private-file backup, isolated restore, access control, and Verify-and-Discard deletion.
 
-- `bench --site <site> migrate` from v0.8.0.
-- MariaDB row-level permission and concurrency tests.
-- ERPNext Company/Cost Center/Warehouse permission interaction.
-- Real worker and scheduler heartbeat.
-- Redis/RQ jobs and websocket availability.
-- Outbound HTTPS webhook delivery.
-- Email health alerts.
-- Real backup location and isolated restore drill.
-- Accounting, stock, tax, POS, and city-ledger reconciliation.
-- Playwright journeys against live Desk and guest pages.
-- Reverse-proxy CSP, HSTS, rate-limit, and upload-limit testing.
+## Conclusion
 
-## CI status
-
-The repository contains:
-
-- Static GitHub Actions job runnable on GitHub-hosted Ubuntu.
-- Conditional bench integration job requiring a self-hosted runner labelled `frappe-v16`.
-- `ci/run_bench_tests.sh` for migrate, Frappe tests, heartbeat, health snapshot, backup, and checksum verification.
-- Playwright scaffold for browser journeys.
-
-A successful static build is not equivalent to production approval. v1.0 requires the real-bench and operational acceptance gates listed in the roadmap.
+The source passes static and pure-rule release checks. Production approval remains blocked until the environment-specific Production Gate and departmental sign-offs are completed.

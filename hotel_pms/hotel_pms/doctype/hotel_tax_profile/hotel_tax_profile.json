@@ -9,6 +9,9 @@
   "profile_name",
   "property",
   "enabled",
+  "localization_section",
+  "transaction_scope",
+  "localization_context_preview",
   "calculation_section",
   "service_charge_rate",
   "tax_rate",
@@ -46,6 +49,25 @@
    "label": "Enabled",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "localization_section",
+   "label": "Localization Scope",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "transaction_scope",
+   "label": "Transaction Scope",
+   "fieldtype": "Select",
+   "options": "All\nRoom\nF&B\nOther",
+   "default": "All",
+   "reqd": 1
+  },
+  {
+   "fieldname": "localization_context_preview",
+   "label": "Resolved Localization",
+   "fieldtype": "Small Text",
+   "read_only": 1
   },
   {
    "fieldname": "calculation_section",
@@ -142,7 +164,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Tax Profile",

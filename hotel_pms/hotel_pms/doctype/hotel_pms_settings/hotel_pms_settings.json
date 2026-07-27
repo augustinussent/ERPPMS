@@ -68,6 +68,16 @@
   "auto_post_laundry_on_return",
   "laundry_overdue_notifications",
   "enable_guest_experience_booking",
+  "communications_section",
+  "enable_whatsapp_notifications",
+  "whatsapp_auto_booking_confirmation",
+  "whatsapp_auto_precheckin_link",
+  "whatsapp_auto_payment_request",
+  "whatsapp_retry_limit",
+  "guest_document_section",
+  "guest_document_max_mb",
+  "guest_document_max_dimension",
+  "purge_verify_discard_documents_daily",
   "platform_section",
   "enable_outbound_webhooks",
   "webhook_max_attempts",
@@ -470,6 +480,64 @@
    "default": "1"
   },
   {
+   "fieldname": "communications_section",
+   "label": "Guest Communications",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_whatsapp_notifications",
+   "label": "Enable WhatsApp Notifications",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "whatsapp_auto_booking_confirmation",
+   "label": "Auto-send Booking Confirmation",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "whatsapp_auto_precheckin_link",
+   "label": "Auto-send Self Check-in Link",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "whatsapp_auto_payment_request",
+   "label": "Auto-send Payment Request Link",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "whatsapp_retry_limit",
+   "label": "WhatsApp Retry Limit",
+   "fieldtype": "Int",
+   "default": "5"
+  },
+  {
+   "fieldname": "guest_document_section",
+   "label": "Guest Document Security",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "guest_document_max_mb",
+   "label": "Maximum Guest Document Size (MB)",
+   "fieldtype": "Int",
+   "default": "3"
+  },
+  {
+   "fieldname": "guest_document_max_dimension",
+   "label": "Maximum Image Dimension (px)",
+   "fieldtype": "Int",
+   "default": "2200"
+  },
+  {
+   "fieldname": "purge_verify_discard_documents_daily",
+   "label": "Daily Verify-and-Discard Purge",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
    "fieldname": "platform_section",
    "label": "Platform Hardening",
    "fieldtype": "Section Break"
@@ -599,7 +667,7 @@
  "issingle": 1,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-19 00:00:00.000000",
+ "modified": "2026-07-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel PMS Settings",

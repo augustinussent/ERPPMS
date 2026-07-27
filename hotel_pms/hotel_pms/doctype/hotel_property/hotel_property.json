@@ -10,6 +10,18 @@
   "company",
   "abbreviation",
   "enabled",
+  "localization_section",
+  "country",
+  "currency",
+  "localization_pack",
+  "localization_code",
+  "column_break_localization",
+  "number_locale",
+  "tax_label",
+  "tax_id_label",
+  "tax_registration_number",
+  "localization_reviewed",
+  "localization_review_notes",
   "defaults_section",
   "default_cost_center",
   "default_warehouse",
@@ -70,6 +82,77 @@
    "fieldtype": "Check",
    "default": "1",
    "in_list_view": 1
+  },
+  {
+   "fieldname": "localization_section",
+   "label": "Localization and ERPNext Tax Identity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "country",
+   "label": "Country",
+   "fieldtype": "Link",
+   "options": "Country",
+   "read_only": 1
+  },
+  {
+   "fieldname": "currency",
+   "label": "Company Currency",
+   "fieldtype": "Link",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "localization_pack",
+   "label": "Localization Pack",
+   "fieldtype": "Select",
+   "options": "Auto\nGeneric\nIndonesia",
+   "default": "Auto"
+  },
+  {
+   "fieldname": "localization_code",
+   "label": "Resolved Pack",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_localization",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "number_locale",
+   "label": "Number / Date Locale",
+   "fieldtype": "Data",
+   "description": "For example id-ID. Formatting only; Company currency remains authoritative."
+  },
+  {
+   "fieldname": "tax_label",
+   "label": "Tax Display Label",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_id_label",
+   "label": "Tax Registration Label",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_registration_number",
+   "label": "Property Tax Registration Number",
+   "fieldtype": "Data",
+   "description": "Display identity only. Accounting remains in ERPNext Company and tax templates."
+  },
+  {
+   "fieldname": "localization_reviewed",
+   "label": "Localization Reviewed by Finance",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "localization_review_notes",
+   "label": "Localization Review Notes",
+   "fieldtype": "Small Text"
   },
   {
    "fieldname": "defaults_section",
@@ -243,7 +326,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-19 00:00:00.000000",
+ "modified": "2026-07-25 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Property",

@@ -8,6 +8,7 @@ from frappe.exceptions import DuplicateEntryError
 from frappe.utils import getdate, now_datetime
 
 from hotel_pms.sync import create_document_once, make_sync_key
+from hotel_pms.localization.registry import resolve_invoice_tax_context
 
 
 def has_app_permission() -> bool:
@@ -174,14 +175,13 @@ def create_sales_invoice(folio: str) -> dict:
         if invoice.meta.has_field("custom_hotel_reservation"):
             invoice.custom_hotel_reservation = reservation.name
 
-        property_doc = frappe.get_doc("Hotel Property", reservation.property)
-        tax_profile = property_doc.default_hotel_tax_profile
-        tax_template = frappe.db.get_value("Hotel Tax Profile", tax_profile, "sales_taxes_template") if tax_profile else None
-        tax_template = tax_template or property_doc.default_sales_taxes_template
+        tax_context = resolve_invoice_tax_context(
+            reservation.property, [charge.tax_profile for charge in charges]
+        )
         if invoice.meta.has_field("custom_hotel_tax_profile"):
-            invoice.custom_hotel_tax_profile = tax_profile
-        if tax_template:
-            invoice.taxes_and_charges = tax_template
+            invoice.custom_hotel_tax_profile = tax_context["tax_profile"]
+        if tax_context["sales_taxes_template"]:
+            invoice.taxes_and_charges = tax_context["sales_taxes_template"]
             invoice.set_taxes()
 
         for charge in charges:

@@ -144,3 +144,13 @@ Use `/app/hotel-platform-console`, `/app/hotel-onboarding`, and `/app/hotel-migr
 
 ## Production approval
 Open `/app/hotel-production-gate`. This release remains a candidate until a specific environment passes all mandatory checks and departmental sign-offs.
+
+## v1.1.0 Localization & Communication
+
+Rilis ini menambahkan country-pack Indonesia, validasi pemetaan pajak ke ERPNext, WhatsApp Meta Cloud API yang asynchronous dan idempotent, communication inbox, serta private guest-document pipeline. Halaman operasional tersedia pada:
+
+```text
+/app/hotel-communications
+```
+
+ERPNext tetap menjadi satu-satunya sumber transaksi keuangan dan stok. Modul localization, komunikasi, dan dokumen tamu tidak membuat Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, atau Stock Entry. Rincian implementasi terdapat di `docs/ADOPTION_V110.md`.

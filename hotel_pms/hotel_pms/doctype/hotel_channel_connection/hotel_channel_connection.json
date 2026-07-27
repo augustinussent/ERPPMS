@@ -1,0 +1,225 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-25 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "channel",
+  "provider",
+  "enabled",
+  "is_default",
+  "meta_section",
+  "display_number",
+  "phone_number_id",
+  "business_account_id",
+  "graph_api_version",
+  "column_break_meta",
+  "access_token",
+  "webhook_verify_token",
+  "app_secret",
+  "request_timeout_seconds",
+  "template_section",
+  "template_language",
+  "booking_confirmation_template",
+  "precheckin_template",
+  "payment_request_template",
+  "status_section",
+  "last_verified_at",
+  "last_message_at",
+  "last_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HCH-.YYYY.-.#####",
+   "default": "HCH-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "channel",
+   "label": "Channel",
+   "fieldtype": "Select",
+   "options": "WhatsApp",
+   "default": "WhatsApp",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "provider",
+   "label": "Provider",
+   "fieldtype": "Select",
+   "options": "Meta Cloud API",
+   "default": "Meta Cloud API",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_default",
+   "label": "Default Connection",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "meta_section",
+   "label": "Meta Cloud API",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "display_number",
+   "label": "Display Number",
+   "fieldtype": "Data",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "phone_number_id",
+   "label": "Phone Number ID",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "business_account_id",
+   "label": "WhatsApp Business Account ID",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "graph_api_version",
+   "label": "Graph API Version",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "description": "Pin the version approved for this deployment, for example vXX.X."
+  },
+  {
+   "fieldname": "column_break_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "access_token",
+   "label": "Permanent Access Token",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "webhook_verify_token",
+   "label": "Webhook Verify Token",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "app_secret",
+   "label": "Meta App Secret",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "request_timeout_seconds",
+   "label": "Request Timeout Seconds",
+   "fieldtype": "Int",
+   "default": "15"
+  },
+  {
+   "fieldname": "template_section",
+   "label": "Approved Templates",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "template_language",
+   "label": "Template Language",
+   "fieldtype": "Data",
+   "default": "id"
+  },
+  {
+   "fieldname": "booking_confirmation_template",
+   "label": "Booking Confirmation Template",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "precheckin_template",
+   "label": "Self Check-in Template",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "payment_request_template",
+   "label": "Payment Request Template",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "status_section",
+   "label": "Connection Status",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "last_verified_at",
+   "label": "Last Verified At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_message_at",
+   "label": "Last Message At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Last Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Channel Connection",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "display_number",
+ "search_fields": "property,display_number,phone_number_id"
+}

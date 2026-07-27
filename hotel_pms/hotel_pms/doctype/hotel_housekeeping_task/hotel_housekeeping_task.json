@@ -10,6 +10,7 @@
   "property",
   "room",
   "reservation",
+  "idempotency_key",
   "task_date",
   "task_type",
   "status",
@@ -53,6 +54,15 @@
    "label": "Reservation",
    "fieldtype": "Link",
    "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
   },
   {
    "fieldname": "task_date",

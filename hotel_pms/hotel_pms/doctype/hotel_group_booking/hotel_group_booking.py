@@ -6,7 +6,10 @@ from datetime import timedelta
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.exceptions import DuplicateEntryError
 from frappe.utils import add_days, cint, date_diff, flt, get_datetime, getdate, now_datetime, nowdate
+
+from hotel_pms.sync import create_document_once, make_sync_key
 
 BLOCKING_GROUP_STATUSES = ("Tentative", "Confirmed", "Event Active")
 
@@ -330,20 +333,36 @@ class HotelGroupBooking(Document):
         )
 
     def _ensure_project(self):
-        if self.project:
+        if self.project and frappe.db.exists("Project", self.project):
             return self.project
-        project = frappe.get_doc(
-            {
-                "doctype": "Project",
-                "project_name": f"{self.name} - {self.booking_name}",
-                "customer": self.customer,
-                "company": self.company,
-                "expected_start_date": self.arrival_date,
-                "expected_end_date": self.departure_date,
-                "status": "Open",
-            }
-        ).insert(ignore_permissions=True)
-        self.db_set("project", project.name)
+
+        base_key = make_sync_key("PROJECT", "GROUP", self.name)
+
+        def build():
+            return frappe.get_doc(
+                {
+                    "doctype": "Project",
+                    "project_name": f"{self.name} - {self.booking_name}",
+                    "customer": self.customer,
+                    "company": self.company,
+                    "expected_start_date": self.arrival_date,
+                    "expected_end_date": self.departure_date,
+                    "status": "Open",
+                }
+            )
+
+        project, _already_created = create_document_once(
+            base_key=base_key,
+            operation="Create Group Project",
+            source_doctype=self.doctype,
+            source_name=self.name,
+            target_doctype="Project",
+            build_document=build,
+            payload={"booking_name": self.booking_name, "customer": self.customer},
+            ignore_permissions=True,
+        )
+        if self.project != project.name:
+            self.db_set("project", project.name)
         return project.name
 
     def _ensure_group_folio(self):
@@ -352,17 +371,24 @@ class HotelGroupBooking(Document):
             if self.group_folio != existing:
                 self.db_set("group_folio", existing)
             return existing
-        folio = frappe.get_doc(
-            {
-                "doctype": "Hotel Group Folio",
-                "group_booking": self.name,
-                "property": self.property,
-                "billing_customer": self.customer,
-                "status": "Open",
-            }
-        ).insert(ignore_permissions=True)
-        self.db_set("group_folio", folio.name)
-        return folio.name
+        try:
+            folio = frappe.get_doc(
+                {
+                    "doctype": "Hotel Group Folio",
+                    "group_booking": self.name,
+                    "property": self.property,
+                    "billing_customer": self.customer,
+                    "status": "Open",
+                }
+            ).insert(ignore_permissions=True)
+            existing = folio.name
+        except DuplicateEntryError:
+            existing = frappe.db.get_value("Hotel Group Folio", {"group_booking": self.name}, "name")
+            if not existing:
+                raise
+        if self.group_folio != existing:
+            self.db_set("group_folio", existing)
+        return existing
 
     def _cancel_unchecked_reservations(self):
         reservations = frappe.get_all(

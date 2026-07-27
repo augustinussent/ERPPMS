@@ -18,6 +18,7 @@
   "source_doctype",
   "source_name",
   "idempotency_key",
+  "sales_invoice",
   "is_already_invoiced",
   "is_void",
   "void_reason"
@@ -101,7 +102,15 @@
    "fieldname": "idempotency_key",
    "label": "Idempotency Key",
    "fieldtype": "Data",
-   "hidden": 1
+   "hidden": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "label": "Sales Invoice",
+   "fieldtype": "Link",
+   "options": "Sales Invoice",
+   "read_only": 1
   },
   {
    "fieldname": "is_already_invoiced",

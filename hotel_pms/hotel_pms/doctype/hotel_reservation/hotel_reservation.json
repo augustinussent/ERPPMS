@@ -17,6 +17,7 @@
   "column_break_guest",
   "source",
   "source_reference",
+  "idempotency_key",
   "group_booking",
   "group_participant",
   "billing_route",
@@ -115,6 +116,15 @@
    "fieldname": "source_reference",
    "label": "Source Reference",
    "fieldtype": "Data"
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
   },
   {
    "fieldname": "group_booking",

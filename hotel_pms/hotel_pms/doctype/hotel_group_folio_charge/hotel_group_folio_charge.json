@@ -120,7 +120,8 @@
    "fieldname": "idempotency_key",
    "label": "Idempotency Key",
    "fieldtype": "Data",
-   "read_only": 1
+   "read_only": 1,
+   "unique": 1
   },
   {
    "fieldname": "is_void",

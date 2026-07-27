@@ -9,6 +9,11 @@
   "default_property",
   "allow_overbooking",
   "auto_create_folio",
+  "storage_section",
+  "enable_photo_uploads",
+  "photo_policy_note",
+  "sync_section",
+  "strict_erpnext_sync",
   "night_audit_section",
   "night_audit_hour",
   "night_audit_minute"
@@ -32,6 +37,37 @@
    "label": "Auto-create Folio on Reservation Submit",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "storage_section",
+   "label": "Storage & Photo Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_photo_uploads",
+   "label": "Enable Photo Uploads",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Global switch for housekeeping and maintenance evidence photos. Keep disabled on storage-limited servers."
+  },
+  {
+   "fieldname": "photo_policy_note",
+   "label": "Photo Storage Policy",
+   "fieldtype": "HTML",
+   "options": "<div class=\"alert alert-info\">When disabled, photo fields are hidden and new hotel evidence image uploads are rejected server-side. Existing photos remain stored and can be viewed again after re-enabling.</div>"
+  },
+  {
+   "fieldname": "sync_section",
+   "label": "ERPNext Synchronization",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "strict_erpnext_sync",
+   "label": "Strict ERPNext Sync / Duplicate Protection",
+   "fieldtype": "Check",
+   "default": "1",
+   "read_only": 1,
+   "description": "Uses deterministic sync keys and an audit ledger for ERPNext documents created by Hotel PMS."
   },
   {
    "fieldname": "night_audit_section",

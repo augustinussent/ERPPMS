@@ -4,7 +4,10 @@ from datetime import date
 
 import frappe
 from frappe import _
+from frappe.exceptions import DuplicateEntryError
 from frappe.utils import getdate, now_datetime
+
+from hotel_pms.sync import create_document_once, make_sync_key
 
 
 def has_app_permission() -> bool:
@@ -124,50 +127,83 @@ def create_sales_invoice(folio: str) -> dict:
     folio_doc = frappe.get_doc("Hotel Folio", folio)
     folio_doc.check_permission("write")
 
-    if folio_doc.sales_invoice:
-        return {"sales_invoice": folio_doc.sales_invoice, "already_created": True}
     if not folio_doc.charges:
         frappe.throw(_("Folio has no charges."))
 
     reservation = frappe.get_doc("Hotel Reservation", folio_doc.reservation)
-    invoice = frappe.new_doc("Sales Invoice")
-    invoice.company = reservation.company
-    invoice.customer = folio_doc.billing_customer or reservation.guest
-    invoice.posting_date = getdate()
-    invoice.due_date = getdate()
-    if invoice.meta.has_field("custom_hotel_folio"):
-        invoice.custom_hotel_folio = folio_doc.name
-    if invoice.meta.has_field("custom_hotel_reservation"):
-        invoice.custom_hotel_reservation = reservation.name
-
-    property_doc = frappe.get_doc("Hotel Property", reservation.property)
-    if property_doc.default_sales_taxes_template:
-        invoice.taxes_and_charges = property_doc.default_sales_taxes_template
-        invoice.set_taxes()
-
-    for charge in folio_doc.charges:
-        if charge.is_void or charge.is_already_invoiced:
-            continue
-        invoice.append(
-            "items",
-            {
-                "item_code": charge.item_code,
-                "item_name": charge.description,
-                "description": charge.description,
-                "qty": charge.qty,
-                "rate": charge.rate,
-                "cost_center": charge.cost_center or reservation.cost_center,
-            },
+    charges = [
+        row
+        for row in folio_doc.charges
+        if not row.is_void and not row.is_already_invoiced and not row.sales_invoice
+    ]
+    if not charges:
+        active_invoice = next(
+            (
+                row.sales_invoice
+                for row in folio_doc.charges
+                if row.sales_invoice
+                and frappe.db.exists("Sales Invoice", row.sales_invoice)
+                and frappe.db.get_value("Sales Invoice", row.sales_invoice, "docstatus") != 2
+            ),
+            None,
         )
-
-    if not invoice.items:
+        if active_invoice:
+            return {"sales_invoice": active_invoice, "already_created": True}
         frappe.throw(_("No uninvoiced folio charges are available."))
 
-    invoice.insert()
+    base_key = make_sync_key("SI", "FOLIO", folio_doc.name, *sorted(row.name for row in charges))
+    payload = {
+        "folio": folio_doc.name,
+        "reservation": reservation.name,
+        "customer": folio_doc.billing_customer or reservation.guest,
+        "charges": [(row.name, row.item_code, row.qty, row.rate) for row in charges],
+    }
+
+    def build():
+        invoice = frappe.new_doc("Sales Invoice")
+        invoice.company = reservation.company
+        invoice.customer = folio_doc.billing_customer or reservation.guest
+        invoice.posting_date = getdate()
+        invoice.due_date = getdate()
+        if invoice.meta.has_field("custom_hotel_folio"):
+            invoice.custom_hotel_folio = folio_doc.name
+        if invoice.meta.has_field("custom_hotel_reservation"):
+            invoice.custom_hotel_reservation = reservation.name
+
+        property_doc = frappe.get_doc("Hotel Property", reservation.property)
+        if property_doc.default_sales_taxes_template:
+            invoice.taxes_and_charges = property_doc.default_sales_taxes_template
+            invoice.set_taxes()
+
+        for charge in charges:
+            invoice.append(
+                "items",
+                {
+                    "item_code": charge.item_code,
+                    "item_name": charge.description,
+                    "description": charge.description,
+                    "qty": charge.qty,
+                    "rate": charge.rate,
+                    "cost_center": charge.cost_center or reservation.cost_center,
+                },
+            )
+        return invoice
+
+    invoice, already_created = create_document_once(
+        base_key=base_key,
+        operation="Create Folio Sales Invoice",
+        source_doctype=folio_doc.doctype,
+        source_name=folio_doc.name,
+        target_doctype="Sales Invoice",
+        build_document=build,
+        payload=payload,
+    )
+    for charge in charges:
+        charge.sales_invoice = invoice.name
     folio_doc.sales_invoice = invoice.name
     folio_doc.status = "Invoiced"
     folio_doc.save()
-    return {"sales_invoice": invoice.name, "already_created": False}
+    return {"sales_invoice": invoice.name, "already_created": already_created}
 
 
 def _get_or_create_folio(reservation) -> "frappe.model.document.Document":
@@ -175,15 +211,22 @@ def _get_or_create_folio(reservation) -> "frappe.model.document.Document":
     if folio_name:
         return frappe.get_doc("Hotel Folio", folio_name)
 
-    folio = frappe.get_doc(
-        {
-            "doctype": "Hotel Folio",
-            "property": reservation.property,
-            "reservation": reservation.name,
-            "guest": reservation.guest,
-            "billing_customer": reservation.billing_customer or reservation.guest,
-            "status": "Open",
-        }
-    )
-    folio.insert(ignore_permissions=True)
-    return folio
+    try:
+        folio = frappe.get_doc(
+            {
+                "doctype": "Hotel Folio",
+                "property": reservation.property,
+                "reservation": reservation.name,
+                "guest": reservation.guest,
+                "billing_customer": reservation.billing_customer or reservation.guest,
+                "status": "Open",
+            }
+        )
+        folio.insert(ignore_permissions=True)
+        return folio
+    except DuplicateEntryError:
+        folio_name = frappe.db.get_value("Hotel Folio", {"reservation": reservation.name}, "name")
+        if not folio_name:
+            raise
+        return frappe.get_doc("Hotel Folio", folio_name)
+

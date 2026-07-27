@@ -7,6 +7,13 @@ app_license = "GPL-3.0"
 
 required_apps = ["erpnext"]
 
+app_include_js = ["/assets/hotel_pms/js/photo_policy.js"]
+
+override_whitelisted_methods = {
+    "frappe.handler.upload_file": "hotel_pms.media.upload_file",
+    "upload_file": "hotel_pms.media.upload_file",
+}
+
 add_to_apps_screen = [
     {
         "name": "hotel_pms",
@@ -18,6 +25,9 @@ add_to_apps_screen = [
 ]
 
 doc_events = {
+    "File": {
+        "before_insert": "hotel_pms.media.validate_file_upload",
+    },
     "Sales Invoice": {
         "on_submit": "hotel_pms.integrations.sales_invoice.on_submit",
         "on_cancel": "hotel_pms.integrations.sales_invoice.on_cancel",
@@ -35,6 +45,7 @@ scheduler_events = {
         "hotel_pms.tasks.create_preventive_maintenance_tasks",
         "hotel_pms.tasks.expire_tentative_group_holds",
         "hotel_pms.tasks.release_group_room_blocks_at_cutoff",
+        "hotel_pms.reconcile.reconcile_erpnext_links",
     ]
 }
 

@@ -52,6 +52,17 @@ class HotelReservation(Document):
         self.db_set("status", "Checked Out")
         self._release_rooms(dirty=True)
 
+        from hotel_pms.tasks import ensure_housekeeping_task
+
+        for row in self.rooms:
+            ensure_housekeeping_task(
+                property_name=self.property,
+                room=row.room,
+                task_date=getdate(),
+                task_type="Checkout Clean",
+                reservation=self.name,
+            )
+
     def _validate_dates(self):
         if getdate(self.departure_date) <= getdate(self.arrival_date):
             frappe.throw(_("Departure date must be after arrival date."))

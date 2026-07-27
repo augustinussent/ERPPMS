@@ -6,7 +6,10 @@ from urllib.parse import quote
 
 import frappe
 from frappe import _
+from frappe.exceptions import DuplicateEntryError
 from frappe.utils import cint, flt, get_datetime, get_time, getdate, nowdate
+
+from hotel_pms.sync import create_document_once, make_sync_key
 
 from hotel_pms.hotel_pms.doctype.hotel_group_booking.hotel_group_booking import (
     get_available_room_type_capacity,
@@ -71,38 +74,53 @@ def get_package_rate(package_template: str, occupancy_type: str = "Any", pricing
 @frappe.whitelist()
 def create_group_quotation(group_booking: str) -> dict:
     booking = _get_booking(group_booking, "write")
-    if booking.quotation:
-        return {"quotation": booking.quotation, "already_created": True}
     if not booking.packages:
         frappe.throw(_("Add at least one package before creating a quotation."))
 
-    quotation = frappe.new_doc("Quotation")
-    quotation.quotation_to = "Customer"
-    quotation.party_name = booking.customer
-    quotation.company = booking.company
-    quotation.transaction_date = nowdate()
-    quotation.valid_till = booking.arrival_date
-    quotation.currency = booking.currency
-    quotation.selling_price_list = booking.price_list
-    if quotation.meta.has_field("custom_hotel_group_booking"):
-        quotation.custom_hotel_group_booking = booking.name
-    _apply_property_taxes(quotation, booking.property)
+    base_key = make_sync_key("QTN", "GROUP", booking.name)
+    payload = {
+        "customer": booking.customer,
+        "company": booking.company,
+        "packages": [(row.package_template, row.billable_units, row.unit_rate) for row in booking.packages],
+    }
 
-    for package in booking.packages:
-        template = frappe.get_doc("Hotel Package Template", package.package_template)
-        units = get_package_billable_units(package)
-        quotation.append(
-            "items",
-            {
-                "item_code": template.sales_item,
-                "qty": units,
-                "rate": package.unit_rate,
-                "description": _package_description(package, template.package_name),
-            },
-        )
-    quotation.insert()
-    booking.db_set("quotation", quotation.name)
-    return {"quotation": quotation.name, "already_created": False}
+    def build():
+        quotation = frappe.new_doc("Quotation")
+        quotation.quotation_to = "Customer"
+        quotation.party_name = booking.customer
+        quotation.company = booking.company
+        quotation.transaction_date = nowdate()
+        quotation.valid_till = booking.arrival_date
+        quotation.currency = booking.currency
+        quotation.selling_price_list = booking.price_list
+        if quotation.meta.has_field("custom_hotel_group_booking"):
+            quotation.custom_hotel_group_booking = booking.name
+        _apply_property_taxes(quotation, booking.property)
+        for package in booking.packages:
+            template = frappe.get_doc("Hotel Package Template", package.package_template)
+            quotation.append(
+                "items",
+                {
+                    "item_code": template.sales_item,
+                    "qty": get_package_billable_units(package),
+                    "rate": package.unit_rate,
+                    "description": _package_description(package, template.package_name),
+                },
+            )
+        return quotation
+
+    quotation, already_created = create_document_once(
+        base_key=base_key,
+        operation="Create Group Quotation",
+        source_doctype=booking.doctype,
+        source_name=booking.name,
+        target_doctype="Quotation",
+        build_document=build,
+        payload=payload,
+    )
+    if booking.quotation != quotation.name:
+        booking.db_set("quotation", quotation.name)
+    return {"quotation": quotation.name, "already_created": already_created}
 
 
 @frappe.whitelist()
@@ -110,39 +128,56 @@ def create_group_sales_order(group_booking: str) -> dict:
     booking = _get_booking(group_booking, "write")
     if booking.docstatus != 1:
         frappe.throw(_("Submit the group booking before creating a Sales Order."))
-    if booking.sales_order:
-        return {"sales_order": booking.sales_order, "already_created": True}
     if not booking.packages:
         frappe.throw(_("Add at least one package before creating a Sales Order."))
 
-    order = frappe.new_doc("Sales Order")
-    order.customer = booking.customer
-    order.company = booking.company
-    order.transaction_date = nowdate()
-    order.delivery_date = booking.arrival_date
-    order.currency = booking.currency
-    order.selling_price_list = booking.price_list
-    order.project = booking.project
-    if order.meta.has_field("custom_hotel_group_booking"):
-        order.custom_hotel_group_booking = booking.name
-    _apply_property_taxes(order, booking.property)
+    base_key = make_sync_key("SO", "GROUP", booking.name)
+    payload = {
+        "customer": booking.customer,
+        "company": booking.company,
+        "project": booking.project,
+        "packages": [(row.package_template, row.billable_units, row.unit_rate) for row in booking.packages],
+    }
 
-    for package in booking.packages:
-        template = frappe.get_doc("Hotel Package Template", package.package_template)
-        order.append(
-            "items",
-            {
-                "item_code": template.sales_item,
-                "qty": get_package_billable_units(package),
-                "rate": package.unit_rate,
-                "delivery_date": booking.arrival_date,
-                "description": _package_description(package, template.package_name),
-                "project": booking.project,
-            },
-        )
-    order.insert()
-    booking.db_set("sales_order", order.name)
-    return {"sales_order": order.name, "already_created": False}
+    def build():
+        order = frappe.new_doc("Sales Order")
+        order.customer = booking.customer
+        order.company = booking.company
+        order.transaction_date = nowdate()
+        order.delivery_date = booking.arrival_date
+        order.currency = booking.currency
+        order.selling_price_list = booking.price_list
+        order.project = booking.project
+        if order.meta.has_field("custom_hotel_group_booking"):
+            order.custom_hotel_group_booking = booking.name
+        _apply_property_taxes(order, booking.property)
+        for package in booking.packages:
+            template = frappe.get_doc("Hotel Package Template", package.package_template)
+            order.append(
+                "items",
+                {
+                    "item_code": template.sales_item,
+                    "qty": get_package_billable_units(package),
+                    "rate": package.unit_rate,
+                    "delivery_date": booking.arrival_date,
+                    "description": _package_description(package, template.package_name),
+                    "project": booking.project,
+                },
+            )
+        return order
+
+    order, already_created = create_document_once(
+        base_key=base_key,
+        operation="Create Group Sales Order",
+        source_doctype=booking.doctype,
+        source_name=booking.name,
+        target_doctype="Sales Order",
+        build_document=build,
+        payload=payload,
+    )
+    if booking.sales_order != order.name:
+        booking.db_set("sales_order", order.name)
+    return {"sales_order": order.name, "already_created": already_created}
 
 
 @frappe.whitelist()
@@ -153,9 +188,7 @@ def create_participant_reservations(group_booking: str) -> dict:
 
     grouped: dict[tuple, list] = defaultdict(list)
     for participant in booking.participants:
-        if participant.participant_type != "Residential" or participant.reservation:
-            continue
-        if not participant.assigned_room:
+        if participant.participant_type != "Residential" or participant.reservation or not participant.assigned_room:
             continue
         key = (
             participant.assigned_room,
@@ -165,46 +198,56 @@ def create_participant_reservations(group_booking: str) -> dict:
         grouped[key].append(participant)
 
     created = []
-    skipped = 0
+    reused = []
     missing_customers = []
     for (room, arrival, departure), participants in grouped.items():
         lead = participants[0]
         if not lead.customer:
             missing_customers.append(lead.participant_name)
             continue
-        room_type = lead.room_type or frappe.db.get_value("Hotel Room", room, "room_type")
-        nightly_rate = _find_room_block_rate(booking, room_type, arrival, departure)
-        billing_customer = lead.customer if any(p.billing_route == "Individual Folio" for p in participants) else booking.customer
-        reservation = frappe.get_doc(
-            {
-                "doctype": "Hotel Reservation",
-                "property": booking.property,
-                "status": "Confirmed",
-                "guest": lead.customer,
-                "billing_customer": billing_customer,
-                "source": "Corporate",
-                "source_reference": booking.name,
-                "arrival_date": arrival,
-                "departure_date": departure,
-                "adults": len(participants),
-                "children": 0,
-                "group_booking": booking.name,
-                "group_participant": lead.name,
-                "billing_route": lead.billing_route,
-                "rooms": [
-                    {
-                        "room_type": room_type,
-                        "room": room,
-                        "nightly_rate": nightly_rate,
-                    }
-                ],
-            }
-        )
-        reservation.insert(ignore_permissions=True)
-        reservation.submit()
+        idempotency_key = make_sync_key("RES", "GROUP", booking.name, room, arrival, departure)
+        existing = frappe.db.get_value("Hotel Reservation", {"idempotency_key": idempotency_key}, "name")
+        if existing:
+            reservation = frappe.get_doc("Hotel Reservation", existing)
+            reused.append(existing)
+        else:
+            room_type = lead.room_type or frappe.db.get_value("Hotel Room", room, "room_type")
+            nightly_rate = _find_room_block_rate(booking, room_type, arrival, departure)
+            billing_customer = lead.customer if any(p.billing_route == "Individual Folio" for p in participants) else booking.customer
+            reservation = frappe.get_doc(
+                {
+                    "doctype": "Hotel Reservation",
+                    "property": booking.property,
+                    "status": "Confirmed",
+                    "guest": lead.customer,
+                    "billing_customer": billing_customer,
+                    "source": "Corporate",
+                    "source_reference": booking.name,
+                    "idempotency_key": idempotency_key,
+                    "arrival_date": arrival,
+                    "departure_date": departure,
+                    "adults": len(participants),
+                    "children": 0,
+                    "group_booking": booking.name,
+                    "group_participant": lead.name,
+                    "billing_route": lead.billing_route,
+                    "rooms": [{"room_type": room_type, "room": room, "nightly_rate": nightly_rate}],
+                }
+            )
+            try:
+                reservation.insert(ignore_permissions=True)
+                reservation.submit()
+                created.append(reservation.name)
+            except DuplicateEntryError:
+                existing = frappe.db.get_value("Hotel Reservation", {"idempotency_key": idempotency_key}, "name")
+                if not existing:
+                    raise
+                reservation = frappe.get_doc("Hotel Reservation", existing)
+                reused.append(existing)
+
         for participant in participants:
-            frappe.db.set_value("Hotel Group Participant", participant.name, "reservation", reservation.name)
-        created.append(reservation.name)
+            if participant.reservation != reservation.name:
+                frappe.db.set_value("Hotel Group Participant", participant.name, "reservation", reservation.name)
 
     if missing_customers:
         frappe.msgprint(
@@ -213,8 +256,13 @@ def create_participant_reservations(group_booking: str) -> dict:
             ),
             alert=True,
         )
-    skipped = len([p for p in booking.participants if p.reservation])
-    return {"created": created, "created_count": len(created), "already_linked": skipped, "missing_customers": missing_customers}
+    return {
+        "created": created,
+        "created_count": len(created),
+        "reused": sorted(set(reused)),
+        "already_linked": len([p for p in booking.participants if p.reservation]),
+        "missing_customers": missing_customers,
+    }
 
 
 @frappe.whitelist()
@@ -430,41 +478,63 @@ def create_group_sales_invoices(group_folio: str) -> dict:
         by_customer[charge.billing_customer or folio.billing_customer].append(charge)
 
     invoices = []
+    reused = []
     for customer, charges in by_customer.items():
-        invoice = frappe.new_doc("Sales Invoice")
-        invoice.company = frappe.db.get_value("Hotel Property", folio.property, "company")
-        invoice.customer = customer
-        invoice.posting_date = nowdate()
-        invoice.due_date = nowdate()
-        invoice.project = booking.project
-        if invoice.meta.has_field("custom_hotel_group_booking"):
-            invoice.custom_hotel_group_booking = booking.name
-        if invoice.meta.has_field("custom_hotel_group_folio"):
-            invoice.custom_hotel_group_folio = folio.name
-        if booking.sales_order and invoice.meta.has_field("custom_hotel_group_sales_order"):
-            invoice.custom_hotel_group_sales_order = booking.sales_order
-        _apply_property_taxes(invoice, booking.property)
-        for charge in charges:
-            invoice.append(
-                "items",
-                {
-                    "item_code": charge.item_code,
-                    "description": charge.description,
-                    "qty": charge.qty,
-                    "rate": charge.rate,
-                    "cost_center": charge.cost_center or booking.cost_center,
-                    "project": booking.project,
-                },
-            )
-        invoice.insert()
+        charge_names = sorted(row.name for row in charges)
+        base_key = make_sync_key("SI", "GROUP-FOLIO", folio.name, customer, *charge_names)
+        payload = {
+            "group_folio": folio.name,
+            "customer": customer,
+            "charges": [(row.name, row.item_code, row.qty, row.rate) for row in charges],
+        }
+
+        def build():
+            invoice = frappe.new_doc("Sales Invoice")
+            invoice.company = frappe.db.get_value("Hotel Property", folio.property, "company")
+            invoice.customer = customer
+            invoice.posting_date = nowdate()
+            invoice.due_date = nowdate()
+            invoice.project = booking.project
+            if invoice.meta.has_field("custom_hotel_group_booking"):
+                invoice.custom_hotel_group_booking = booking.name
+            if invoice.meta.has_field("custom_hotel_group_folio"):
+                invoice.custom_hotel_group_folio = folio.name
+            if booking.sales_order and invoice.meta.has_field("custom_hotel_group_sales_order"):
+                invoice.custom_hotel_group_sales_order = booking.sales_order
+            _apply_property_taxes(invoice, booking.property)
+            for charge in charges:
+                invoice.append(
+                    "items",
+                    {
+                        "item_code": charge.item_code,
+                        "description": charge.description,
+                        "qty": charge.qty,
+                        "rate": charge.rate,
+                        "cost_center": charge.cost_center or booking.cost_center,
+                        "project": booking.project,
+                    },
+                )
+            return invoice
+
+        invoice, already_created = create_document_once(
+            base_key=base_key,
+            operation="Create Group Folio Sales Invoice",
+            source_doctype=folio.doctype,
+            source_name=folio.name,
+            target_doctype="Sales Invoice",
+            build_document=build,
+            payload=payload,
+        )
         for charge in charges:
             charge.sales_invoice = invoice.name
         invoices.append(invoice.name)
+        if already_created:
+            reused.append(invoice.name)
 
     folio.sales_invoice = invoices[0] if len(invoices) == 1 else None
     folio.status = "Invoiced"
     folio.save()
-    return {"sales_invoices": invoices, "count": len(invoices)}
+    return {"sales_invoices": invoices, "count": len(invoices), "reused": reused}
 
 
 @frappe.whitelist()

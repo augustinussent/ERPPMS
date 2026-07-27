@@ -1,7 +1,43 @@
 from __future__ import annotations
 
 import frappe
+from frappe.exceptions import DuplicateEntryError
 from frappe.utils import add_days, getdate
+
+from hotel_pms.sync import make_sync_key
+
+
+def ensure_housekeeping_task(
+    *,
+    property_name: str,
+    room: str,
+    task_date,
+    task_type: str,
+    reservation: str | None = None,
+) -> tuple[str, bool]:
+    key = make_sync_key("HK", room, getdate(task_date).isoformat(), task_type, reservation or "-")
+    existing = frappe.db.get_value("Hotel Housekeeping Task", {"idempotency_key": key}, "name")
+    if existing:
+        return existing, True
+    try:
+        task = frappe.get_doc(
+            {
+                "doctype": "Hotel Housekeeping Task",
+                "property": property_name,
+                "room": room,
+                "reservation": reservation,
+                "task_date": getdate(task_date),
+                "task_type": task_type,
+                "status": "Open",
+                "idempotency_key": key,
+            }
+        ).insert(ignore_permissions=True)
+        return task.name, False
+    except DuplicateEntryError:
+        existing = frappe.db.get_value("Hotel Housekeeping Task", {"idempotency_key": key}, "name")
+        if existing:
+            return existing, True
+        raise
 
 
 def create_housekeeping_tasks() -> None:
@@ -14,26 +50,22 @@ def create_housekeeping_tasks() -> None:
     for room in rooms:
         if room.housekeeping_status not in ("Dirty", "Pickup"):
             continue
-        if frappe.db.exists("Hotel Housekeeping Task", {"room": room.name, "task_date": today, "status": ("!=", "Cancelled")}):
+        task_type = "Checkout Clean" if room.housekeeping_status == "Dirty" else "Pickup"
+        if frappe.db.exists(
+            "Hotel Housekeeping Task",
+            {"room": room.name, "task_date": today, "task_type": task_type, "status": ("!=", "Cancelled")},
+        ):
             continue
-        frappe.get_doc(
-            {
-                "doctype": "Hotel Housekeeping Task",
-                "property": room.property,
-                "room": room.name,
-                "task_date": today,
-                "task_type": "Checkout Clean" if room.housekeeping_status == "Dirty" else "Pickup",
-                "status": "Open",
-            }
-        ).insert(ignore_permissions=True)
+        ensure_housekeeping_task(
+            property_name=room.property,
+            room=room.name,
+            task_date=today,
+            task_type=task_type,
+        )
 
 
 def create_preventive_maintenance_tasks() -> None:
-    """Create tasks from active maintenance schedules due today.
-
-    The schedule doctype is intentionally generic so hotel SOP intervals can be
-    represented without hard-coding every pump, filter, gutter, or genset into Python.
-    """
+    """Create exactly one ticket per preventive schedule and due date."""
     today = getdate()
     schedules = frappe.get_all(
         "Hotel Preventive Maintenance Schedule",
@@ -41,30 +73,36 @@ def create_preventive_maintenance_tasks() -> None:
         fields=["name", "property", "asset", "location", "task_title", "priority", "interval_days", "next_due_date"],
     )
     for schedule in schedules:
-        if not frappe.db.exists("Hotel Maintenance Ticket", {"preventive_schedule": schedule.name, "due_date": today}):
-            frappe.get_doc(
-                {
-                    "doctype": "Hotel Maintenance Ticket",
-                    "property": schedule.property,
-                    "subject": schedule.task_title,
-                    "description": schedule.task_title,
-                    "source": "Preventive Maintenance",
-                    "asset": schedule.asset,
-                    "location": schedule.location,
-                    "priority": schedule.priority or "Medium",
-                    "status": "Open",
-                    "due_date": today,
-                    "preventive_schedule": schedule.name,
-                    "is_preventive": 1,
-                }
-            ).insert(ignore_permissions=True)
+        due_date = getdate(schedule.next_due_date or today)
+        key = make_sync_key("PM", schedule.name, due_date.isoformat())
+        if not frappe.db.exists("Hotel Maintenance Ticket", {"idempotency_key": key}):
+            try:
+                frappe.get_doc(
+                    {
+                        "doctype": "Hotel Maintenance Ticket",
+                        "property": schedule.property,
+                        "subject": schedule.task_title,
+                        "description": schedule.task_title,
+                        "source": "Preventive Maintenance",
+                        "asset": schedule.asset,
+                        "location": schedule.location,
+                        "priority": schedule.priority or "Medium",
+                        "status": "Open",
+                        "due_date": due_date,
+                        "preventive_schedule": schedule.name,
+                        "is_preventive": 1,
+                        "idempotency_key": key,
+                    }
+                ).insert(ignore_permissions=True)
+            except DuplicateEntryError:
+                pass
 
         interval = schedule.interval_days or 30
         frappe.db.set_value(
             "Hotel Preventive Maintenance Schedule",
             schedule.name,
             "next_due_date",
-            add_days(today, interval),
+            add_days(due_date, interval),
             update_modified=False,
         )
 

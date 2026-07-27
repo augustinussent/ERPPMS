@@ -23,13 +23,7 @@
 
 ## Phase 4: Revenue and integrations
 
-Implemented in v0.2 starter:
-
-- Group bookings, room blocks, meeting spaces, package templates, BEO revisions, confirmation letters, group folios, package posting, and profitability
-
-Remaining:
-
-- Rate calendar, promo codes, corporate contracts
+- Rate calendar, packages, promo codes, group bookings, corporate contracts
 - Website booking engine
 - Channel manager/OTA API integration with retry and reconciliation
 - Restaurant/POS room-charge settlement

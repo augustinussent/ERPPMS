@@ -1,0 +1,141 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:idempotency_key",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "idempotency_key",
+  "status",
+  "operation",
+  "source_section",
+  "source_doctype",
+  "source_name",
+  "target_section",
+  "target_doctype",
+  "target_name",
+  "completed_at",
+  "payload_hash",
+  "error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "In Progress\nCompleted\nFailed",
+   "default": "In Progress",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "operation",
+   "label": "Operation",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_section",
+   "label": "Source",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "source_doctype",
+   "label": "Source DocType",
+   "fieldtype": "Link",
+   "options": "DocType",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_name",
+   "label": "Source Document",
+   "fieldtype": "Dynamic Link",
+   "options": "source_doctype",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "target_section",
+   "label": "ERPNext Target",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "target_doctype",
+   "label": "Target DocType",
+   "fieldtype": "Link",
+   "options": "DocType",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "target_name",
+   "label": "Target Document",
+   "fieldtype": "Dynamic Link",
+   "options": "target_doctype",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payload_hash",
+   "label": "Payload Hash",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "label": "Error Message",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel ERP Sync Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "operation",
+ "search_fields": "idempotency_key,source_name,target_name"
+}

@@ -6,7 +6,10 @@ frappe.ui.form.on("Hotel Reservation", {
       frm.add_custom_button(__("Mark No Show"), () => cancellationDialog(frm, "No Show"), __("Operations"));
     }
     if (frm.doc.docstatus === 1 && frm.doc.status === "Checked In") {
-      frm.add_custom_button(__("Check Out"), () => run("hotel_pms.api.check_out", { reservation: frm.doc.name }), __("Operations"));
+      frm.add_custom_button(__("Check Out"), () => {
+        frappe.route_options = { reservation: frm.doc.name };
+        frappe.set_route("hotel-checkout");
+      }, __("Operations"));
       frm.add_custom_button(__("Move Room"), () => roomMoveDialog(frm), __("Stay Changes"));
       frm.add_custom_button(__("Extend / Early Departure"), () => stayAmendDialog(frm), __("Stay Changes"));
     }
@@ -72,9 +75,34 @@ function paymentDialog(frm, type) {
     {fieldname:"mode_of_payment",label:__("Mode of Payment"),fieldtype:"Link",options:"Mode of Payment",reqd:1},
     {fieldname:"reference_no",label:__("Reference No"),fieldtype:"Data"},
     {fieldname:"reference_date",label:__("Reference Date"),fieldtype:"Date",default:frappe.datetime.get_today()},
+    {fieldname:"cashier_shift",label:__("Cashier Shift"),fieldtype:"Link",options:"Hotel Cashier Shift",get_query:()=>({filters:{property:frm.doc.property,status:"Open"}})},
   ], primary_action_label:__("Create Draft Payment Entry"), primary_action:async values=>{
     values.reservation=frm.doc.name; values.idempotency_key=`WEB-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const method=type==="Deposit"?"hotel_pms.front_desk.create_deposit_payment_entry":"hotel_pms.front_desk.create_refund_payment_entry";
     const response=await frappe.call({method,args:values,freeze:true}); dialog.hide(); frappe.set_route("Form","Payment Entry",response.message.payment_entry);
   }}); dialog.show();
+}
+
+frappe.ui.form.on("Hotel Reservation", {
+  refresh(frm) {
+    frm.add_custom_button(__("Rate Quote"), () => revenueQuoteDialog(frm), __("Revenue"));
+    if (!frm.is_new()) {
+      frm.add_custom_button(__("Checkout Screen"), () => {
+        frappe.route_options = { reservation: frm.doc.name };
+        frappe.set_route("hotel-checkout");
+      }, __("Billing"));
+    }
+    if (frm.doc.direct_bill_approval) {
+      frm.add_custom_button(__("Open Direct Bill Approval"), () => frappe.set_route("Form", "Hotel Direct Bill Approval", frm.doc.direct_bill_approval), __("Billing"));
+    }
+  },
+});
+
+function revenueQuoteDialog(frm) {
+  const requests = (frm.doc.rooms || []).map(row => ({ room_type: row.room_type, rate_plan: row.rate_plan, quantity: 1, adults: row.adults, children: row.children, requested_rate: row.nightly_rate || null, rate_approval: frm.doc.rate_approval || null }));
+  if (!requests.length || requests.some(x => !x.rate_plan)) return frappe.msgprint(__("Every room needs a rate plan before quoting."));
+  frappe.call({ method: "hotel_pms.revenue.quote_booking", args: { payload: { property: frm.doc.property, arrival_date: frm.doc.arrival_date, departure_date: frm.doc.departure_date, customer: frm.doc.guest, voucher_code: frm.doc.voucher_code, travel_agent_contract: frm.doc.travel_agent_contract, room_requests: requests } }, freeze: true }).then(r => {
+    const q = r.message;
+    frappe.msgprint({ title: __("Rate Quote"), wide: true, message: `<div class="row"><div class="col-sm-6"><b>${__("Room Total")}</b><br>${format_currency(q.advertised_total_before_voucher)}</div><div class="col-sm-6"><b>${__("Voucher Discount")}</b><br>${format_currency(q.voucher_discount)}</div><div class="col-sm-6"><b>${__("Service Charge")}</b><br>${format_currency(q.service_charge)}</div><div class="col-sm-6"><b>${__("Tax")}</b><br>${format_currency(q.tax)}</div><div class="col-sm-12"><h3>${__("Grand Total")}: ${format_currency(q.grand_total)}</h3></div></div><small>${__("Quote hash")}: ${frappe.utils.escape_html(q.quote_hash)}</small>` });
+  });
 }

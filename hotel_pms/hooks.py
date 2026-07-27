@@ -53,6 +53,8 @@ scheduler_events = {
         "hotel_pms.tasks.expire_tentative_group_holds",
         "hotel_pms.tasks.release_group_room_blocks_at_cutoff",
         "hotel_pms.reconcile.reconcile_erpnext_links",
+        "hotel_pms.revenue.expire_rate_approvals",
+        "hotel_pms.revenue.update_travel_agent_settlement_statuses",
     ]
 }
 

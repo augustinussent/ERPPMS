@@ -11,6 +11,8 @@ def setup_sync_fields() -> None:
         "Sales Order": "customer",
         "Sales Invoice": "customer",
         "Payment Entry": "party_name",
+        "Purchase Invoice": "supplier",
+        "Payment Request": "reference_name",
     }.items():
         fields[doctype] = [
             {

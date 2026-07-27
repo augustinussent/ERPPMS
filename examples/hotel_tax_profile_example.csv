@@ -1,0 +1,2 @@
+profile_name,property,service_charge_rate,tax_rate,tax_basis,prices_include_service_charge,prices_include_tax,rounding_method,sales_taxes_template,accountant_reviewed
+Hotel Standard Tax,THE BATU HOTEL,5,10,Net Amount plus Service Charge,1,1,Round to Currency Precision,Hotel Sales Tax - TBH,0

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0 - 2026-07-21
+
+- Added deterministic stay quoting with rate seasons, date-level rate calendar overrides, derived rate plans, floors, and stay/arrival/departure restrictions.
+- Added governed below-floor rate approvals with expiry and audit fields.
+- Added voucher rules, reservation-safe redemption records, usage limits, customer scope, and idempotent release on cancellation.
+- Added travel-agent contracts, gross/net pricing basis, reservation commission accrual, settlement batches, and duplicate-safe ERPNext Purchase Invoice drafts.
+- Added configurable Hotel Tax Profile with service charge, tax basis, inclusive/exclusive pricing, rounding, and ERPNext Sales Taxes Template mapping.
+- Added per-line folio tax display for individual, group, and city-ledger charges while ERPNext remains the accounting source of truth.
+- Added controlled folio split/transfer/reversal across guest, group, and city-ledger folios with exact amount conservation and immutable audit records.
+- Added unified checkout page for charges, invoices, deposits, direct-bill approval, payment requests, transfers, and final checkout.
+- Added city-ledger accounts, credit limits, direct-bill approvals, folios, invoices, and outstanding reporting.
+- Added cashier shifts, drawer movements, ERPNext Payment Entry/POS reconciliation, variance reasons, and manager review above a configurable threshold.
+- Added ERPNext Payment Request creation for submitted Sales Invoices with deterministic sync keys and duplicate prevention.
+- Added revenue calendar, checkout, and cashier operational pages plus Rate Overview, Cashier Reconciliation, and City Ledger Outstanding reports.
+- Extended ERPNext synchronization fields to Payment Request, Purchase Invoice, Sales Invoice, Payment Entry, and POS Invoice.
+- Added daily approval expiry and travel-agent settlement status reconciliation.
+
 ## 0.5.0 - 2026-07-20
 
 - Added responsive Housekeeping and Engineering mobile operations page.

@@ -38,6 +38,13 @@ def on_submit(doc, method=None) -> None:
             )
         frappe.db.set_value("Hotel Group Folio", group_folio, "status", "Invoiced")
 
+    city_folio = getattr(doc, "custom_hotel_city_ledger_folio", None)
+    if city_folio and frappe.db.exists("Hotel City Ledger Folio", city_folio):
+        rows = frappe.get_all("Hotel City Ledger Charge", filters={"parent": city_folio, "sales_invoice": doc.name}, pluck="name")
+        for row_name in rows:
+            frappe.db.set_value("Hotel City Ledger Charge", row_name, "is_already_invoiced", 1, update_modified=False)
+        frappe.db.set_value("Hotel City Ledger Folio", city_folio, {"status": "Invoiced", "sales_invoice": doc.name})
+
 
 def on_cancel(doc, method=None) -> None:
     folio = getattr(doc, "custom_hotel_folio", None)
@@ -89,6 +96,14 @@ def on_cancel(doc, method=None) -> None:
             group_folio,
             {"status": "Invoiced" if remaining else "Open", "sales_invoice": remaining},
         )
+
+    city_folio = getattr(doc, "custom_hotel_city_ledger_folio", None)
+    if city_folio and frappe.db.exists("Hotel City Ledger Folio", city_folio):
+        rows = frappe.get_all("Hotel City Ledger Charge", filters={"parent": city_folio, "sales_invoice": doc.name}, pluck="name")
+        for row_name in rows:
+            frappe.db.set_value("Hotel City Ledger Charge", row_name, {"is_already_invoiced": 0, "sales_invoice": None}, update_modified=False)
+        remaining = frappe.db.get_value("Hotel City Ledger Charge", {"parent": city_folio, "sales_invoice": ("is", "set")}, "sales_invoice")
+        frappe.db.set_value("Hotel City Ledger Folio", city_folio, {"status": "Invoiced" if remaining else "Open", "sales_invoice": remaining})
 
 
 def on_trash(doc, method=None) -> None:

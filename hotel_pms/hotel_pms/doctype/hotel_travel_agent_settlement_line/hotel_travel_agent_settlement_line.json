@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "reservation",
+  "departure_date",
+  "gross_revenue",
+  "commission_rate",
+  "commission_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "gross_revenue",
+   "label": "Gross Revenue",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "commission_rate",
+   "label": "Commission %",
+   "fieldtype": "Percent"
+  },
+  {
+   "fieldname": "commission_amount",
+   "label": "Commission Amount",
+   "fieldtype": "Currency",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Travel Agent Settlement Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

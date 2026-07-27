@@ -4,6 +4,8 @@ import frappe
 
 
 def on_submit(doc, method=None) -> None:
+    from hotel_pms.billing import on_payment_entry_change as update_cashier
+    update_cashier(doc, method)
     """Mirror a submitted POS Invoice into the folio for visibility only.
 
     Revenue and stock are already booked by POS Invoice, so mirrored rows are
@@ -40,6 +42,8 @@ def on_submit(doc, method=None) -> None:
 
 
 def on_cancel(doc, method=None) -> None:
+    from hotel_pms.billing import on_payment_entry_change as update_cashier
+    update_cashier(doc, method)
     folio_name = getattr(doc, "custom_hotel_folio", None)
     if not folio_name or not frappe.db.exists("Hotel Folio", folio_name):
         return

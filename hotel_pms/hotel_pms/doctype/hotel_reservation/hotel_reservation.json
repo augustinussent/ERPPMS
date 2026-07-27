@@ -23,6 +23,20 @@
   "group_booking",
   "group_participant",
   "billing_route",
+  "revenue_section",
+  "voucher_code",
+  "voucher_redemption",
+  "voucher_discount",
+  "travel_agent_contract",
+  "travel_agent_commission",
+  "travel_agent_commission_status",
+  "rate_approval",
+  "rate_quote_hash",
+  "quoted_room_total",
+  "quoted_service_charge",
+  "quoted_tax",
+  "quoted_grand_total",
+  "direct_bill_approval",
   "cancellation_section",
   "cancellation_policy",
   "registration",
@@ -355,6 +369,93 @@
    "fieldname": "notes",
    "label": "Notes",
    "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "revenue_section",
+   "label": "Revenue & Distribution",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "voucher_code",
+   "label": "Voucher Code",
+   "fieldtype": "Link",
+   "options": "Hotel Voucher"
+  },
+  {
+   "fieldname": "voucher_redemption",
+   "label": "Voucher Redemption",
+   "fieldtype": "Link",
+   "options": "Hotel Voucher Redemption",
+   "read_only": 1
+  },
+  {
+   "fieldname": "voucher_discount",
+   "label": "Voucher Discount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "travel_agent_contract",
+   "label": "Travel Agent Contract",
+   "fieldtype": "Link",
+   "options": "Hotel Travel Agent Contract"
+  },
+  {
+   "fieldname": "travel_agent_commission",
+   "label": "Travel Agent Commission",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "travel_agent_commission_status",
+   "label": "Commission Status",
+   "fieldtype": "Select",
+   "options": "\nPending\nInvoiced\nPaid\nWaived",
+   "default": ""
+  },
+  {
+   "fieldname": "rate_approval",
+   "label": "Rate Approval",
+   "fieldtype": "Link",
+   "options": "Hotel Rate Approval"
+  },
+  {
+   "fieldname": "rate_quote_hash",
+   "label": "Rate Quote Hash",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "quoted_room_total",
+   "label": "Quoted Room Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quoted_service_charge",
+   "label": "Quoted Service Charge",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quoted_tax",
+   "label": "Quoted Tax",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quoted_grand_total",
+   "label": "Quoted Grand Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "direct_bill_approval",
+   "label": "Direct Bill Approval",
+   "fieldtype": "Link",
+   "options": "Hotel Direct Bill Approval",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -432,6 +533,25 @@
   {
    "role": "Engineering Supervisor",
    "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Cashier",
+   "read": 1,
+   "write": 1,
+   "print": 1
+  },
+  {
+   "role": "Credit Manager",
+   "read": 1,
+   "write": 1,
    "report": 1
   }
  ],

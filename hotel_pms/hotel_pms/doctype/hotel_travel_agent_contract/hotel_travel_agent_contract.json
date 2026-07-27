@@ -1,0 +1,196 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:contract_name",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "contract_name",
+  "property",
+  "travel_agent",
+  "booking_customer",
+  "enabled",
+  "valid_from",
+  "valid_to",
+  "pricing_section",
+  "pricing_basis",
+  "commission_rate",
+  "net_rate_discount",
+  "commission_item",
+  "expense_account",
+  "cost_center",
+  "settlement_days",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "contract_name",
+   "label": "Contract Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "travel_agent",
+   "label": "Travel Agent Supplier",
+   "fieldtype": "Link",
+   "options": "Supplier",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "booking_customer",
+   "label": "Booking Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "description": "Optional customer used when the agent is billed directly."
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Valid From",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valid_to",
+   "label": "Valid To",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pricing_section",
+   "label": "Commercial Terms",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "pricing_basis",
+   "label": "Pricing Basis",
+   "fieldtype": "Select",
+   "options": "Gross Rate with Commission\nNet Rate",
+   "default": "Gross Rate with Commission",
+   "reqd": 1
+  },
+  {
+   "fieldname": "commission_rate",
+   "label": "Commission %",
+   "fieldtype": "Percent"
+  },
+  {
+   "fieldname": "net_rate_discount",
+   "label": "Net Rate Discount %",
+   "fieldtype": "Percent"
+  },
+  {
+   "fieldname": "commission_item",
+   "label": "Commission Item",
+   "fieldtype": "Link",
+   "options": "Item"
+  },
+  {
+   "fieldname": "expense_account",
+   "label": "Commission Expense Account",
+   "fieldtype": "Link",
+   "options": "Account"
+  },
+  {
+   "fieldname": "cost_center",
+   "label": "Cost Center",
+   "fieldtype": "Link",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "settlement_days",
+   "label": "Settlement Days",
+   "fieldtype": "Int",
+   "default": "30"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Travel Agent Contract",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "contract_name",
+ "search_fields": "property,travel_agent",
+ "naming_rule": "By fieldname"
+}

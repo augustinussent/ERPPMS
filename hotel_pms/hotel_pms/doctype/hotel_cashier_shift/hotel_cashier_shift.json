@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "company",
+  "cashier",
+  "status",
+  "opened_at",
+  "closed_at",
+  "mode_of_payment",
+  "cash_account",
+  "opening_float",
+  "totals_section",
+  "cash_receipts",
+  "cash_refunds",
+  "drawer_adjustments",
+  "expected_cash",
+  "counted_cash",
+  "variance",
+  "variance_reason",
+  "closed_by",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HCSH-.YYYY.-.#####",
+   "default": "HCSH-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "cashier",
+   "label": "Cashier",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Open\nClosing Review\nClosed\nCancelled",
+   "default": "Open",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "opened_at",
+   "label": "Opened At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closed_at",
+   "label": "Closed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "label": "Cash Mode of Payment",
+   "fieldtype": "Link",
+   "options": "Mode of Payment",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cash_account",
+   "label": "Cash Account",
+   "fieldtype": "Link",
+   "options": "Account",
+   "reqd": 1
+  },
+  {
+   "fieldname": "opening_float",
+   "label": "Opening Float",
+   "fieldtype": "Currency",
+   "default": "0"
+  },
+  {
+   "fieldname": "totals_section",
+   "label": "Reconciliation",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cash_receipts",
+   "label": "Cash Receipts",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cash_refunds",
+   "label": "Cash Refunds",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "drawer_adjustments",
+   "label": "Drawer Adjustments",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_cash",
+   "label": "Expected Cash",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "counted_cash",
+   "label": "Counted Cash",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "variance",
+   "label": "Variance",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "variance_reason",
+   "label": "Variance Reason",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "closed_by",
+   "label": "Closed By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Cashier Shift",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Cashier",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "cashier",
+ "search_fields": "property,cashier,status",
+ "naming_rule": "By \"Naming Series\" field"
+}

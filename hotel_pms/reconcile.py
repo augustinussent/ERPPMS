@@ -104,6 +104,15 @@ def reconcile_erpnext_links() -> dict:
                 frappe.db.set_value("Hotel Group Booking", row.group_booking, "group_folio", row.name, update_modified=False)
                 repaired += 1
 
+    for row in frappe.get_all("Hotel City Ledger Folio", fields=["name", "sales_invoice", "status"]):
+        active_invoices, row_repairs = _reconcile_charge_invoice_links("Hotel City Ledger Charge", row.name)
+        repaired += row_repairs
+        active_invoice = active_invoices[-1] if active_invoices else None
+        expected_status = "Invoiced" if active_invoice else "Open"
+        if row.status in ("Open", "Invoiced") and (row.sales_invoice != active_invoice or row.status != expected_status):
+            frappe.db.set_value("Hotel City Ledger Folio", row.name, {"sales_invoice": active_invoice, "status": expected_status}, update_modified=False)
+            repaired += 1
+
     # Restore group commercial links from active ERPNext documents.
     for booking in frappe.get_all("Hotel Group Booking", fields=["name", "quotation", "sales_order", "project"]):
         mappings = [
@@ -177,13 +186,17 @@ def get_sync_health() -> dict:
           and coalesce(sales_invoice, '') = ''
         """
     )[0][0]
-    healthy = not stale_logs and not broken_targets and not unlinked_folio_charges and not unlinked_group_charges
+    unlinked_city_charges = frappe.db.sql(
+        """select count(*) from `tabHotel City Ledger Charge` where is_already_invoiced=1 and coalesce(sales_invoice,'')=''"""
+    )[0][0] if frappe.db.exists("DocType", "Hotel City Ledger Charge") else 0
+    healthy = not stale_logs and not broken_targets and not unlinked_folio_charges and not unlinked_group_charges and not unlinked_city_charges
     return {
         "healthy": healthy,
         "stale_in_progress_logs": stale_logs,
         "broken_sync_targets": broken_targets,
         "invoiced_folio_rows_without_invoice": unlinked_folio_charges,
         "invoiced_group_rows_without_invoice": unlinked_group_charges,
+        "invoiced_city_ledger_rows_without_invoice": unlinked_city_charges,
         "message": _("No synchronization anomalies were found.")
         if healthy
         else _("Synchronization anomalies require administrator review."),

@@ -1,0 +1,181 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "",
+  "creation": "2026-07-21 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "posting_date",
+    "charge_category",
+    "item_code",
+    "description",
+    "qty",
+    "rate",
+    "amount",
+    "tax_profile",
+    "net_amount",
+    "service_charge_amount",
+    "tax_amount",
+    "gross_amount",
+    "cost_center",
+    "source_doctype",
+    "source_name",
+    "idempotency_key",
+    "sales_invoice",
+    "is_already_invoiced",
+    "is_void",
+    "void_reason",
+    "transfer_source"
+  ],
+  "fields": [
+    {
+      "fieldname": "posting_date",
+      "label": "Posting Date",
+      "fieldtype": "Date",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "charge_category",
+      "label": "Charge Category",
+      "fieldtype": "Select",
+      "options": "Room\nFood\nBeverage\nMeeting Room\nEquipment\nMinibar\nLaundry\nTransport\nDamage\nOther",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item_code",
+      "label": "Item",
+      "fieldtype": "Link",
+      "options": "Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "label": "Description",
+      "fieldtype": "Small Text",
+      "reqd": 1
+    },
+    {
+      "fieldname": "qty",
+      "label": "Quantity",
+      "fieldtype": "Float",
+      "default": "1",
+      "reqd": 1
+    },
+    {
+      "fieldname": "rate",
+      "label": "Rate",
+      "fieldtype": "Currency",
+      "reqd": 1
+    },
+    {
+      "fieldname": "amount",
+      "label": "Amount",
+      "fieldtype": "Currency",
+      "read_only": 1
+    },
+    {
+      "fieldname": "tax_profile",
+      "label": "Tax Profile",
+      "fieldtype": "Link",
+      "options": "Hotel Tax Profile"
+    },
+    {
+      "fieldname": "net_amount",
+      "label": "Net Amount",
+      "fieldtype": "Currency",
+      "read_only": 1
+    },
+    {
+      "fieldname": "service_charge_amount",
+      "label": "Service Charge Amount",
+      "fieldtype": "Currency",
+      "read_only": 1
+    },
+    {
+      "fieldname": "tax_amount",
+      "label": "Tax Amount",
+      "fieldtype": "Currency",
+      "read_only": 1
+    },
+    {
+      "fieldname": "gross_amount",
+      "label": "Gross Amount",
+      "fieldtype": "Currency",
+      "read_only": 1
+    },
+    {
+      "fieldname": "cost_center",
+      "label": "Cost Center",
+      "fieldtype": "Link",
+      "options": "Cost Center"
+    },
+    {
+      "fieldname": "source_doctype",
+      "label": "Source DocType",
+      "fieldtype": "Link",
+      "options": "DocType"
+    },
+    {
+      "fieldname": "source_name",
+      "label": "Source Name",
+      "fieldtype": "Dynamic Link",
+      "options": "source_doctype"
+    },
+    {
+      "fieldname": "idempotency_key",
+      "label": "Idempotency Key",
+      "fieldtype": "Data",
+      "unique": 1,
+      "hidden": 1
+    },
+    {
+      "fieldname": "sales_invoice",
+      "label": "Sales Invoice",
+      "fieldtype": "Link",
+      "options": "Sales Invoice",
+      "read_only": 1
+    },
+    {
+      "fieldname": "is_already_invoiced",
+      "label": "Already Invoiced",
+      "fieldtype": "Check",
+      "default": "0",
+      "read_only": 1
+    },
+    {
+      "fieldname": "is_void",
+      "label": "Void",
+      "fieldtype": "Check",
+      "default": "0"
+    },
+    {
+      "fieldname": "void_reason",
+      "label": "Void Reason",
+      "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "transfer_source",
+      "label": "Transfer Source",
+      "fieldtype": "Link",
+      "options": "Hotel Folio Transfer",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "istable": 1,
+  "issingle": 0,
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-07-21 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel City Ledger Charge",
+  "owner": "Administrator",
+  "permissions": [],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 0
+}

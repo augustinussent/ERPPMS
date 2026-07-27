@@ -1,0 +1,4 @@
+property,room_type,rate_plan,rate_date,rate_override,floor_rate,minimum_stay,maximum_stay,closed_to_arrival,closed_to_departure,stop_sell,minimum_advance_days,maximum_advance_days,notes
+THE BATU HOTEL,Deluxe,BAR,2026-08-15,850000,650000,2,0,0,0,0,0,365,High season weekend
+THE BATU HOTEL,Deluxe,BAR,2026-08-16,,650000,2,0,0,0,0,0,365,Use season rate
+THE BATU HOTEL,Deluxe,BAR,2026-08-17,,650000,1,0,0,0,1,0,365,Maintenance stop sell

@@ -12,6 +12,12 @@
   "qty",
   "rate",
   "amount",
+  "tax_profile",
+  "net_amount",
+  "service_charge_amount",
+  "tax_amount",
+  "gross_amount",
+  "transfer_source",
   "cost_center",
   "billing_destination",
   "billing_customer",
@@ -134,6 +140,43 @@
    "label": "Already Invoiced",
    "fieldtype": "Check",
    "default": "0"
+  },
+  {
+   "fieldname": "tax_profile",
+   "label": "Tax Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Tax Profile"
+  },
+  {
+   "fieldname": "net_amount",
+   "label": "Net Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_charge_amount",
+   "label": "Service Charge Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_amount",
+   "label": "Tax Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gross_amount",
+   "label": "Gross Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "transfer_source",
+   "label": "Transfer Source",
+   "fieldtype": "Link",
+   "options": "Hotel Folio Transfer",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 0,

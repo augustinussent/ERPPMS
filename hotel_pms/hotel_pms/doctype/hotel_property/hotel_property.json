@@ -20,6 +20,8 @@
   "address",
   "selling_price_list",
   "default_sales_taxes_template",
+  "default_hotel_tax_profile",
+  "default_payment_gateway_account",
   "default_cancellation_policy"
  ],
  "fields": [
@@ -114,6 +116,18 @@
    "label": "Default Cancellation Policy",
    "fieldtype": "Link",
    "options": "Hotel Cancellation Policy"
+  },
+  {
+   "fieldname": "default_hotel_tax_profile",
+   "label": "Default Hotel Tax Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Tax Profile"
+  },
+  {
+   "fieldname": "default_payment_gateway_account",
+   "label": "Default Payment Gateway Account",
+   "fieldtype": "Link",
+   "options": "Payment Gateway Account"
   }
  ],
  "index_web_pages_for_search": 1,

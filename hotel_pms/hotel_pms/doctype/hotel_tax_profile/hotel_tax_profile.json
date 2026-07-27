@@ -1,0 +1,207 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:profile_name",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "profile_name",
+  "property",
+  "enabled",
+  "calculation_section",
+  "service_charge_rate",
+  "tax_rate",
+  "tax_basis",
+  "prices_include_service_charge",
+  "prices_include_tax",
+  "erpnext_section",
+  "sales_taxes_template",
+  "service_charge_item",
+  "service_charge_account",
+  "tax_account",
+  "rounding_method",
+  "rounding_account",
+  "accountant_reviewed",
+  "review_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "profile_name",
+   "label": "Profile Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "calculation_section",
+   "label": "Display Estimate Rules",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "service_charge_rate",
+   "label": "Service Charge %",
+   "fieldtype": "Percent",
+   "default": "0"
+  },
+  {
+   "fieldname": "tax_rate",
+   "label": "Tax / PBJT / PPN %",
+   "fieldtype": "Percent",
+   "default": "0"
+  },
+  {
+   "fieldname": "tax_basis",
+   "label": "Tax Basis",
+   "fieldtype": "Select",
+   "options": "Net Amount\nNet Amount plus Service Charge",
+   "default": "Net Amount plus Service Charge"
+  },
+  {
+   "fieldname": "prices_include_service_charge",
+   "label": "Prices Include Service Charge",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "prices_include_tax",
+   "label": "Prices Include Tax",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "erpnext_section",
+   "label": "ERPNext Posting",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sales_taxes_template",
+   "label": "Sales Taxes and Charges Template",
+   "fieldtype": "Link",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "service_charge_item",
+   "label": "Service Charge Item",
+   "fieldtype": "Link",
+   "options": "Item"
+  },
+  {
+   "fieldname": "service_charge_account",
+   "label": "Service Charge Account",
+   "fieldtype": "Link",
+   "options": "Account"
+  },
+  {
+   "fieldname": "tax_account",
+   "label": "Tax Account",
+   "fieldtype": "Link",
+   "options": "Account"
+  },
+  {
+   "fieldname": "rounding_method",
+   "label": "Rounding Method",
+   "fieldtype": "Select",
+   "options": "No Rounding\nNearest 1\nNearest 10\nNearest 100\nNearest 1000",
+   "default": "No Rounding"
+  },
+  {
+   "fieldname": "rounding_account",
+   "label": "Rounding Account",
+   "fieldtype": "Link",
+   "options": "Account"
+  },
+  {
+   "fieldname": "accountant_reviewed",
+   "label": "Reviewed by Accountant / Tax Adviser",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "review_notes",
+   "label": "Review Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Tax Profile",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "profile_name",
+ "search_fields": "property",
+ "naming_rule": "By fieldname"
+}

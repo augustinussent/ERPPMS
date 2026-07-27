@@ -18,7 +18,20 @@
   "rate",
   "min_stay",
   "max_stay",
-  "refundable"
+  "refundable",
+  "base_rate_plan",
+  "derived_adjustment_type",
+  "derived_adjustment_value",
+  "meal_plan_supplement",
+  "restrictions_section",
+  "closed_to_arrival",
+  "closed_to_departure",
+  "stop_sell",
+  "minimum_advance_days",
+  "maximum_advance_days",
+  "guardrail_section",
+  "floor_rate",
+  "require_approval_below_floor"
  ],
  "fields": [
   {
@@ -98,6 +111,79 @@
   {
    "fieldname": "refundable",
    "label": "Refundable",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "base_rate_plan",
+   "label": "Base Rate Plan",
+   "fieldtype": "Link",
+   "options": "Hotel Rate Plan",
+   "description": "Optional parent plan for derived pricing."
+  },
+  {
+   "fieldname": "derived_adjustment_type",
+   "label": "Derived Adjustment",
+   "fieldtype": "Select",
+   "options": "\nPercentage\nFixed Amount\nFixed Rate"
+  },
+  {
+   "fieldname": "derived_adjustment_value",
+   "label": "Derived Adjustment Value",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "meal_plan_supplement",
+   "label": "Meal Plan Supplement",
+   "fieldtype": "Currency",
+   "default": "0"
+  },
+  {
+   "fieldname": "restrictions_section",
+   "label": "Default Restrictions",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "closed_to_arrival",
+   "label": "Closed to Arrival",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "closed_to_departure",
+   "label": "Closed to Departure",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "stop_sell",
+   "label": "Stop Sell",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "minimum_advance_days",
+   "label": "Minimum Advance Days",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "maximum_advance_days",
+   "label": "Maximum Advance Days",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "guardrail_section",
+   "label": "Rate Guardrail",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "floor_rate",
+   "label": "Floor / Hurdle Rate",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "require_approval_below_floor",
+   "label": "Require Approval Below Floor",
    "fieldtype": "Check",
    "default": "1"
   }

@@ -37,6 +37,13 @@
   "photo_policy_note",
   "sync_section",
   "strict_erpnext_sync",
+  "revenue_section",
+  "default_hotel_tax_profile",
+  "default_voucher_discount_item",
+  "require_rate_quote_on_reservation",
+  "allow_manual_rate_without_plan",
+  "require_direct_bill_approval",
+  "cashier_variance_approval_threshold",
   "night_audit_section",
   "night_audit_hour",
   "night_audit_minute"
@@ -248,6 +255,49 @@
    "label": "Night Audit Minute",
    "fieldtype": "Int",
    "default": "0"
+  },
+  {
+   "fieldname": "revenue_section",
+   "label": "Revenue & Billing",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_hotel_tax_profile",
+   "label": "Default Hotel Tax Profile",
+   "fieldtype": "Link",
+   "options": "Hotel Tax Profile"
+  },
+  {
+   "fieldname": "require_rate_quote_on_reservation",
+   "label": "Require Valid Rate Quote on Reservation",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Enable after all active rate plans and calendar restrictions are configured."
+  },
+  {
+   "fieldname": "allow_manual_rate_without_plan",
+   "label": "Allow Manual Rate Without Rate Plan",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "require_direct_bill_approval",
+   "label": "Require Direct Bill Approval",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "cashier_variance_approval_threshold",
+   "label": "Cashier Variance Approval Threshold",
+   "fieldtype": "Currency",
+   "default": "0"
+  },
+  {
+   "fieldname": "default_voucher_discount_item",
+   "label": "Voucher Discount Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "description": "Non-stock service item used for a negative folio charge when a voucher is applied."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -279,6 +329,22 @@
   },
   {
    "role": "Engineering Supervisor",
+   "read": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "read": 1
+  },
+  {
+   "role": "Cashier",
+   "read": 1
+  },
+  {
+   "role": "Credit Manager",
+   "read": 1
+  },
+  {
+   "role": "Accounts Manager",
    "read": 1
   }
  ],

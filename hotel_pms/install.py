@@ -7,9 +7,10 @@ from hotel_pms.setup_group_booking import setup_group_booking
 from hotel_pms.setup_sync import setup_sync_fields
 from hotel_pms.setup_front_office import setup_front_office
 from hotel_pms.setup_operations import setup_operations
+from hotel_pms.setup_revenue_billing import setup_revenue_billing
 
 
-ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet"]
+ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager"]
 
 
 def before_install() -> None:
@@ -62,3 +63,4 @@ def after_install() -> None:
     setup_sync_fields()
     setup_front_office()
     setup_operations()
+    setup_revenue_billing()

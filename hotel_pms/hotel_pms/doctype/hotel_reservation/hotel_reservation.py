@@ -3,7 +3,7 @@ from __future__ import annotations
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import getdate
+from frappe.utils import flt, getdate
 
 from hotel_pms.room_status import set_room_status
 
@@ -16,6 +16,7 @@ class HotelReservation(Document):
         self._validate_dates()
         self._prevent_direct_policy_bypass()
         self._set_defaults()
+        self._apply_revenue_quote()
         self._validate_room_rows()
         self._validate_room_availability()
 
@@ -29,6 +30,12 @@ class HotelReservation(Document):
     def on_submit(self):
         if frappe.db.get_single_value("Hotel PMS Settings", "auto_create_folio"):
             self._ensure_folio()
+        if self.voucher_code:
+            from hotel_pms.revenue import reserve_voucher_for_reservation
+            redemption = reserve_voucher_for_reservation(self)
+            if redemption and self.voucher_redemption != redemption:
+                self.db_set("voucher_redemption", redemption)
+            self._post_voucher_discount()
 
     def on_cancel(self):
         was_checked_in = self.status == "Checked In"
@@ -77,7 +84,23 @@ class HotelReservation(Document):
             frappe.throw(_("Only checked-in reservations can be checked out."))
         if getdate() < getdate(self.departure_date):
             frappe.throw(_("This is an early departure. Amend the departure date first so inventory, audit history, and charges remain consistent."))
-        self.db_set({"status": "Checked Out", "actual_check_out_at": frappe.utils.now_datetime()})
+        from hotel_pms.front_desk import _reservation_balance
+        balance = flt(_reservation_balance(self.name), 2)
+        if self.billing_route == "Direct Bill":
+            if frappe.db.get_single_value("Hotel PMS Settings", "require_direct_bill_approval"):
+                approval = (
+                    frappe.db.get_value(
+                        "Hotel Direct Bill Approval", self.direct_bill_approval,
+                        ["status", "approved_amount"], as_dict=True
+                    ) if self.direct_bill_approval else None
+                )
+                if not approval or approval.status != "Approved" or flt(approval.approved_amount) < balance:
+                    frappe.throw(_("Approved direct-bill authorization covering the current balance is required before checkout."))
+        elif balance > 0.01:
+            frappe.throw(
+                _("Outstanding guest balance {0} must be invoiced and settled before checkout. Use the Hotel Checkout screen.").format(balance)
+            )
+        self.db_set({"status": "Checked Out", "actual_check_out_at": frappe.utils.now_datetime(), "travel_agent_commission_status": "Pending" if self.travel_agent_commission else self.travel_agent_commission_status})
         self._release_rooms(dirty=True)
 
         from hotel_pms.tasks import ensure_housekeeping_task
@@ -114,6 +137,79 @@ class HotelReservation(Document):
             self.cancellation_policy = frappe.db.get_single_value("Hotel PMS Settings", "default_cancellation_policy")
         if not self.required_deposit and self.deposit_amount:
             self.required_deposit = self.deposit_amount
+
+
+    def _apply_revenue_quote(self):
+        rows_with_plan = [row for row in self.rooms if row.rate_plan]
+        require_quote = frappe.db.get_single_value("Hotel PMS Settings", "require_rate_quote_on_reservation")
+        allow_manual = frappe.db.get_single_value("Hotel PMS Settings", "allow_manual_rate_without_plan")
+        if self.rooms and len(rows_with_plan) != len(self.rooms):
+            if require_quote or not allow_manual:
+                frappe.throw(_("Every room requires a rate plan before this reservation can be saved."))
+            return
+        if not rows_with_plan:
+            return
+        from hotel_pms.revenue import quote_booking
+        payload = {
+            "property": self.property,
+            "reservation": self.name if not self.is_new() else None,
+            "arrival_date": self.arrival_date,
+            "departure_date": self.departure_date,
+            "customer": self.guest,
+            "voucher_code": self.voucher_code,
+            "travel_agent_contract": self.travel_agent_contract,
+            "room_requests": [
+                {
+                    "room_type": row.room_type,
+                    "rate_plan": row.rate_plan,
+                    "quantity": 1,
+                    "adults": row.adults,
+                    "children": row.children,
+                    "requested_rate": row.nightly_rate if row.nightly_rate else None,
+                    "rate_approval": self.rate_approval,
+                }
+                for row in self.rooms
+            ],
+        }
+        quote = quote_booking(payload)
+        nights = max((getdate(self.departure_date) - getdate(self.arrival_date)).days, 1)
+        for row, room_quote in zip(self.rooms, quote["rooms"]):
+            row.quoted_stay_total = room_quote["advertised_total"]
+            row.nightly_rate = flt(room_quote["advertised_total"]) / nights
+            row.rate_quote_hash = room_quote["quote_hash"]
+        self.rate_quote_hash = quote["quote_hash"]
+        self.voucher_discount = quote["voucher_discount"]
+        self.quoted_room_total = quote["advertised_total"]
+        self.quoted_service_charge = quote["service_charge"]
+        self.quoted_tax = quote["tax"]
+        self.quoted_grand_total = quote["grand_total"]
+        self.travel_agent_commission = quote["agent_commission"]
+        if self.travel_agent_commission and not self.travel_agent_commission_status:
+            self.travel_agent_commission_status = "Pending"
+
+    def _post_voucher_discount(self):
+        if not self.voucher_discount or not self.folio:
+            return
+        item = frappe.db.get_single_value("Hotel PMS Settings", "default_voucher_discount_item")
+        if not item:
+            frappe.throw(_("Configure Voucher Discount Item in Hotel PMS Settings before submitting a voucher reservation."))
+        folio = frappe.get_doc("Hotel Folio", self.folio)
+        key = f"VOUCHER:{self.name}:{self.voucher_code}"
+        if any(row.idempotency_key == key for row in folio.charges):
+            return
+        folio.append("charges", {
+            "posting_date": getdate(self.arrival_date),
+            "charge_type": "Other",
+            "item_code": item,
+            "description": f"Voucher {self.voucher_code}",
+            "qty": 1,
+            "rate": -abs(self.voucher_discount),
+            "cost_center": self.cost_center,
+            "source_doctype": self.doctype,
+            "source_name": self.name,
+            "idempotency_key": key,
+        })
+        folio.save(ignore_permissions=True)
 
     def _validate_room_rows(self):
         if not self.rooms:

@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "source_folio_type",
+  "source_folio",
+  "destination_folio_type",
+  "destination_folio",
+  "transfer_type",
+  "reason",
+  "lines",
+  "total_transferred",
+  "reverses_transfer",
+  "reversed_by",
+  "status",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HFTR-.YYYY.-.#####",
+   "default": "HFTR-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "source_folio_type",
+   "label": "Source Folio Type",
+   "fieldtype": "Select",
+   "options": "Hotel Folio\nHotel Group Folio\nHotel City Ledger Folio",
+   "reqd": 1
+  },
+  {
+   "fieldname": "source_folio",
+   "label": "Source Folio",
+   "fieldtype": "Dynamic Link",
+   "options": "source_folio_type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "destination_folio_type",
+   "label": "Destination Folio Type",
+   "fieldtype": "Select",
+   "options": "Hotel Folio\nHotel Group Folio\nHotel City Ledger Folio",
+   "reqd": 1
+  },
+  {
+   "fieldname": "destination_folio",
+   "label": "Destination Folio",
+   "fieldtype": "Dynamic Link",
+   "options": "destination_folio_type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "transfer_type",
+   "label": "Transfer Type",
+   "fieldtype": "Select",
+   "options": "Transfer\nSplit\nReversal",
+   "default": "Transfer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Audit Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "lines",
+   "label": "Lines",
+   "fieldtype": "Table",
+   "options": "Hotel Folio Transfer Line",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_transferred",
+   "label": "Total Transferred",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reverses_transfer",
+   "label": "Reverses Transfer",
+   "fieldtype": "Link",
+   "options": "Hotel Folio Transfer"
+  },
+  {
+   "fieldname": "reversed_by",
+   "label": "Reversed By",
+   "fieldtype": "Link",
+   "options": "Hotel Folio Transfer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nApplied\nReversed\nCancelled",
+   "default": "Draft",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Folio Transfer",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "source_folio",
+ "search_fields": "source_folio,destination_folio",
+ "naming_rule": "By \"Naming Series\" field"
+}

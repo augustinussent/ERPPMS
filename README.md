@@ -28,6 +28,11 @@ The PMS and ERPNext share one Frappe site and one database. Hotel documents rema
 - Cancellation/no-show policies and confirmation print format
 - Guest Registration Card and registered occupants
 - ERPNext Payment Entry drafts for deposits and refunds
+- Deterministic rate calendar, seasons, derived plans, restrictions, floor-rate approvals, and quote hashes
+- Voucher redemption and travel-agent commission settlement
+- Configurable hotel tax/service-charge profiles mapped to ERPNext tax templates
+- Folio split, transfer, reversal, unified checkout, Payment Request links, and city ledger
+- Cashier shifts, drawer movements, ERPNext cash/POS reconciliation, and variance review
 
 ## Important accounting rule
 
@@ -90,18 +95,17 @@ Check-out → Room Dirty → Housekeeping → Clean / Inspected
 
 ## Front Desk and Operations
 
-Open `/app/hotel-front-desk` for Front Office and `/app/hotel-housekeeping-mobile` for Housekeeping/Engineering mobile operations. Before using cancellation, no-show, deposit, or refund actions, configure a cancellation policy, fee Item, and ERPNext Mode of Payment accounts. Configure checklist templates and SLA values before enabling strict operational enforcement. See `docs/FRONT_OFFICE_V040.md` and `docs/OPERATIONS_V050.md`.
+Open `/app/hotel-front-desk` for Front Office, `/app/hotel-housekeeping-mobile` for Housekeeping/Engineering, `/app/hotel-revenue-calendar` for Revenue, `/app/hotel-checkout` for billing, and `/app/hotel-cashier` for cashier operations. Configure cancellation policy, Mode of Payment accounts, tax profile, rate plans, voucher-discount Item, credit accounts, and checklist/SLA values before enabling strict controls. See `docs/FRONT_OFFICE_V040.md`, `docs/OPERATIONS_V050.md`, and `docs/REVENUE_BILLING_V060.md`.
 
 ## Production gaps to complete before go-live
 
 This repository is a serious starter, not a finished replacement for OPERA, eZee, or other mature PMS products. Before production, implement and test:
 
-- Split folios, charge transfers, city ledger settlement, and unified checkout across multiple invoices
-- Cashier shift, cash drawer, and night-audit close lock
-- Tax/service-charge rules for Indonesian operations
-- Rate calendar, derived rates, restrictions, vouchers, and travel-agent commissions
+- Night-audit business-date lock and formal cashier handover approval
+- Accountant-approved Indonesian tax/service-charge setup and regulatory reporting
+- OTA/channel-manager rate and inventory distribution
+- Revenue forecasting and automated pricing recommendations
 - Minibar stock issue workflow and physical reconciliation
-- OTA/channel-manager integration and webhook retry queue
 - Booking engine, guest portal, and online payment
 - Privacy retention, anonymization, and access-control tests
 - Automated backups, monitoring, restore drills, and disaster recovery

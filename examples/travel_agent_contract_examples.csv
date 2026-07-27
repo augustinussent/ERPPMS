@@ -1,0 +1,2 @@
+contract_name,property,travel_agent,valid_from,valid_to,pricing_basis,commission_rate,settlement_days,commission_item,expense_account,cost_center,enabled
+AGENT-2026-A,THE BATU HOTEL,PT CONTOH TRAVEL,2026-01-01,2026-12-31,Gross Rate with Commission,10,30,Travel Agent Commission,Travel Agent Commission - TBH,Hotel - TBH,1

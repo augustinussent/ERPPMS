@@ -1,0 +1,216 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:voucher_code",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "voucher_code",
+  "voucher_name",
+  "property",
+  "enabled",
+  "discount_type",
+  "discount_value",
+  "maximum_discount",
+  "validity_section",
+  "booking_from",
+  "booking_to",
+  "stay_from",
+  "stay_to",
+  "minimum_stay",
+  "usage_limit",
+  "usage_per_customer",
+  "scope_section",
+  "room_type",
+  "rate_plan",
+  "customer",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "voucher_code",
+   "label": "Voucher Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "voucher_name",
+   "label": "Voucher Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "discount_type",
+   "label": "Discount Type",
+   "fieldtype": "Select",
+   "options": "Percentage\nFixed Amount",
+   "reqd": 1,
+   "default": "Percentage"
+  },
+  {
+   "fieldname": "discount_value",
+   "label": "Discount Value",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "maximum_discount",
+   "label": "Maximum Discount",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "validity_section",
+   "label": "Validity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "booking_from",
+   "label": "Booking From",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "booking_to",
+   "label": "Booking To",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "stay_from",
+   "label": "Stay From",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "stay_to",
+   "label": "Stay To",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "minimum_stay",
+   "label": "Minimum Stay",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "usage_limit",
+   "label": "Total Usage Limit",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "usage_per_customer",
+   "label": "Usage per Customer",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "scope_section",
+   "label": "Scope",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type"
+  },
+  {
+   "fieldname": "rate_plan",
+   "label": "Rate Plan",
+   "fieldtype": "Link",
+   "options": "Hotel Rate Plan"
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Voucher",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "voucher_name",
+ "search_fields": "voucher_code,voucher_name,property",
+ "naming_rule": "By fieldname"
+}

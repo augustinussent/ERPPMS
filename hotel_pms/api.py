@@ -167,14 +167,21 @@ def create_sales_invoice(folio: str) -> dict:
         invoice.customer = folio_doc.billing_customer or reservation.guest
         invoice.posting_date = getdate()
         invoice.due_date = getdate()
+        if invoice.meta.has_field("allocate_advances_automatically"):
+            invoice.allocate_advances_automatically = True
         if invoice.meta.has_field("custom_hotel_folio"):
             invoice.custom_hotel_folio = folio_doc.name
         if invoice.meta.has_field("custom_hotel_reservation"):
             invoice.custom_hotel_reservation = reservation.name
 
         property_doc = frappe.get_doc("Hotel Property", reservation.property)
-        if property_doc.default_sales_taxes_template:
-            invoice.taxes_and_charges = property_doc.default_sales_taxes_template
+        tax_profile = property_doc.default_hotel_tax_profile
+        tax_template = frappe.db.get_value("Hotel Tax Profile", tax_profile, "sales_taxes_template") if tax_profile else None
+        tax_template = tax_template or property_doc.default_sales_taxes_template
+        if invoice.meta.has_field("custom_hotel_tax_profile"):
+            invoice.custom_hotel_tax_profile = tax_profile
+        if tax_template:
+            invoice.taxes_and_charges = tax_template
             invoice.set_taxes()
 
         for charge in charges:

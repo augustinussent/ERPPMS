@@ -10,37 +10,32 @@
 
 ## Completed front-office release: v0.4.0
 
-- Today dashboard
-- Physical-room tape chart
-- Quick multi-room booking
-- Room move
-- Extend stay and early departure
+- Today dashboard and physical-room tape chart
+- Quick multi-room booking, room move, extend stay, and early departure
 - Guest Registration Card and occupants
-- Cancellation and no-show policy engine
-- Deposit and refund draft Payment Entry workflow
-- Front-office change audit log
+- Cancellation/no-show policy and deposit/refund workflow
 
 ## Completed operations release: v0.5.0
 
-- Responsive Housekeeping/Engineering route and realtime notifications
+- Mobile Housekeeping/Engineering operations and realtime notifications
 - Priority queue, assignment, timer, checklist, inspection, and reclean
-- Lost & Found with chain of custody
-- Unified Engineering request, SLA, room block, and post-maintenance cleaning
-- Room-status timeline, Room History, Housekeeping KPI, and Maintenance SLA reports
-- Recurring-problem counter and SOP Candidate workflow
+- Lost & Found, SLA, post-maintenance cleaning, Room History, KPI, and SOP Candidate
 
-## Next release: v0.6.0 Revenue and Billing
+## Completed revenue and billing release: v0.6.0
 
-- Rate calendar, derived rates, restrictions, seasons, vouchers, and travel-agent commissions
-- Folio split, transfer, city ledger, unified checkout, payment links, cashier shift, and closing
-- Indonesian tax and service-charge policy layer
+- Rate plans, seasons, date calendar, derived rates, restrictions, floor approvals, and deterministic quote hash
+- Vouchers and travel-agent contracts/commission settlements
+- Configurable hotel tax and service-charge profiles mapped to ERPNext tax templates
+- Folio split, transfer, reversal, unified checkout, and Payment Requests
+- City ledger, direct-bill credit governance, and outstanding report
+- Cashier shift, drawer movement, reconciliation, variance review, and reports
 
-## v0.7.0 Guest-facing
+## Next release: v0.7.0 Guest-facing
 
 - Direct booking engine
 - Guest portal and secure self check-in
 - Online payment and confirmation/cancellation portal
-- Guest profile 360, merge, privacy retention, and anonymization
+- Guest profile 360, duplicate merge, privacy retention, and anonymization
 
 ## v0.8.0 Restaurant and Guest Services
 

@@ -12,6 +12,8 @@
   "adults",
   "children",
   "nightly_rate",
+  "quoted_stay_total",
+  "rate_quote_hash",
   "discount_percent",
   "notes"
  ],
@@ -66,6 +68,19 @@
    "fieldname": "notes",
    "label": "Notes",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "quoted_stay_total",
+   "label": "Quoted Stay Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate_quote_hash",
+   "label": "Rate Quote Hash",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "index_web_pages_for_search": 1,

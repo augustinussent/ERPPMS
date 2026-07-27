@@ -239,9 +239,19 @@ def quick_multi_room_booking(payload: str | dict) -> dict:
     if existing:
         return {"reservation": existing, "already_created": True}
 
+    booking_quote = None
+    if all(request.get("rate_plan") for request in data["room_requests"]):
+        from hotel_pms.revenue import quote_booking
+        booking_quote = quote_booking({
+            "property": data["property"], "arrival_date": data["arrival_date"], "departure_date": data["departure_date"],
+            "customer": data["guest"], "voucher_code": data.get("voucher_code"),
+            "travel_agent_contract": data.get("travel_agent_contract"), "room_requests": data["room_requests"],
+        })
+
     selected_rooms: list[dict] = []
     already_selected: set[str] = set()
-    for request in data["room_requests"]:
+    nights = max((getdate(data["departure_date"]) - getdate(data["arrival_date"])).days, 1)
+    for request_index, request in enumerate(data["room_requests"]):
         quantity = max(cint(request.get("quantity") or 1), 1)
         available = get_available_rooms(
             data["property"], data["arrival_date"], data["departure_date"], request.get("room_type")
@@ -254,6 +264,9 @@ def quick_multi_room_booking(payload: str | dict) -> dict:
                 )
             )
         rate = flt(request.get("nightly_rate"))
+        quote_row = booking_quote["rooms"][request_index] if booking_quote else None
+        if quote_row:
+            rate = flt(quote_row["advertised_total"]) / nights
         if not rate:
             rate = flt(frappe.db.get_value("Hotel Room Type", request.get("room_type"), "base_rate"))
         for room in available[:quantity]:
@@ -293,6 +306,15 @@ def quick_multi_room_booking(payload: str | dict) -> dict:
             "children": sum(cint(row.get("children") or 0) * cint(row.get("quantity") or 1) for row in data["room_requests"]),
             "cancellation_policy": data.get("cancellation_policy"),
             "required_deposit": flt(data.get("required_deposit")),
+            "voucher_code": data.get("voucher_code"),
+            "travel_agent_contract": data.get("travel_agent_contract"),
+            "voucher_discount": booking_quote.get("voucher_discount") if booking_quote else 0,
+            "quoted_room_total": booking_quote.get("advertised_total") if booking_quote else 0,
+            "quoted_service_charge": booking_quote.get("service_charge") if booking_quote else 0,
+            "quoted_tax": booking_quote.get("tax") if booking_quote else 0,
+            "quoted_grand_total": booking_quote.get("grand_total") if booking_quote else 0,
+            "travel_agent_commission": booking_quote.get("agent_commission") if booking_quote else 0,
+            "rate_quote_hash": booking_quote.get("quote_hash") if booking_quote else None,
             "rooms": selected_rooms,
             "notes": data.get("notes"),
         }
@@ -609,6 +631,9 @@ def cancel_reservation(
             "no_show_processed_at": now_datetime() if transaction_type == "No Show" else None,
         },
     )
+    if doc.voucher_code:
+        from hotel_pms.revenue import release_voucher_for_reservation
+        release_voucher_for_reservation(doc.name)
     for row in doc.rooms:
         if frappe.db.get_value("Hotel Room", row.room, "operational_status") != "Occupied":
             set_room_status(
@@ -691,6 +716,7 @@ def create_deposit_payment_entry(
     idempotency_key: str,
     reference_no: str | None = None,
     reference_date: str | None = None,
+    cashier_shift: str | None = None,
 ) -> dict:
     _require_front_desk_access()
     doc = get_locked_reservation(reservation)
@@ -706,6 +732,7 @@ def create_deposit_payment_entry(
         idempotency_key=idempotency_key,
         reference_no=reference_no,
         reference_date=reference_date,
+        cashier_shift=cashier_shift,
     )
 
 
@@ -717,6 +744,7 @@ def create_refund_payment_entry(
     idempotency_key: str,
     reference_no: str | None = None,
     reference_date: str | None = None,
+    cashier_shift: str | None = None,
 ) -> dict:
     frappe.only_for(["System Manager", "Hotel Manager", "Accounts User", "Accounts Manager"])
     doc = get_locked_reservation(reservation)
@@ -732,15 +760,16 @@ def create_refund_payment_entry(
         idempotency_key=idempotency_key,
         reference_no=reference_no,
         reference_date=reference_date,
+        cashier_shift=cashier_shift,
     )
 
 
 def _create_reservation_payment_entry(
     *, reservation, transaction_type: str, amount: float, mode_of_payment: str,
-    idempotency_key: str, reference_no: str | None, reference_date: str | None,
+    idempotency_key: str, reference_no: str | None, reference_date: str | None, cashier_shift: str | None = None,
 ) -> dict:
     base_key = make_sync_key("PE", transaction_type, reservation.name, idempotency_key)
-    payload = {"reservation": reservation.name, "type": transaction_type, "amount": amount, "mode": mode_of_payment}
+    payload = {"reservation": reservation.name, "type": transaction_type, "amount": amount, "mode": mode_of_payment, "cashier_shift": cashier_shift}
 
     def build():
         from erpnext.accounts.party import get_party_account
@@ -772,6 +801,8 @@ def _create_reservation_payment_entry(
             payment.custom_hotel_reservation = reservation.name
         if payment.meta.has_field("custom_hotel_transaction_type"):
             payment.custom_hotel_transaction_type = transaction_type
+        if payment.meta.has_field("custom_hotel_cashier_shift"):
+            payment.custom_hotel_cashier_shift = cashier_shift or frappe.db.get_value("Hotel Cashier Shift", {"property": reservation.property, "cashier": frappe.session.user, "status": "Open"}, "name")
         return payment
 
     payment, already_created = create_document_once(

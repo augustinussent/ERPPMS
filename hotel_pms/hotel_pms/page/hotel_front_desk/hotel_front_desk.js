@@ -14,6 +14,8 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
   page.set_primary_action(__("Quick Booking"), () => quickBooking(), "add");
   page.add_inner_button(__("Refresh"), () => refreshAll());
   page.add_inner_button(__("Operations Mobile"), () => frappe.set_route("hotel-housekeeping-mobile"));
+  page.add_inner_button(__("Revenue Calendar"), () => frappe.set_route("hotel-revenue-calendar"));
+  page.add_inner_button(__("Cashier"), () => frappe.set_route("hotel-cashier"));
 
   const body = $(`<div>
     <style>
@@ -39,7 +41,11 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
   });
   body.on("click", "[data-reservation]", function () { frappe.set_route("Form", "Hotel Reservation", $(this).data("reservation")); });
   body.on("click", "[data-action=checkin]", async function (event) { event.stopPropagation(); await callOp("hotel_pms.api.check_in", { reservation: $(this).data("name") }); });
-  body.on("click", "[data-action=checkout]", async function (event) { event.stopPropagation(); await callOp("hotel_pms.api.check_out", { reservation: $(this).data("name") }); });
+  body.on("click", "[data-action=checkout]", function (event) {
+    event.stopPropagation();
+    frappe.route_options = { reservation: $(this).data("name") };
+    frappe.set_route("hotel-checkout");
+  });
 
   async function callOp(method, args) { await frappe.call({ method, args, freeze: true }); refreshAll(); }
   function esc(value) { return frappe.utils.escape_html(String(value == null ? "" : value)); }
@@ -79,10 +85,13 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
       { fieldname:"arrival_date", label:__("Arrival"), fieldtype:"Date", default:state.date, reqd:1 },
       { fieldname:"departure_date", label:__("Departure"), fieldtype:"Date", default:frappe.datetime.add_days(state.date,1), reqd:1 },
       { fieldname:"source", label:__("Source"), fieldtype:"Select", options:"Direct\nWalk-in\nWebsite\nOTA\nCorporate\nTravel Agent", default:"Direct" },
+      { fieldname:"voucher_code", label:__("Voucher Code"), fieldtype:"Link", options:"Hotel Voucher" },
+      { fieldname:"travel_agent_contract", label:__("Travel Agent Contract"), fieldtype:"Link", options:"Hotel Travel Agent Contract" },
       { fieldname:"room_requests", label:__("Room Requests"), fieldtype:"Table", reqd:1, in_place_edit:true, data:[], fields:[
         { fieldname:"room_type", label:__("Room Type"), fieldtype:"Link", options:"Hotel Room Type", reqd:1, in_list_view:1, get_query:()=>({filters:{property:state.property,enabled:1}}) },
         { fieldname:"quantity", label:__("Qty"), fieldtype:"Int", default:1, reqd:1, in_list_view:1 },
-        { fieldname:"nightly_rate", label:__("Nightly Rate"), fieldtype:"Currency", in_list_view:1 },
+        { fieldname:"rate_plan", label:__("Rate Plan"), fieldtype:"Link", options:"Hotel Rate Plan", reqd:1, in_list_view:1, get_query:()=>({filters:{property:state.property,enabled:1}}) },
+        { fieldname:"nightly_rate", label:__("Requested Nightly Rate"), fieldtype:"Currency", in_list_view:1 },
         { fieldname:"adults", label:__("Adults/Room"), fieldtype:"Int", default:2, in_list_view:1 },
         { fieldname:"children", label:__("Children/Room"), fieldtype:"Int", default:0, in_list_view:1 },
       ]},

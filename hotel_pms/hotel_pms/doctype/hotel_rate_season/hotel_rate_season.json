@@ -1,0 +1,192 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "season_name",
+  "property",
+  "enabled",
+  "validity_section",
+  "valid_from",
+  "valid_to",
+  "priority",
+  "days",
+  "scope_section",
+  "room_type",
+  "rate_plan",
+  "adjustment_type",
+  "adjustment_value",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HSEAS-.YYYY.-.#####",
+   "default": "HSEAS-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "season_name",
+   "label": "Season Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "validity_section",
+   "label": "Validity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Valid From",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valid_to",
+   "label": "Valid To",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Int",
+   "default": "10",
+   "description": "Higher priority wins when seasons overlap."
+  },
+  {
+   "fieldname": "days",
+   "label": "Applicable Days",
+   "fieldtype": "Table",
+   "options": "Hotel Rate Season Day"
+  },
+  {
+   "fieldname": "scope_section",
+   "label": "Scope",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type"
+  },
+  {
+   "fieldname": "rate_plan",
+   "label": "Rate Plan",
+   "fieldtype": "Link",
+   "options": "Hotel Rate Plan"
+  },
+  {
+   "fieldname": "adjustment_type",
+   "label": "Adjustment Type",
+   "fieldtype": "Select",
+   "options": "Percentage\nFixed Amount\nFixed Rate",
+   "default": "Percentage",
+   "reqd": 1
+  },
+  {
+   "fieldname": "adjustment_value",
+   "label": "Adjustment Value",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Rate Season",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "season_name",
+ "search_fields": "property,room_type,rate_plan",
+ "naming_rule": "By \"Naming Series\" field"
+}

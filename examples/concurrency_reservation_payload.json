@@ -1,0 +1,13 @@
+{
+  "property": "REPLACE-WITH-STAGING-PROPERTY",
+  "guest": "REPLACE-WITH-STAGING-CUSTOMER",
+  "arrival_date": "2026-08-01",
+  "departure_date": "2026-08-02",
+  "rooms": [
+    {
+      "room_type": "REPLACE-WITH-LAST-ROOM-TYPE",
+      "adults": 2,
+      "children": 0
+    }
+  ]
+}

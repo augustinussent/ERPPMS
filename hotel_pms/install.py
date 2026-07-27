@@ -11,6 +11,7 @@ from hotel_pms.setup_revenue_billing import setup_revenue_billing
 from hotel_pms.setup_guest_facing import setup_guest_facing
 from hotel_pms.setup_services import setup_services
 from hotel_pms.setup_platform import setup_platform
+from hotel_pms.setup_production_gate import setup_production_gate
 
 
 ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager", "Restaurant Cashier", "Restaurant Captain", "Kitchen", "Laundry", "Guest Services", "Hotel API User", "Hotel Cross Property Manager"]
@@ -70,3 +71,4 @@ def after_install() -> None:
     setup_guest_facing()
     setup_services()
     setup_platform()
+    setup_production_gate()

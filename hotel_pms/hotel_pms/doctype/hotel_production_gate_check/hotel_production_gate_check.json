@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-24 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "category",
+  "check_code",
+  "title",
+  "execution_type",
+  "mandatory",
+  "status",
+  "measured_value",
+  "threshold",
+  "details",
+  "evidence_url",
+  "checked_at",
+  "checked_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "category",
+   "label": "Category",
+   "fieldtype": "Select",
+   "options": "Platform\nAccounting\nInventory & Operations\nSecurity\nReliability & DR\nPerformance\nOperational Readiness",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "check_code",
+   "label": "Check Code",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "title",
+   "label": "Check",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution_type",
+   "label": "Execution",
+   "fieldtype": "Select",
+   "options": "Automated\nManual",
+   "reqd": 1,
+   "default": "Manual",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mandatory",
+   "label": "Mandatory",
+   "fieldtype": "Check",
+   "default": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nRunning\nPassed\nWarning\nFailed\nNot Applicable",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "measured_value",
+   "label": "Measured Value",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "threshold",
+   "label": "Threshold",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details",
+   "label": "Details",
+   "fieldtype": "Long Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evidence_url",
+   "label": "Evidence / Attachment URL",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checked_at",
+   "label": "Checked At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checked_by",
+   "label": "Checked By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-24 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Production Gate Check",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

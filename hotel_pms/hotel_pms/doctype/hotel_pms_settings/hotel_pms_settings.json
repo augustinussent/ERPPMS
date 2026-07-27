@@ -81,7 +81,14 @@
   "enable_health_alerts",
   "last_worker_heartbeat",
   "health_alert_recipients",
-  "security_runbook_note"
+  "security_runbook_note",
+  "production_gate_section",
+  "production_target_rpo_minutes",
+  "production_target_rto_minutes",
+  "production_max_accounting_variance",
+  "production_max_p95_ms",
+  "production_max_error_percent",
+  "production_gate_note"
  ],
  "fields": [
   {
@@ -544,6 +551,47 @@
    "label": "Last Worker Heartbeat",
    "fieldtype": "Datetime",
    "read_only": 1
+  },
+  {
+   "fieldname": "production_gate_section",
+   "label": "Production Gate Thresholds",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "production_target_rpo_minutes",
+   "label": "Target RPO Minutes",
+   "fieldtype": "Int",
+   "default": "1440"
+  },
+  {
+   "fieldname": "production_target_rto_minutes",
+   "label": "Target RTO Minutes",
+   "fieldtype": "Int",
+   "default": "240"
+  },
+  {
+   "fieldname": "production_max_accounting_variance",
+   "label": "Maximum Accounting Variance",
+   "fieldtype": "Currency",
+   "default": "1"
+  },
+  {
+   "fieldname": "production_max_p95_ms",
+   "label": "Maximum P95 Response Time ms",
+   "fieldtype": "Int",
+   "default": "1500"
+  },
+  {
+   "fieldname": "production_max_error_percent",
+   "label": "Maximum Load-test Error %",
+   "fieldtype": "Percent",
+   "default": "1"
+  },
+  {
+   "fieldname": "production_gate_note",
+   "label": "Production Approval Note",
+   "fieldtype": "HTML",
+   "options": "<div class=\"alert alert-warning\">A successful static build is not production approval. Use Hotel Production Gate Run and attach evidence for restore, security, load, reconciliation, parallel run, and departmental sign-off.</div>"
   }
  ],
  "index_web_pages_for_search": 1,

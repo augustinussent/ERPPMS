@@ -137,6 +137,10 @@ Operational pages:
 The release adds outlet/table operations, KOT and kitchen display, controlled split billing to ERPNext POS/Sales Invoice, QR ordering, room service, laundry, experiences, and shift handover. See `docs/SERVICES_V080.md`.
 
 
-## v0.9.0 Platform Hardening
+## v1.0.0-rc1 Platform Hardening
 
 Use `/app/hotel-platform-console`, `/app/hotel-onboarding`, and `/app/hotel-migration-importer`. Assign every operational user through `Hotel User Property Access`. API v1 documentation is in `docs/openapi-v1.json`. See `docs/PLATFORM_HARDENING_V090.md`.
+
+
+## Production approval
+Open `/app/hotel-production-gate`. This release remains a candidate until a specific environment passes all mandatory checks and departmental sign-offs.

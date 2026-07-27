@@ -1,0 +1,13 @@
+{
+  "environment_name": "Pre-production",
+  "property": "REPLACE-WITH-PROPERTY",
+  "release_version": "1.0.0rc1",
+  "expected_frappe_version": "PIN-EXACT-V16-VERSION",
+  "expected_erpnext_version": "PIN-EXACT-V16-VERSION",
+  "expected_image_digest": "sha256:PIN-EXACT-IMAGE-DIGEST",
+  "target_rpo_minutes": 1440,
+  "target_rto_minutes": 240,
+  "maximum_accounting_variance": 1,
+  "maximum_p95_ms": 1500,
+  "maximum_error_percent": 1
+}

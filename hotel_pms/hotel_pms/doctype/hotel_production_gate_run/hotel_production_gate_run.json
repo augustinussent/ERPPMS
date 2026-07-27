@@ -1,0 +1,273 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-24 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "environment_name",
+  "release_version",
+  "expected_frappe_version",
+  "actual_frappe_version",
+  "expected_erpnext_version",
+  "actual_erpnext_version",
+  "expected_image_digest",
+  "actual_image_digest",
+  "status",
+  "started_at",
+  "completed_at",
+  "summary_section",
+  "blocker_count",
+  "warning_count",
+  "passed_count",
+  "column_break_summary",
+  "target_rpo_minutes",
+  "target_rto_minutes",
+  "measured_rpo_minutes",
+  "measured_rto_minutes",
+  "checks_section",
+  "checks",
+  "signoff_section",
+  "signoffs",
+  "decision_section",
+  "go_live_decision",
+  "decision_by",
+  "decision_at",
+  "decision_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPG-.YYYY.-.#####",
+   "default": "HPG-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "environment_name",
+   "label": "Environment",
+   "fieldtype": "Select",
+   "options": "Development\nStaging\nPre-production\nProduction",
+   "default": "Staging",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "release_version",
+   "label": "Release Version",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Gate Status",
+   "fieldtype": "Select",
+   "options": "Draft\nRunning\nBlocked\nReady for Sign-off\nApproved\nRejected",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "started_at",
+   "label": "Started At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_at",
+   "label": "Completed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "summary_section",
+   "label": "Summary",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "blocker_count",
+   "label": "Blockers",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "warning_count",
+   "label": "Warnings",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "passed_count",
+   "label": "Passed",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_summary",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "target_rpo_minutes",
+   "label": "Target RPO Minutes",
+   "fieldtype": "Int",
+   "default": "1440"
+  },
+  {
+   "fieldname": "target_rto_minutes",
+   "label": "Target RTO Minutes",
+   "fieldtype": "Int",
+   "default": "240"
+  },
+  {
+   "fieldname": "measured_rpo_minutes",
+   "label": "Measured RPO Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "measured_rto_minutes",
+   "label": "Measured RTO Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checks_section",
+   "label": "Production Gate Checks",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "checks",
+   "label": "Checks",
+   "fieldtype": "Table",
+   "options": "Hotel Production Gate Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signoff_section",
+   "label": "Department Sign-off",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "signoffs",
+   "label": "Sign-offs",
+   "fieldtype": "Table",
+   "options": "Hotel Production Gate Signoff",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decision_section",
+   "label": "Decision",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "go_live_decision",
+   "label": "Go-live Decision",
+   "fieldtype": "Select",
+   "options": "Pending\nGo\nNo-Go\nRollback",
+   "default": "Pending",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decision_by",
+   "label": "Decision By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decision_at",
+   "label": "Decision At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decision_notes",
+   "label": "Decision Notes",
+   "fieldtype": "Long Text"
+  },
+  {
+   "fieldname": "expected_frappe_version",
+   "label": "Expected Frappe Version",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_frappe_version",
+   "label": "Actual Frappe Version",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_erpnext_version",
+   "label": "Expected ERPNext Version",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_erpnext_version",
+   "label": "Actual ERPNext Version",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "expected_image_digest",
+   "label": "Expected Container Image Digest",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_image_digest",
+   "label": "Actual Container Image Digest",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-24 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Production Gate Run",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "release_version"
+}

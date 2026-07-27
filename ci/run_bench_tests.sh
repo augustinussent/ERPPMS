@@ -14,3 +14,4 @@ bench --site "$SITE" execute hotel_pms.platform.worker_heartbeat
 bench --site "$SITE" execute hotel_pms.platform.capture_health_snapshot
 bench --site "$SITE" backup --with-files
 bench --site "$SITE" execute hotel_pms.platform.verify_latest_backup
+bench --site "$SITE" execute hotel_pms.production_gate.restore_smoke_check

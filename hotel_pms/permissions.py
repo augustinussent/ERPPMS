@@ -65,3 +65,7 @@ def hotel_voucher_redemption_query(user=None): return permission_query('Hotel Vo
 def hotel_cancellation_query(user=None): return permission_query('Hotel Cancellation',user)
 def hotel_cancellation_policy_query(user=None): return permission_query('Hotel Cancellation Policy',user)
 def hotel_folio_transfer_query(user=None): return permission_query('Hotel Folio Transfer',user)
+
+
+def hotel_production_gate_run_query(user=None):
+    return permission_query("Hotel Production Gate Run", user)

@@ -140,6 +140,7 @@ permission_query_conditions = {
     'Hotel Webhook Subscription': "hotel_pms.permissions.hotel_webhook_subscription_query",
     'Hotel Webhook Delivery': "hotel_pms.permissions.hotel_webhook_delivery_query",
     'Hotel API Idempotency': "hotel_pms.permissions.hotel_api_idempotency_query",
+    'Hotel Production Gate Run': "hotel_pms.permissions.hotel_production_gate_run_query",
 }
 
 has_permission = {
@@ -206,4 +207,5 @@ has_permission = {
     'Hotel Webhook Subscription': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Webhook Delivery': "hotel_pms.permissions.property_document_has_permission",
     'Hotel API Idempotency': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Production Gate Run': "hotel_pms.permissions.property_document_has_permission",
 }

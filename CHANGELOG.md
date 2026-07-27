@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-rc1
+- Production gate evidence model, reconciliation checks, departmental sign-off, cutover and rollback tooling.
+- Concurrency, performance, security, restore-drill, and pinned-container scaffolding.
+- This is a release candidate and requires environment-specific gate approval.
+
+
 ## 0.9.0
 
 - Multi-property access control and property switcher.

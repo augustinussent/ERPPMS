@@ -10,6 +10,7 @@ def setup_sync_fields() -> None:
         "Quotation": "party_name",
         "Sales Order": "customer",
         "Sales Invoice": "customer",
+        "Payment Entry": "party_name",
     }.items():
         fields[doctype] = [
             {

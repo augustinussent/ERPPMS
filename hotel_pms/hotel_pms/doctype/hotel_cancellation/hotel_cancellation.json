@@ -1,0 +1,204 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "owner": "Administrator",
+ "sort_field": "transaction_date",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "field_order": [
+  "naming_series",
+  "reservation",
+  "property",
+  "transaction_type",
+  "transaction_date",
+  "status",
+  "policy_section",
+  "policy",
+  "gross_stay_amount",
+  "calculated_fee",
+  "waived_fee",
+  "final_fee",
+  "deposit_received",
+  "refund_due",
+  "reason_section",
+  "reason",
+  "waiver_reason",
+  "approved_by",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HCAN-.YYYY.-.#####",
+   "default": "HCAN-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "transaction_type",
+   "label": "Transaction Type",
+   "fieldtype": "Select",
+   "options": "Cancellation\nNo Show",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "transaction_date",
+   "label": "Transaction Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nCompleted\nReversed",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "policy_section",
+   "label": "Policy Calculation",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "policy",
+   "label": "Cancellation Policy",
+   "fieldtype": "Link",
+   "options": "Hotel Cancellation Policy",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gross_stay_amount",
+   "label": "Gross Stay Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculated_fee",
+   "label": "Calculated Fee",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "waived_fee",
+   "label": "Waived Fee",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_fee",
+   "label": "Final Fee",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deposit_received",
+   "label": "Deposit Received",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refund_due",
+   "label": "Refund Due",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason_section",
+   "label": "Reason & Approval",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "waiver_reason",
+   "label": "Waiver Reason",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "approved_by",
+   "label": "Approved By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "name": "Hotel Cancellation",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "reservation",
+ "search_fields": "reservation,reason",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ]
+}

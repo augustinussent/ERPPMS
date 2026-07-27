@@ -16,7 +16,8 @@ def has_app_permission() -> bool:
 
 @frappe.whitelist()
 def check_in(reservation: str) -> dict:
-    doc = frappe.get_doc("Hotel Reservation", reservation)
+    from hotel_pms.front_desk import get_locked_reservation
+    doc = get_locked_reservation(reservation)
     doc.check_permission("write")
     doc.check_in()
     return {"reservation": doc.name, "status": doc.status}
@@ -24,7 +25,8 @@ def check_in(reservation: str) -> dict:
 
 @frappe.whitelist()
 def check_out(reservation: str) -> dict:
-    doc = frappe.get_doc("Hotel Reservation", reservation)
+    from hotel_pms.front_desk import get_locked_reservation
+    doc = get_locked_reservation(reservation)
     doc.check_permission("write")
     doc.check_out()
     return {"reservation": doc.name, "status": doc.status}

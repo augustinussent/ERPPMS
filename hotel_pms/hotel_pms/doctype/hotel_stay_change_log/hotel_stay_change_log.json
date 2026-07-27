@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "owner": "Administrator",
+ "sort_field": "changed_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "field_order": [
+  "naming_series",
+  "reservation",
+  "property",
+  "change_type",
+  "changed_at",
+  "changed_by",
+  "room_section",
+  "old_room",
+  "new_room",
+  "date_section",
+  "old_arrival_date",
+  "new_arrival_date",
+  "old_departure_date",
+  "new_departure_date",
+  "reason",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HCHG-.YYYY.-.#####",
+   "default": "HCHG-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "change_type",
+   "label": "Change Type",
+   "fieldtype": "Select",
+   "options": "Room Move\nExtend Stay\nEarly Departure\nArrival Date Change",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "changed_at",
+   "label": "Changed At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "changed_by",
+   "label": "Changed By",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "room_section",
+   "label": "Room Change",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "old_room",
+   "label": "Old Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_room",
+   "label": "New Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date_section",
+   "label": "Stay Date Change",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "old_arrival_date",
+   "label": "Old Arrival",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_arrival_date",
+   "label": "New Arrival",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "old_departure_date",
+   "label": "Old Departure",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_departure_date",
+   "label": "New Departure",
+   "fieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "name": "Hotel Stay Change Log",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "reservation",
+ "search_fields": "reservation,old_room,new_room",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "report": 1
+  }
+ ]
+}

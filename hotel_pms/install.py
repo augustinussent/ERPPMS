@@ -5,6 +5,7 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 from hotel_pms.setup_group_booking import setup_group_booking
 from hotel_pms.setup_sync import setup_sync_fields
+from hotel_pms.setup_front_office import setup_front_office
 
 
 ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Engineering", "Hotel Sales", "Banquet"]
@@ -58,3 +59,4 @@ def after_install() -> None:
     )
     setup_group_booking()
     setup_sync_fields()
+    setup_front_office()

@@ -20,6 +20,12 @@ The PMS and ERPNext share one Frappe site and one database. Hotel documents rema
 - POS Invoice mirroring into the folio without duplicating revenue
 - Housekeeping tasks and before/after photos
 - Maintenance tickets, preventive schedules, vendors, assets, costs, and prevention notes
+- Front Desk dashboard and physical-room tape chart
+- Idempotent quick multi-room booking
+- Controlled room move, extend stay, and early departure with change logs
+- Cancellation/no-show policies and confirmation print format
+- Guest Registration Card and registered occupants
+- ERPNext Payment Entry drafts for deposits and refunds
 
 ## Important accounting rule
 
@@ -79,23 +85,25 @@ Room inventory               Night Audit / Service Charges
 Check-out → Room Dirty → Housekeeping → Clean / Inspected
 ```
 
+## Front Desk v0.4.0
+
+Open `/app/hotel-front-desk` after migration. Before using cancellation, no-show, deposit, or refund actions, configure a cancellation policy, fee Item, and ERPNext Mode of Payment accounts. See `docs/FRONT_OFFICE_V040.md`.
+
 ## Production gaps to complete before go-live
 
 This repository is a serious starter, not a finished replacement for OPERA, eZee, or other mature PMS products. Before production, implement and test:
 
-- Availability tape chart and bulk room assignment
-- Deposit and refund workflow using Payment Entry references
-- Split folios and city ledger settlement
+- Mobile housekeeping queue, checklists, supervisor inspection, Lost & Found, and unified room history
+- Split folios, charge transfers, city ledger settlement, and unified checkout across multiple invoices
+- Cashier shift, cash drawer, and night-audit close lock
 - Tax/service-charge rules for Indonesian operations
-- Group reservations, room moves, extensions, and early departure
-- No-show/cancellation fees
-- Unified checkout payment across multiple ERPNext invoices
+- Rate calendar, derived rates, restrictions, vouchers, and travel-agent commissions
 - Minibar stock issue workflow and physical reconciliation
-- Audit log, shift closing, cash drawer, and night-audit close lock
 - OTA/channel-manager integration and webhook retry queue
-- Guest ID/privacy retention policies and access controls
+- Booking engine, guest portal, and online payment
+- Privacy retention, anonymization, and access-control tests
 - Automated backups, monitoring, restore drills, and disaster recovery
-- Unit, integration, concurrency, and user-acceptance tests
+- Full bench-based unit, integration, concurrency, permission, migration, and user-acceptance tests
 
 ## Do not edit ERPNext core
 

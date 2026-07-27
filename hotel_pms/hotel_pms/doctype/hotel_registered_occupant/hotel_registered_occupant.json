@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "owner": "Administrator",
+ "sort_field": "idx",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 0,
+ "autoname": "",
+ "field_order": [
+  "full_name",
+  "is_primary_guest",
+  "nationality",
+  "date_of_birth",
+  "id_type",
+  "id_number",
+  "address"
+ ],
+ "fields": [
+  {
+   "fieldname": "full_name",
+   "label": "Full Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_primary_guest",
+   "label": "Primary Guest",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "nationality",
+   "label": "Nationality",
+   "fieldtype": "Link",
+   "options": "Country"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "label": "Date of Birth",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "id_type",
+   "label": "ID Type",
+   "fieldtype": "Select",
+   "options": "KTP\nPassport\nDriving License\nOther"
+  },
+  {
+   "fieldname": "id_number",
+   "label": "ID Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "address",
+   "label": "Address",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "name": "Hotel Registered Occupant",
+ "permissions": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  }
+ ]
+}

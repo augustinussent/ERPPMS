@@ -1,0 +1,154 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:policy_name",
+ "field_order": [
+  "policy_name",
+  "enabled",
+  "property",
+  "policy_section",
+  "free_cancellation_days",
+  "fee_type",
+  "fee_value",
+  "no_show_section",
+  "no_show_fee_type",
+  "no_show_fee_value",
+  "fee_item",
+  "governance_section",
+  "require_manager_approval_for_waiver",
+  "terms"
+ ],
+ "fields": [
+  {
+   "fieldname": "policy_name",
+   "label": "Policy Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "policy_section",
+   "label": "Cancellation Rule",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "free_cancellation_days",
+   "label": "Free Cancellation Until Days Before Arrival",
+   "fieldtype": "Int",
+   "default": "1",
+   "description": "Cancellation is free when processed this many whole days or more before arrival."
+  },
+  {
+   "fieldname": "fee_type",
+   "label": "Late Cancellation Fee Type",
+   "fieldtype": "Select",
+   "options": "None\nFixed Amount\nPercentage\nFirst Night\nFull Stay",
+   "default": "First Night",
+   "reqd": 1
+  },
+  {
+   "fieldname": "fee_value",
+   "label": "Fee Value",
+   "fieldtype": "Currency",
+   "description": "Fixed amount or percentage value. Ignored for First Night and Full Stay."
+  },
+  {
+   "fieldname": "no_show_section",
+   "label": "No-show Rule",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "no_show_fee_type",
+   "label": "No-show Fee Type",
+   "fieldtype": "Select",
+   "options": "None\nFixed Amount\nPercentage\nFirst Night\nFull Stay",
+   "default": "First Night",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_show_fee_value",
+   "label": "No-show Fee Value",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "fee_item",
+   "label": "ERPNext Fee Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "description": "Required when a fee can be charged; keeps revenue in ERPNext."
+  },
+  {
+   "fieldname": "governance_section",
+   "label": "Governance",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "require_manager_approval_for_waiver",
+   "label": "Manager Approval Required for Fee Waiver",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "terms",
+   "label": "Policy Terms",
+   "fieldtype": "Text Editor"
+  }
+ ],
+ "name": "Hotel Cancellation Policy",
+ "naming_rule": "By fieldname",
+ "title_field": "policy_name",
+ "search_fields": "property",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1
+  }
+ ]
+}

@@ -13,6 +13,8 @@
   "guest_section",
   "guest",
   "guest_contact",
+  "booked_by_contact",
+  "communication_contact",
   "billing_customer",
   "column_break_guest",
   "source",
@@ -21,11 +23,21 @@
   "group_booking",
   "group_participant",
   "billing_route",
+  "cancellation_section",
+  "cancellation_policy",
+  "registration",
+  "cancellation_document",
+  "cancellation_number",
+  "cancellation_fee",
+  "cancelled_at",
+  "no_show_processed_at",
   "stay_section",
   "arrival_date",
   "departure_date",
   "arrival_time",
   "departure_time",
+  "actual_check_in_at",
+  "actual_check_out_at",
   "column_break_stay",
   "adults",
   "children",
@@ -33,6 +45,9 @@
   "rooms",
   "finance_section",
   "cost_center",
+  "required_deposit",
+  "deposit_received",
+  "deposit_refunded",
   "deposit_amount",
   "deposit_payment_entry",
   "folio",
@@ -93,6 +108,20 @@
    "options": "Contact"
   },
   {
+   "fieldname": "booked_by_contact",
+   "label": "Booked By Contact",
+   "fieldtype": "Link",
+   "options": "Contact",
+   "description": "Person who arranged the booking when different from the staying guest."
+  },
+  {
+   "fieldname": "communication_contact",
+   "label": "Communication Recipient",
+   "fieldtype": "Link",
+   "options": "Contact",
+   "description": "Contact who receives confirmation and operational messages."
+  },
+  {
    "fieldname": "billing_customer",
    "label": "Billing Customer",
    "fieldtype": "Link",
@@ -147,6 +176,56 @@
    "default": "Individual Folio"
   },
   {
+   "fieldname": "cancellation_section",
+   "label": "Cancellation & Registration",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cancellation_policy",
+   "label": "Cancellation Policy",
+   "fieldtype": "Link",
+   "options": "Hotel Cancellation Policy",
+   "fetch_from": "property.default_cancellation_policy"
+  },
+  {
+   "fieldname": "registration",
+   "label": "Guest Registration",
+   "fieldtype": "Link",
+   "options": "Hotel Guest Registration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_document",
+   "label": "Cancellation / No-show Record",
+   "fieldtype": "Link",
+   "options": "Hotel Cancellation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_number",
+   "label": "Cancellation Number",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancellation_fee",
+   "label": "Cancellation / No-show Fee",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancelled_at",
+   "label": "Cancelled / No-show At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "no_show_processed_at",
+   "label": "No-show Processed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
    "fieldname": "stay_section",
    "label": "Stay",
    "fieldtype": "Section Break"
@@ -174,6 +253,18 @@
    "fieldname": "departure_time",
    "label": "Expected Departure Time",
    "fieldtype": "Time"
+  },
+  {
+   "fieldname": "actual_check_in_at",
+   "label": "Actual Check-in At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_check_out_at",
+   "label": "Actual Check-out At",
+   "fieldtype": "Datetime",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_stay",
@@ -217,9 +308,29 @@
    "fetch_from": "property.default_cost_center"
   },
   {
+   "fieldname": "required_deposit",
+   "label": "Required Deposit",
+   "fieldtype": "Currency",
+   "description": "Commercial requirement. Actual receipts and refunds are derived from submitted ERPNext Payment Entries."
+  },
+  {
+   "fieldname": "deposit_received",
+   "label": "Deposit Received",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deposit_refunded",
+   "label": "Deposit Refunded",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
    "fieldname": "deposit_amount",
-   "label": "Deposit Amount",
-   "fieldtype": "Currency"
+   "label": "Legacy Deposit Amount",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "read_only": 1
   },
   {
    "fieldname": "deposit_payment_entry",

@@ -19,7 +19,8 @@
   "check_out_time",
   "address",
   "selling_price_list",
-  "default_sales_taxes_template"
+  "default_sales_taxes_template",
+  "default_cancellation_policy"
  ],
  "fields": [
   {
@@ -107,6 +108,12 @@
    "label": "Default Sales Taxes and Charges Template",
    "fieldtype": "Link",
    "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "default_cancellation_policy",
+   "label": "Default Cancellation Policy",
+   "fieldtype": "Link",
+   "options": "Hotel Cancellation Policy"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -126,6 +133,22 @@
   },
   {
    "role": "Hotel Manager"
+  },
+  {
+   "role": "Front Desk",
+   "read": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1
+  },
+  {
+   "role": "Housekeeping",
+   "read": 1
+  },
+  {
+   "role": "Engineering",
+   "read": 1
   }
  ],
  "sort_field": "modified",

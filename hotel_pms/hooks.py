@@ -19,7 +19,7 @@ add_to_apps_screen = [
         "name": "hotel_pms",
         "logo": "/assets/hotel_pms/images/logo.svg",
         "title": "Hotel PMS",
-        "route": "/desk/hotel-reservation",
+        "route": "/app/hotel-front-desk",
         "has_permission": "hotel_pms.api.has_app_permission",
     }
 ]
@@ -27,6 +27,10 @@ add_to_apps_screen = [
 doc_events = {
     "File": {
         "before_insert": "hotel_pms.media.validate_file_upload",
+    },
+    "Payment Entry": {
+        "on_submit": "hotel_pms.integrations.payment_entry.on_submit",
+        "on_cancel": "hotel_pms.integrations.payment_entry.on_cancel",
     },
     "Sales Invoice": {
         "on_submit": "hotel_pms.integrations.sales_invoice.on_submit",
@@ -40,6 +44,9 @@ doc_events = {
 }
 
 scheduler_events = {
+    "cron": {
+        "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates"],
+    },
     "daily": [
         "hotel_pms.tasks.create_housekeeping_tasks",
         "hotel_pms.tasks.create_preventive_maintenance_tasks",

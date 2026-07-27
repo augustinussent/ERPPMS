@@ -74,7 +74,7 @@
    "fieldname": "housekeeping_status",
    "label": "Housekeeping Status",
    "fieldtype": "Select",
-   "options": "Clean\nDirty\nInspected\nPickup",
+   "options": "Clean\nDirty\nAssigned\nCleaning\nReady for Inspection\nInspected\nReclean Required\nDo Not Disturb\nService Refused\nWaiting Engineering\nPost-Maintenance Cleaning\nDeep Cleaning\nPickup",
    "default": "Clean",
    "reqd": 1,
    "in_list_view": 1
@@ -119,6 +119,29 @@
   },
   {
    "role": "Hotel Manager"
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering",
+   "read": 1,
+   "write": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",

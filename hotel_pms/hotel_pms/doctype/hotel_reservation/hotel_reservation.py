@@ -12,6 +12,7 @@ BLOCKING_STATUSES = ("Tentative", "Confirmed", "Checked In")
 class HotelReservation(Document):
     def validate(self):
         self._validate_dates()
+        self._prevent_direct_policy_bypass()
         self._set_defaults()
         self._validate_room_rows()
         self._validate_room_availability()
@@ -19,6 +20,9 @@ class HotelReservation(Document):
     def before_submit(self):
         if self.status == "Tentative":
             self.status = "Confirmed"
+
+    def before_cancel(self):
+        frappe.throw(_("Reservation documents are not cancelled directly. Use the controlled cancellation action to preserve policy, fee, refund, and audit records."))
 
     def on_submit(self):
         if frappe.db.get_single_value("Hotel PMS Settings", "auto_create_folio"):
@@ -41,15 +45,30 @@ class HotelReservation(Document):
         if today >= getdate(self.departure_date):
             frappe.throw(_("Reservation has already reached its departure date."))
         self._validate_room_availability(exclude_self=True)
-        self.db_set("status", "Checked In")
+        if frappe.db.get_single_value("Hotel PMS Settings", "require_verified_registration_before_check_in"):
+            if not self.registration or frappe.db.get_value("Hotel Guest Registration", self.registration, "status") != "Verified":
+                frappe.throw(_("A verified Guest Registration Card is required before check-in."))
         for row in self.rooms:
-            frappe.db.set_value("Hotel Room", row.room, {"operational_status": "Occupied", "housekeeping_status": "Clean"})
+            room_status = frappe.db.get_value(
+                "Hotel Room", row.room, ["operational_status", "housekeeping_status"], as_dict=True
+            )
+            if room_status.operational_status != "Available":
+                frappe.throw(_("Room {0} is not operationally available.").format(row.room))
+            if room_status.housekeeping_status not in ("Clean", "Inspected"):
+                frappe.throw(_("Room {0} is not ready for check-in; housekeeping status is {1}.").format(
+                    row.room, room_status.housekeeping_status
+                ))
+        self.db_set({"status": "Checked In", "actual_check_in_at": frappe.utils.now_datetime()})
+        for row in self.rooms:
+            frappe.db.set_value("Hotel Room", row.room, {"operational_status": "Occupied"})
         self._ensure_folio()
 
     def check_out(self):
         if self.status != "Checked In":
             frappe.throw(_("Only checked-in reservations can be checked out."))
-        self.db_set("status", "Checked Out")
+        if getdate() < getdate(self.departure_date):
+            frappe.throw(_("This is an early departure. Amend the departure date first so inventory, audit history, and charges remain consistent."))
+        self.db_set({"status": "Checked Out", "actual_check_out_at": frappe.utils.now_datetime()})
         self._release_rooms(dirty=True)
 
         from hotel_pms.tasks import ensure_housekeeping_task
@@ -67,11 +86,24 @@ class HotelReservation(Document):
         if getdate(self.departure_date) <= getdate(self.arrival_date):
             frappe.throw(_("Departure date must be after arrival date."))
 
+    def _prevent_direct_policy_bypass(self):
+        old = self.get_doc_before_save() if not self.is_new() else None
+        if old and old.status != self.status and self.status in ("Checked In", "Checked Out", "Cancelled", "No Show"):
+            frappe.throw(_("Use the controlled Front Desk action for check-in, check-out, cancellation, or no-show processing."))
+
     def _set_defaults(self):
         if not self.billing_customer:
             self.billing_customer = self.guest
+        if not self.communication_contact:
+            self.communication_contact = self.guest_contact or self.booked_by_contact
         if not self.cost_center and self.property:
             self.cost_center = frappe.db.get_value("Hotel Property", self.property, "default_cost_center")
+        if not self.cancellation_policy and self.property:
+            self.cancellation_policy = frappe.db.get_value("Hotel Property", self.property, "default_cancellation_policy")
+        if not self.cancellation_policy:
+            self.cancellation_policy = frappe.db.get_single_value("Hotel PMS Settings", "default_cancellation_policy")
+        if not self.required_deposit and self.deposit_amount:
+            self.required_deposit = self.deposit_amount
 
     def _validate_room_rows(self):
         if not self.rooms:
@@ -90,10 +122,25 @@ class HotelReservation(Document):
                 frappe.throw(_("Room type does not match room {0}.").format(row.room))
             if room.operational_status in ("Out of Order", "Out of Service"):
                 frappe.throw(_("Room {0} is not operational.").format(row.room))
+            capacity = frappe.db.get_value(
+                "Hotel Room Type", row.room_type, ["max_adults", "max_children"], as_dict=True
+            )
+            if capacity and row.adults > capacity.max_adults:
+                frappe.throw(_("Adults in room {0} exceed the room-type capacity of {1}.").format(row.room, capacity.max_adults))
+            if capacity and row.children > capacity.max_children:
+                frappe.throw(_("Children in room {0} exceed the room-type capacity of {1}.").format(row.room, capacity.max_children))
 
     def _validate_room_availability(self, exclude_self=False):
         if frappe.db.get_single_value("Hotel PMS Settings", "allow_overbooking"):
             return
+        room_names = sorted({row.room for row in self.rooms if row.room})
+        if room_names:
+            placeholders = ", ".join(["%s"] * len(room_names))
+            frappe.db.sql(
+                f"select name from `tabHotel Room` where name in ({placeholders}) order by name for update",
+                tuple(room_names),
+            )
+        requested_by_type = {}
         for row in self.rooms:
             params = {
                 "room": row.room,
@@ -119,21 +166,27 @@ class HotelReservation(Document):
             )
             if conflicts:
                 frappe.throw(_("Room {0} conflicts with reservation {1}.").format(row.room, conflicts[0].name))
+            requested_by_type[row.room_type] = requested_by_type.get(row.room_type, 0) + 1
 
-            # Room-type blocks protect group inventory even before exact room assignment.
-            from hotel_pms.hotel_pms.doctype.hotel_group_booking.hotel_group_booking import get_available_room_type_capacity
+        # Room-type blocks protect group inventory even before exact room assignment.
+        # Validate the aggregate request, not each row independently; otherwise two
+        # rows can both consume the last remaining room, a tiny arithmetic tragedy.
+        from hotel_pms.hotel_pms.doctype.hotel_group_booking.hotel_group_booking import get_available_room_type_capacity
 
+        for room_type, requested in requested_by_type.items():
             available_capacity = get_available_room_type_capacity(
                 property_name=self.property,
-                room_type=row.room_type,
+                room_type=room_type,
                 arrival_date=self.arrival_date,
                 departure_date=self.departure_date,
                 exclude_group_booking=self.group_booking,
                 exclude_reservation=self.name,
             )
-            if available_capacity <= 0:
+            if available_capacity < requested:
                 frappe.throw(
-                    _("No unheld room-type capacity remains for {0} during these dates.").format(row.room_type)
+                    _("Only {0} unheld room(s) remain for {1}; this reservation requests {2}.").format(
+                        available_capacity, room_type, requested
+                    )
                 )
 
     def _ensure_folio(self):

@@ -1,0 +1,248 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "field_order": [
+  "naming_series",
+  "reservation",
+  "property",
+  "guest",
+  "guest_contact",
+  "status",
+  "stay_section",
+  "arrival_date",
+  "departure_date",
+  "actual_arrival_time",
+  "vehicle_number",
+  "occupant_section",
+  "occupants",
+  "id_section",
+  "id_retention_mode",
+  "primary_id_type",
+  "primary_id_number",
+  "id_file",
+  "verified_by",
+  "verified_at",
+  "agreement_section",
+  "terms_accepted",
+  "privacy_consent",
+  "signature_name",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HGRC-.YYYY.-.#####",
+   "default": "HGRC-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "guest",
+   "label": "Guest Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "guest_contact",
+   "label": "Guest Contact",
+   "fieldtype": "Link",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nCompleted\nVerified",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "stay_section",
+   "label": "Stay Details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actual_arrival_time",
+   "label": "Actual Arrival Time",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "vehicle_number",
+   "label": "Vehicle Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "occupant_section",
+   "label": "Registered Occupants",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "occupants",
+   "label": "Occupants",
+   "fieldtype": "Table",
+   "options": "Hotel Registered Occupant",
+   "reqd": 1
+  },
+  {
+   "fieldname": "id_section",
+   "label": "Identity Verification",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "id_retention_mode",
+   "label": "ID Retention Mode",
+   "fieldtype": "Select",
+   "options": "Store Image\nVerify and Discard\nDo Not Upload",
+   "default": "Verify and Discard",
+   "reqd": 1
+  },
+  {
+   "fieldname": "primary_id_type",
+   "label": "Primary ID Type",
+   "fieldtype": "Select",
+   "options": "KTP\nPassport\nDriving License\nOther"
+  },
+  {
+   "fieldname": "primary_id_number",
+   "label": "Primary ID Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "id_file",
+   "label": "ID Image",
+   "fieldtype": "Attach Image",
+   "depends_on": "eval:doc.id_retention_mode=='Store Image'"
+  },
+  {
+   "fieldname": "verified_by",
+   "label": "Verified By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "verified_at",
+   "label": "Verified At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "agreement_section",
+   "label": "Agreement",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "terms_accepted",
+   "label": "Hotel Terms Accepted",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "privacy_consent",
+   "label": "Privacy Consent Recorded",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "signature_name",
+   "label": "Signature Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "name": "Hotel Guest Registration",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "guest",
+ "search_fields": "reservation,guest,vehicle_number",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ]
+}

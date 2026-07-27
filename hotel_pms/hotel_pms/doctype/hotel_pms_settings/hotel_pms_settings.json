@@ -9,6 +9,13 @@
   "default_property",
   "allow_overbooking",
   "auto_create_folio",
+  "front_office_section",
+  "default_cancellation_policy",
+  "default_cancellation_fee_item",
+  "auto_process_no_shows",
+  "no_show_cutoff_hours",
+  "default_id_retention_mode",
+  "require_verified_registration_before_check_in",
   "storage_section",
   "enable_photo_uploads",
   "photo_policy_note",
@@ -37,6 +44,50 @@
    "label": "Auto-create Folio on Reservation Submit",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "front_office_section",
+   "label": "Front Office Policies",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_cancellation_policy",
+   "label": "Default Cancellation Policy",
+   "fieldtype": "Link",
+   "options": "Hotel Cancellation Policy"
+  },
+  {
+   "fieldname": "default_cancellation_fee_item",
+   "label": "Fallback Cancellation Fee Item",
+   "fieldtype": "Link",
+   "options": "Item"
+  },
+  {
+   "fieldname": "auto_process_no_shows",
+   "label": "Automatically Process No-shows",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Keep disabled until cancellation policies, fee item, and operational review have passed UAT."
+  },
+  {
+   "fieldname": "no_show_cutoff_hours",
+   "label": "No-show Cutoff Hours After Expected Arrival",
+   "fieldtype": "Int",
+   "default": "4"
+  },
+  {
+   "fieldname": "default_id_retention_mode",
+   "label": "Default ID Retention Mode",
+   "fieldtype": "Select",
+   "options": "Store Image\nVerify and Discard\nDo Not Upload",
+   "default": "Verify and Discard"
+  },
+  {
+   "fieldname": "require_verified_registration_before_check_in",
+   "label": "Require Verified Registration Before Check-in",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Enable only after the registration-card workflow is trained and tested."
   },
   {
    "fieldname": "storage_section",

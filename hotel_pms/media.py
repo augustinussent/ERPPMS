@@ -12,6 +12,7 @@ PHOTO_FIELDS_BY_DOCTYPE = {
     # Future modules can use the same global policy without changing the File hook.
     "Hotel Lost and Found": {"item_photo", "handover_photo"},
     "Hotel Room Inspection": {"inspection_photo"},
+    "Hotel Guest Registration": {"id_file"},
     "Hotel Inspection Finding": {"finding_photo", "resolution_photo"},
     "Hotel SOP Candidate": {"before_photo", "after_photo", "reference_photo"},
 }

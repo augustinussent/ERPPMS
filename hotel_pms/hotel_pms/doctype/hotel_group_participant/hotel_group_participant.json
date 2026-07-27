@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "participant_name",
+  "customer",
+  "contact",
+  "participant_type",
+  "room_type",
+  "assigned_room",
+  "occupancy_type",
+  "arrival_date",
+  "departure_date",
+  "billing_route",
+  "reservation",
+  "special_requests"
+ ],
+ "fields": [
+  {
+   "fieldname": "participant_name",
+   "label": "Participant Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Guest Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "contact",
+   "label": "Contact",
+   "fieldtype": "Link",
+   "options": "Contact",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "participant_type",
+   "label": "Participant Type",
+   "fieldtype": "Select",
+   "options": "Residential\nDay Delegate\nSpeaker\nVIP\nCompanion\nCrew",
+   "default": "Residential",
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "assigned_room",
+   "label": "Assigned Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "occupancy_type",
+   "label": "Occupancy Type",
+   "fieldtype": "Select",
+   "options": "Single\nTwin Share\nTriple Share\nDay Delegate",
+   "default": "Twin Share",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival Date",
+   "fieldtype": "Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billing_route",
+   "label": "Billing Route",
+   "fieldtype": "Select",
+   "options": "Master Folio\nIndividual Folio\nDirect Bill",
+   "default": "Master Folio",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "special_requests",
+   "label": "Special Requests",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Participant",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

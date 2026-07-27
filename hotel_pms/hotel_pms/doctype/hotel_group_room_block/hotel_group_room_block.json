@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "room_type",
+  "arrival_date",
+  "departure_date",
+  "rooms_blocked",
+  "rooms_assigned",
+  "outstanding_rooms",
+  "nightly_rate",
+  "release_date",
+  "block_status",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "rooms_blocked",
+   "label": "Rooms Blocked",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "default": "1",
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "rooms_assigned",
+   "label": "Rooms Assigned",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "outstanding_rooms",
+   "label": "Outstanding Rooms",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "nightly_rate",
+   "label": "Indicative Nightly Rate",
+   "fieldtype": "Currency",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "release_date",
+   "label": "Cut-off / Release Date",
+   "fieldtype": "Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "block_status",
+   "label": "Block Status",
+   "fieldtype": "Select",
+   "options": "Active\nReleased\nConsumed",
+   "default": "Active",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Room Block",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

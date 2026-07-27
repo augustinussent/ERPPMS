@@ -1,0 +1,6 @@
+package_name,package_type,occupancy_type,pricing_basis,minimum_pax,rate
+Halfday Meeting,Halfday Meeting,Day Delegate,Per Person Package,20,250000
+Fullday Meeting,Fullday Meeting,Day Delegate,Per Person Package,20,350000
+Fullboard Meeting,Fullboard Meeting,Twin Share,Per Person Per Night,20,850000
+Fullboard Meeting,Fullboard Meeting,Single,Per Person Per Night,20,1150000
+Fullboard Meeting,Fullboard Meeting,Day Delegate,Per Person Per Day,20,350000

@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "space_name",
+  "property",
+  "enabled",
+  "location",
+  "area_sqm",
+  "default_capacity",
+  "setup_minutes",
+  "breakdown_minutes",
+  "capacity_section",
+  "capacities",
+  "equipment_section",
+  "standard_equipment",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HFSP-.#####",
+   "default": "HFSP-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "space_name",
+   "label": "Function Space Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "area_sqm",
+   "label": "Area (m²)",
+   "fieldtype": "Float"
+  },
+  {
+   "fieldname": "default_capacity",
+   "label": "Default Capacity",
+   "fieldtype": "Int",
+   "default": "0"
+  },
+  {
+   "fieldname": "setup_minutes",
+   "label": "Setup Buffer (minutes)",
+   "fieldtype": "Int",
+   "default": "30"
+  },
+  {
+   "fieldname": "breakdown_minutes",
+   "label": "Breakdown Buffer (minutes)",
+   "fieldtype": "Int",
+   "default": "30"
+  },
+  {
+   "fieldname": "capacity_section",
+   "label": "Capacity by Setup",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "capacities",
+   "label": "Capacities",
+   "fieldtype": "Table",
+   "options": "Hotel Function Space Capacity"
+  },
+  {
+   "fieldname": "equipment_section",
+   "label": "Standard Equipment",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "standard_equipment",
+   "label": "Standard Equipment",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Function Space",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Banquet",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "space_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "space_name,property"
+}

@@ -1,0 +1,222 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "group_booking",
+  "revision_no",
+  "status",
+  "issue_date",
+  "property",
+  "customer",
+  "contact_person",
+  "event_name",
+  "event_start",
+  "event_end",
+  "guaranteed_pax",
+  "functions_section",
+  "functions",
+  "requirements_section",
+  "special_requirements",
+  "billing_instruction",
+  "distribution_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "BEO-.YYYY.-.#####",
+   "default": "BEO-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "group_booking",
+   "label": "Group Booking",
+   "fieldtype": "Link",
+   "options": "Hotel Group Booking",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision_no",
+   "label": "Revision",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nIssued\nSuperseded\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "issue_date",
+   "label": "Issue Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contact_person",
+   "label": "Contact Person",
+   "fieldtype": "Link",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "event_name",
+   "label": "Event Name",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "event_start",
+   "label": "Event Start",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "event_end",
+   "label": "Event End",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "guaranteed_pax",
+   "label": "Guaranteed Pax",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "functions_section",
+   "label": "Functions",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "functions",
+   "label": "Functions",
+   "fieldtype": "Table",
+   "options": "Hotel BEO Function",
+   "reqd": 1
+  },
+  {
+   "fieldname": "requirements_section",
+   "label": "Requirements",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "special_requirements",
+   "label": "Special Requirements",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "billing_instruction",
+   "label": "Billing Instruction",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "distribution_list",
+   "label": "Distribution List",
+   "fieldtype": "Small Text",
+   "default": "Front Office, Banquet, Kitchen, Restaurant, Housekeeping, Engineering, Security, Finance"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Banquet Event Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Banquet",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  }
+ ],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "event_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "group_booking,event_name"
+}

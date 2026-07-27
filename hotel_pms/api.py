@@ -89,12 +89,33 @@ def run_night_audit(property: str, business_date: str | None = None) -> dict:
         folio.last_activity_at = now_datetime()
         folio.save(ignore_permissions=True)
 
+    from hotel_pms.group_booking import post_due_package_schedule_internal
+
+    group_posted = 0
+    group_skipped = 0
+    group_bookings = frappe.get_all(
+        "Hotel Group Booking",
+        filters={
+            "property": property,
+            "docstatus": 1,
+            "status": ("in", ["Confirmed", "Event Active"]),
+        },
+        pluck="name",
+    )
+    for group_booking in group_bookings:
+        result = post_due_package_schedule_internal(group_booking, audit_date.isoformat())
+        group_posted += result.get("posted", 0)
+        group_skipped += result.get("skipped", 0)
+
     return {
         "property": property,
         "business_date": audit_date.isoformat(),
         "reservations": len(reservations),
         "posted": posted,
         "skipped": skipped,
+        "group_bookings": len(group_bookings),
+        "group_package_posted": group_posted,
+        "group_package_skipped": group_skipped,
     }
 
 

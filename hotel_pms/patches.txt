@@ -1,3 +1,4 @@
 [pre_model_sync]
 
 [post_model_sync]
+hotel_pms.patches.v0_2.setup_group_booking

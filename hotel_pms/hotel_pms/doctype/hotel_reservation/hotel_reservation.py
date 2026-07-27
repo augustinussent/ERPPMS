@@ -109,6 +109,22 @@ class HotelReservation(Document):
             if conflicts:
                 frappe.throw(_("Room {0} conflicts with reservation {1}.").format(row.room, conflicts[0].name))
 
+            # Room-type blocks protect group inventory even before exact room assignment.
+            from hotel_pms.hotel_pms.doctype.hotel_group_booking.hotel_group_booking import get_available_room_type_capacity
+
+            available_capacity = get_available_room_type_capacity(
+                property_name=self.property,
+                room_type=row.room_type,
+                arrival_date=self.arrival_date,
+                departure_date=self.departure_date,
+                exclude_group_booking=self.group_booking,
+                exclude_reservation=self.name,
+            )
+            if available_capacity <= 0:
+                frappe.throw(
+                    _("No unheld room-type capacity remains for {0} during these dates.").format(row.room_type)
+                )
+
     def _ensure_folio(self):
         from hotel_pms.api import _get_or_create_folio
         folio = _get_or_create_folio(self)

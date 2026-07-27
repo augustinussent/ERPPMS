@@ -3,8 +3,10 @@ from __future__ import annotations
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
+from hotel_pms.setup_group_booking import setup_group_booking
 
-ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Engineering"]
+
+ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Engineering", "Hotel Sales", "Banquet"]
 
 
 def before_install() -> None:
@@ -53,3 +55,4 @@ def after_install() -> None:
         },
         update=True,
     )
+    setup_group_booking()

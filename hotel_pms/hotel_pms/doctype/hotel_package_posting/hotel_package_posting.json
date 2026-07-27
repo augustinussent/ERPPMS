@@ -1,0 +1,198 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "group_booking",
+  "group_package_row",
+  "package_template",
+  "scheduled_datetime",
+  "status",
+  "charge_category",
+  "item_code",
+  "description",
+  "qty",
+  "rate",
+  "amount",
+  "idempotency_key",
+  "group_folio_charge",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPOST-.YYYY.-.#####",
+   "default": "HPOST-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "group_booking",
+   "label": "Group Booking",
+   "fieldtype": "Link",
+   "options": "Hotel Group Booking",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "group_package_row",
+   "label": "Group Package Row",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "package_template",
+   "label": "Package Template",
+   "fieldtype": "Link",
+   "options": "Hotel Package Template",
+   "reqd": 1
+  },
+  {
+   "fieldname": "scheduled_datetime",
+   "label": "Scheduled Date & Time",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Scheduled\nPrepared\nServed\nPosted\nCancelled",
+   "default": "Scheduled",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "charge_category",
+   "label": "Charge Category",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_code",
+   "label": "Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "qty",
+   "label": "Qty",
+   "fieldtype": "Float",
+   "reqd": 1,
+   "default": "1"
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "label": "Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "group_folio_charge",
+   "label": "Group Folio Charge Row",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Package Posting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Banquet",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "search_fields": "group_booking,package_template,item_code"
+}

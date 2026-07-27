@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "charge_category",
+  "destination",
+  "customer",
+  "participant_name",
+  "percentage",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "charge_category",
+   "label": "Charge Category",
+   "fieldtype": "Select",
+   "options": "Package\nRoom\nMeeting Room\nFood\nBeverage\nEquipment\nMinibar\nLaundry\nTransport\nDamage\nOther",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "destination",
+   "label": "Destination",
+   "fieldtype": "Select",
+   "options": "Master Folio\nIndividual Folio\nDirect Bill",
+   "reqd": 1,
+   "default": "Master Folio",
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "customer",
+   "label": "Billing Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "participant_name",
+   "label": "Participant Name",
+   "fieldtype": "Data",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "percentage",
+   "label": "Percentage",
+   "fieldtype": "Percent",
+   "default": "100",
+   "allow_on_submit": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Billing Instruction",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

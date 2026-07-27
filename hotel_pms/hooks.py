@@ -21,6 +21,7 @@ doc_events = {
     "Sales Invoice": {
         "on_submit": "hotel_pms.integrations.sales_invoice.on_submit",
         "on_cancel": "hotel_pms.integrations.sales_invoice.on_cancel",
+        "on_trash": "hotel_pms.integrations.sales_invoice.on_trash",
     },
     "POS Invoice": {
         "on_submit": "hotel_pms.integrations.pos_invoice.on_submit",
@@ -32,6 +33,8 @@ scheduler_events = {
     "daily": [
         "hotel_pms.tasks.create_housekeeping_tasks",
         "hotel_pms.tasks.create_preventive_maintenance_tasks",
+        "hotel_pms.tasks.expire_tentative_group_holds",
+        "hotel_pms.tasks.release_group_room_blocks_at_cutoff",
     ]
 }
 

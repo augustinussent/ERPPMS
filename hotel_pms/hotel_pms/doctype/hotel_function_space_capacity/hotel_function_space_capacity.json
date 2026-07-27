@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "setup_style",
+  "capacity"
+ ],
+ "fields": [
+  {
+   "fieldname": "setup_style",
+   "label": "Setup Style",
+   "fieldtype": "Select",
+   "options": "Theatre\nClassroom\nU-Shape\nBoardroom\nRound Table\nCocktail\nBanquet\nHollow Square\nOther",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "capacity",
+   "label": "Capacity",
+   "fieldtype": "Int",
+   "reqd": 1,
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Function Space Capacity",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

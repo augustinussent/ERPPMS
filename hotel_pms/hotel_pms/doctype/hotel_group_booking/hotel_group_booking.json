@@ -1,0 +1,559 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "booking_name",
+  "property",
+  "company",
+  "status",
+  "customer_section",
+  "customer",
+  "contact_person",
+  "contact_name",
+  "contact_email",
+  "contact_phone",
+  "column_break_customer",
+  "sales_person",
+  "source",
+  "inquiry_date",
+  "hold_until",
+  "confirmed_on",
+  "dates_section",
+  "arrival_date",
+  "departure_date",
+  "event_start",
+  "event_end",
+  "column_break_dates",
+  "estimated_pax",
+  "guaranteed_pax",
+  "actual_pax",
+  "billable_pax",
+  "room_block_section",
+  "room_blocks",
+  "participants_section",
+  "participants",
+  "functions_section",
+  "event_functions",
+  "packages_section",
+  "packages",
+  "billing_section",
+  "billing_instructions",
+  "finance_section",
+  "currency",
+  "price_list",
+  "cost_center",
+  "project",
+  "column_break_finance",
+  "quotation",
+  "sales_order",
+  "group_folio",
+  "current_beo",
+  "deposit_amount",
+  "total_package_amount",
+  "deposit_schedule_section",
+  "deposit_schedules",
+  "letter_section",
+  "confirmation_letter_date",
+  "confirmation_letter_contact_name",
+  "confirmation_letter_subject",
+  "confirmation_letter_intro",
+  "confirmation_letter_terms",
+  "confirmation_signatory_name",
+  "confirmation_signatory_title",
+  "notes_section",
+  "special_requirements",
+  "internal_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HGB-.YYYY.-.#####",
+   "default": "HGB-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_name",
+   "label": "Group / Event Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "fetch_from": "property.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Inquiry\nTentative\nConfirmed\nEvent Active\nCompleted\nClosed\nCancelled",
+   "default": "Inquiry",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "customer_section",
+   "label": "Customer & Sales",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "customer",
+   "label": "Customer / Company",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "contact_person",
+   "label": "Contact Person",
+   "fieldtype": "Link",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "contact_name",
+   "label": "PIC Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "contact_email",
+   "label": "PIC Email",
+   "fieldtype": "Data",
+   "options": "Email"
+  },
+  {
+   "fieldname": "contact_phone",
+   "label": "PIC Phone",
+   "fieldtype": "Data",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "column_break_customer",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_person",
+   "label": "Sales Person",
+   "fieldtype": "Link",
+   "options": "Sales Person"
+  },
+  {
+   "fieldname": "source",
+   "label": "Booking Source",
+   "fieldtype": "Select",
+   "options": "Direct\nCorporate\nGovernment\nTravel Agent\nEvent Organizer\nWebsite\nOther",
+   "default": "Direct"
+  },
+  {
+   "fieldname": "inquiry_date",
+   "label": "Inquiry Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "hold_until",
+   "label": "Tentative Hold Until",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "confirmed_on",
+   "label": "Confirmed On",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dates_section",
+   "label": "Stay & Event Dates",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "event_start",
+   "label": "Event Start",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "event_end",
+   "label": "Event End",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "column_break_dates",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "estimated_pax",
+   "label": "Estimated Pax",
+   "fieldtype": "Int",
+   "default": "0"
+  },
+  {
+   "fieldname": "guaranteed_pax",
+   "label": "Guaranteed Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "actual_pax",
+   "label": "Actual Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billable_pax",
+   "label": "Billable Pax",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "room_block_section",
+   "label": "Room Block",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "room_blocks",
+   "label": "Room Blocks",
+   "fieldtype": "Table",
+   "options": "Hotel Group Room Block",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "participants_section",
+   "label": "Rooming List & Participants",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "participants",
+   "label": "Participants",
+   "fieldtype": "Table",
+   "options": "Hotel Group Participant",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "functions_section",
+   "label": "Meeting / Banquet Functions",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "event_functions",
+   "label": "Event Functions",
+   "fieldtype": "Table",
+   "options": "Hotel Group Event Function",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "packages_section",
+   "label": "Packages",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "packages",
+   "label": "Packages",
+   "fieldtype": "Table",
+   "options": "Hotel Group Package",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billing_section",
+   "label": "Billing Instructions",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "billing_instructions",
+   "label": "Billing Instructions",
+   "fieldtype": "Table",
+   "options": "Hotel Group Billing Instruction",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "finance_section",
+   "label": "ERPNext Commercial & Finance",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "currency",
+   "label": "Currency",
+   "fieldtype": "Link",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "price_list",
+   "label": "Selling Price List",
+   "fieldtype": "Link",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "cost_center",
+   "label": "Cost Center",
+   "fieldtype": "Link",
+   "options": "Cost Center",
+   "fetch_from": "property.default_cost_center"
+  },
+  {
+   "fieldname": "project",
+   "label": "ERPNext Project",
+   "fieldtype": "Link",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_finance",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quotation",
+   "label": "Quotation",
+   "fieldtype": "Link",
+   "options": "Quotation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "label": "Sales Order",
+   "fieldtype": "Link",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "group_folio",
+   "label": "Group Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Group Folio",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "current_beo",
+   "label": "Current BEO",
+   "fieldtype": "Link",
+   "options": "Hotel Banquet Event Order",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "deposit_amount",
+   "label": "Required Deposit",
+   "fieldtype": "Currency",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "total_package_amount",
+   "label": "Package Total",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "deposit_schedule_section",
+   "label": "Deposit Schedule",
+   "fieldtype": "Section Break",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "deposit_schedules",
+   "label": "Deposit Schedule",
+   "fieldtype": "Table",
+   "options": "Hotel Group Deposit Schedule",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "letter_section",
+   "label": "Confirmation Letter",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "confirmation_letter_date",
+   "label": "Letter Date",
+   "fieldtype": "Date",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_letter_contact_name",
+   "label": "Addressee",
+   "fieldtype": "Data",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_letter_subject",
+   "label": "Subject",
+   "fieldtype": "Data",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_letter_intro",
+   "label": "Opening Text",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_letter_terms",
+   "label": "Terms & Conditions",
+   "fieldtype": "Text Editor",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_signatory_name",
+   "label": "Signatory Name",
+   "fieldtype": "Data",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmation_signatory_title",
+   "label": "Signatory Title",
+   "fieldtype": "Data",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "notes_section",
+   "label": "Notes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "special_requirements",
+   "label": "Special Requirements",
+   "fieldtype": "Text Editor",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "internal_notes",
+   "label": "Internal Notes",
+   "fieldtype": "Text Editor",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Booking",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Banquet",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "booking_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "booking_name,customer,contact_name"
+}

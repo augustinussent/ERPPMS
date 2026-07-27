@@ -17,6 +17,9 @@
   "column_break_guest",
   "source",
   "source_reference",
+  "group_booking",
+  "group_participant",
+  "billing_route",
   "stay_section",
   "arrival_date",
   "departure_date",
@@ -112,6 +115,26 @@
    "fieldname": "source_reference",
    "label": "Source Reference",
    "fieldtype": "Data"
+  },
+  {
+   "fieldname": "group_booking",
+   "label": "Group Booking",
+   "fieldtype": "Link",
+   "options": "Hotel Group Booking",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "group_participant",
+   "label": "Group Participant Row",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "billing_route",
+   "label": "Billing Route",
+   "fieldtype": "Select",
+   "options": "Master Folio\nIndividual Folio\nDirect Bill",
+   "default": "Individual Folio"
   },
   {
    "fieldname": "stay_section",

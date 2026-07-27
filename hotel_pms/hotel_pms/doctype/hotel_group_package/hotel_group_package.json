@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "package_template",
+  "date_from",
+  "date_to",
+  "occupancy_type",
+  "pricing_basis",
+  "estimated_pax",
+  "guaranteed_pax",
+  "actual_pax",
+  "billable_pax",
+  "room_count",
+  "unit_rate",
+  "billable_units",
+  "amount",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "package_template",
+   "label": "Package Template",
+   "fieldtype": "Link",
+   "options": "Hotel Package Template",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "date_from",
+   "label": "From Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "date_to",
+   "label": "To Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "occupancy_type",
+   "label": "Occupancy Type",
+   "fieldtype": "Select",
+   "options": "Single\nTwin Share\nTriple Share\nDay Delegate\nAny",
+   "default": "Any",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "pricing_basis",
+   "label": "Pricing Basis",
+   "fieldtype": "Select",
+   "options": "Per Person Per Day\nPer Person Per Night\nPer Person Package\nPer Room Per Night\nFlat",
+   "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "estimated_pax",
+   "label": "Estimated Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "guaranteed_pax",
+   "label": "Guaranteed Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "actual_pax",
+   "label": "Actual Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billable_pax",
+   "label": "Billable Pax",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "room_count",
+   "label": "Room Count",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "unit_rate",
+   "label": "Unit Rate",
+   "fieldtype": "Currency",
+   "reqd": 1,
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billable_units",
+   "label": "Billable Units",
+   "fieldtype": "Float",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amount",
+   "label": "Amount",
+   "fieldtype": "Currency",
+   "read_only": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Package",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "milestone",
+  "due_date",
+  "calculation_type",
+  "percentage",
+  "amount",
+  "status",
+  "payment_request",
+  "payment_entry",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "milestone",
+   "label": "Milestone",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "due_date",
+   "label": "Due Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "calculation_type",
+   "label": "Calculation Type",
+   "fieldtype": "Select",
+   "options": "Percent\nFixed Amount",
+   "default": "Percent",
+   "reqd": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "percentage",
+   "label": "Percentage",
+   "fieldtype": "Percent",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "amount",
+   "label": "Amount",
+   "fieldtype": "Currency",
+   "default": "0",
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nRequested\nPaid\nWaived",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "payment_request",
+   "label": "Payment Request",
+   "fieldtype": "Link",
+   "options": "Payment Request",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "label": "Payment Entry",
+   "fieldtype": "Link",
+   "options": "Payment Entry",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Deposit Schedule",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

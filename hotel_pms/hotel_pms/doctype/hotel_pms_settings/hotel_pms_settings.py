@@ -1,5 +1,5 @@
 from frappe.model.document import Document
 
 
-class HotelPmsSettings(Document):
+class HotelPMSSettings(Document):
     pass

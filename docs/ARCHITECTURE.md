@@ -19,6 +19,7 @@
 - Night audit
 - Housekeeping task workflow
 - Hotel maintenance ticket workflow and preventive schedules
+- Group booking, room blocks, rooming list, event functions, BEO, package schedule, group folio, and confirmation letter
 
 ## Integration keys
 
@@ -35,6 +36,10 @@
 | Hotel Folio | Sales Invoice | Checkout billing |
 | Hotel Maintenance Ticket | Supplier | External vendor |
 | Hotel Maintenance Ticket | Purchase Order | Approved outsourced work/material |
+| Hotel Group Booking | Project | Event-level profitability dimension |
+| Hotel Group Booking | Quotation / Sales Order | Commercial offer and contract |
+| Hotel Group Folio Charge | Sales Invoice | Group, individual, or direct-bill settlement |
+| Hotel Group Booking | Purchase Invoice | Direct event cost |
 
 ## Anti-duplication rules
 

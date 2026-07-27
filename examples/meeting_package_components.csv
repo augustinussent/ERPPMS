@@ -1,0 +1,14 @@
+package_name,component_name,item_code,charge_category,calculation_basis,frequency,relative_day,service_time,qty_multiplier,allocation_percent
+Halfday Meeting,Meeting Room,MEETING-ROOM,Meeting Room,Per Event,Once,0,08:00:00,1,35
+Halfday Meeting,Coffee Break,COFFEE-BREAK,Food,Per Pax,Once,0,10:00:00,1,25
+Halfday Meeting,Lunch,LUNCH-BUFFET,Food,Per Pax,Once,0,12:00:00,1,40
+Fullday Meeting,Meeting Room,MEETING-ROOM,Meeting Room,Per Event,Once,0,08:00:00,1,25
+Fullday Meeting,Coffee Break Morning,COFFEE-BREAK,Food,Per Pax,Once,0,10:00:00,1,15
+Fullday Meeting,Lunch,LUNCH-BUFFET,Food,Per Pax,Once,0,12:00:00,1,40
+Fullday Meeting,Coffee Break Afternoon,COFFEE-BREAK,Food,Per Pax,Once,0,15:00:00,1,20
+Fullboard Meeting,Accommodation,ROOM-PACKAGE,Room,Per Pax,Per Night,0,14:00:00,1,40
+Fullboard Meeting,Meeting Room,MEETING-ROOM,Meeting Room,Per Event,Per Day,0,08:00:00,1,10
+Fullboard Meeting,Coffee Break,COFFEE-BREAK,Food,Per Pax,Per Day,0,10:00:00,2,10
+Fullboard Meeting,Lunch,LUNCH-BUFFET,Food,Per Pax,Per Day,0,12:00:00,1,15
+Fullboard Meeting,Dinner,DINNER-BUFFET,Food,Per Pax,Per Night,0,19:00:00,1,20
+Fullboard Meeting,Breakfast,BREAKFAST-BUFFET,Food,Per Pax,Per Night,1,07:00:00,1,5

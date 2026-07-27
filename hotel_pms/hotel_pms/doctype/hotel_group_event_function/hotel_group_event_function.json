@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "function_name",
+  "function_type",
+  "start_datetime",
+  "end_datetime",
+  "function_space",
+  "setup_style",
+  "estimated_pax",
+  "guaranteed_pax",
+  "actual_pax",
+  "billable_pax",
+  "status",
+  "menu",
+  "equipment",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "function_name",
+   "label": "Function Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "function_type",
+   "label": "Function Type",
+   "fieldtype": "Select",
+   "options": "Meeting\nCoffee Break\nBreakfast\nLunch\nDinner\nReception\nSetup\nBreakdown\nOther",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "start_datetime",
+   "label": "Start",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "end_datetime",
+   "label": "End",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "function_space",
+   "label": "Function Space",
+   "fieldtype": "Link",
+   "options": "Hotel Function Space",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "setup_style",
+   "label": "Setup Style",
+   "fieldtype": "Select",
+   "options": "Theatre\nClassroom\nU-Shape\nBoardroom\nRound Table\nCocktail\nBanquet\nHollow Square\nOther",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "estimated_pax",
+   "label": "Estimated Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "guaranteed_pax",
+   "label": "Guaranteed Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "actual_pax",
+   "label": "Actual Pax",
+   "fieldtype": "Int",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "billable_pax",
+   "label": "Billable Pax",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Planned\nConfirmed\nPrepared\nServed\nCompleted\nCancelled",
+   "default": "Planned",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "menu",
+   "label": "Menu / Refreshment",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "equipment",
+   "label": "Equipment",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Operational Notes",
+   "fieldtype": "Small Text",
+   "allow_on_submit": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Group Event Function",
+ "owner": "Administrator",
+ "permissions": [],
+ "track_changes": 1
+}

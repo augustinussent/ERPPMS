@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "package_name",
+  "package_type",
+  "property",
+  "enabled",
+  "sales_item",
+  "minimum_pax",
+  "default_meeting_hours",
+  "valid_from",
+  "valid_to",
+  "components_section",
+  "components",
+  "rates_section",
+  "rates",
+  "terms"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPKG-.#####",
+   "default": "HPKG-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "package_name",
+   "label": "Package Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "package_type",
+   "label": "Package Type",
+   "fieldtype": "Select",
+   "options": "Halfday Meeting\nFullday Meeting\nFullboard Meeting\nResidential Meeting\nWedding\nGathering\nCustom",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "sales_item",
+   "label": "Package Sales Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "minimum_pax",
+   "label": "Minimum Pax",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "default_meeting_hours",
+   "label": "Default Meeting Hours",
+   "fieldtype": "Float",
+   "default": "8"
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Valid From",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "valid_to",
+   "label": "Valid To",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "components_section",
+   "label": "Components & Revenue Allocation",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "components",
+   "label": "Components",
+   "fieldtype": "Table",
+   "options": "Hotel Package Component",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rates_section",
+   "label": "Rates",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "rates",
+   "label": "Rates",
+   "fieldtype": "Table",
+   "options": "Hotel Package Rate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "terms",
+   "label": "Package Terms",
+   "fieldtype": "Text Editor"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Package Template",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Sales",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Banquet",
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  }
+ ],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "package_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "package_name,package_type"
+}

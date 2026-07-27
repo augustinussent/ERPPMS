@@ -13,6 +13,11 @@
   "rate",
   "amount",
   "kitchen_station",
+  "course",
+  "allergy_alert",
+  "preparation_minutes",
+  "stock_posted",
+  "stock_kitchen_ticket",
   "notes",
   "status",
   "kitchen_ticket",
@@ -91,6 +96,39 @@
    "fieldname": "cancel_reason",
    "label": "Cancellation Reason",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "course",
+   "label": "Course",
+   "fieldtype": "Select",
+   "options": "Starter\nMain\nDessert\nBeverage\nOther",
+   "read_only": 1
+  },
+  {
+   "fieldname": "allergy_alert",
+   "label": "Allergy Alert",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "preparation_minutes",
+   "label": "Preparation Minutes",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_posted",
+   "label": "Recipe Stock Posted",
+   "fieldtype": "Check",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_kitchen_ticket",
+   "label": "Stock Kitchen Ticket",
+   "fieldtype": "Link",
+   "options": "Hotel Kitchen Ticket",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

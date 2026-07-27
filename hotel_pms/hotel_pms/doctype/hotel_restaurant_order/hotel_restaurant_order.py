@@ -53,6 +53,9 @@ class HotelRestaurantOrder(Document):
                 row.item_name = menu.menu_name
                 row.rate = menu.rate
                 row.kitchen_station = menu.kitchen_station
+                row.course = menu.course
+                row.allergy_alert = menu.allergy_alert
+                row.preparation_minutes = menu.preparation_minutes
             if row.qty <= 0 or row.rate < 0:
                 frappe.throw("Order item quantity must be positive and rate cannot be negative.")
             row.amount = flt(row.qty) * flt(row.rate)

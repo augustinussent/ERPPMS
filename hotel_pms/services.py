@@ -4,9 +4,11 @@ from collections import defaultdict
 from decimal import Decimal
 import frappe
 from frappe import _
-from frappe.utils import add_to_date, cint, flt, get_datetime, getdate, now_datetime, nowdate
+from frappe.utils import add_to_date, cint, flt, get_datetime, getdate, now_datetime, nowdate, time_diff_in_seconds
 from hotel_pms.notifications import notify_roles
 from hotel_pms.services_rules import allocation_conserves, derive_table_status, laundry_is_overdue, money
+from hotel_pms.fnb_rules import derive_kds_ticket_status, kds_progress
+from hotel_pms.fnb_inventory import invoice_stock_fields, queue_ticket_stock_posting, validate_inventory_configuration, should_post_recipe
 from hotel_pms.sync import make_sync_key
 
 RESTAURANT_ROLES={"Restaurant Cashier","Restaurant Captain","Kitchen","Hotel Manager","System Manager"}
@@ -45,6 +47,16 @@ def _next_kot_number(outlet):
     row.save(ignore_permissions=True)
     return row.daily_kot_counter
 
+def _publish_kds(property_name, outlet, ticket=None, action="update"):
+    frappe.publish_realtime(
+        "hotel_kds_update",
+        {"property": property_name, "outlet": outlet, "ticket": ticket, "action": action},
+        after_commit=True,
+    )
+
+def _ticket_status(ticket_doc):
+    return derive_kds_ticket_status([row.status for row in ticket_doc.items])
+
 @frappe.whitelist()
 def get_restaurant_console(outlet=None):
     _require(RESTAURANT_ROLES)
@@ -81,6 +93,8 @@ def confirm_restaurant_order(order):
 def send_order_to_kitchen(order,request_key):
     _require(CAPTAIN_ROLES); doc=_lock("Hotel Restaurant Order",order)
     if doc.status not in ("Confirmed","In Kitchen"): frappe.throw(_("Confirm the order before sending it to the kitchen."))
+    outlet_doc = frappe.get_doc("Hotel Outlet", doc.outlet)
+    validate_inventory_configuration(outlet_doc)
     grouped=defaultdict(list)
     for row in doc.items:
         if row.status=="Ordered": grouped[row.kitchen_station or "Main Kitchen"].append(row)
@@ -89,48 +103,134 @@ def send_order_to_kitchen(order,request_key):
         key=make_sync_key("KOT",doc.name,station,request_key)
         existing=frappe.db.get_value("Hotel Kitchen Ticket",{"request_key":key},"name")
         if existing: tickets.append(existing); continue
-        kot=frappe.get_doc({"doctype":"Hotel Kitchen Ticket","property":doc.property,"outlet":doc.outlet,"restaurant_order":doc.name,"kot_date":nowdate(),"daily_kot_number":_next_kot_number(doc.outlet),"kitchen_station":station,"sent_at":now_datetime(),"request_key":key})
+        max_minutes=max([cint(item.preparation_minutes or 0) for item in items] or [0])
+        courses=sorted({item.course or "Main" for item in items})
+        priority=doc.priority or "Normal"
+        kot=frappe.get_doc({
+            "doctype":"Hotel Kitchen Ticket","property":doc.property,"outlet":doc.outlet,
+            "restaurant_order":doc.name,"kot_date":nowdate(),"daily_kot_number":_next_kot_number(doc.outlet),
+            "kitchen_station":station,"sent_at":now_datetime(),"last_activity_at":now_datetime(),
+            "target_ready_at":add_to_date(now_datetime(), minutes=max_minutes or 15),
+            "table":doc.table,"room":doc.room,"guest_name":doc.guest_name,"captain":frappe.session.user,
+            "priority":priority,"course":", ".join(courses),"request_key":key,
+        })
         for item in items:
-            kot.append("items",{"order_item_row":item.name,"item_code":item.item_code,"item_name":item.item_name,"qty":item.qty,"notes":item.notes})
+            kot.append("items",{
+                "order_item_row":item.name,"menu_item":item.menu_item,"item_code":item.item_code,
+                "item_name":item.item_name,"qty":item.qty,"notes":item.notes,"course":item.course,
+                "allergy_alert":item.allergy_alert,"preparation_minutes":item.preparation_minutes,
+            })
         kot.insert(ignore_permissions=True); tickets.append(kot.name)
         for item in items: item.status="Sent"; item.kitchen_ticket=kot.name
+        queue_ticket_stock_posting(kot.name)
+        _publish_kds(doc.property, doc.outlet, kot.name, "new")
     if grouped:
-        doc.status="In Kitchen"; doc.save(ignore_permissions=True); _set_table(doc.table,doc.name,"In Kitchen")
+        doc.status="In Kitchen"
+        if should_post_recipe(outlet_doc):
+            doc.stock_reconciliation_status="Pending"
+            doc.stock_reconciliation_note=_("Waiting for ERPNext recipe Stock Entries.")
+        else:
+            doc.stock_reconciliation_status="Not Required"
+            doc.stock_reconciliation_note=None
+        doc.save(ignore_permissions=True); _set_table(doc.table,doc.name,"In Kitchen")
         notify_roles(["Kitchen","Restaurant Captain","Hotel Manager"],property_name=doc.property,subject=_("New kitchen ticket for {0}").format(doc.name),message=_("{0} KOT(s) sent to kitchen.").format(len(tickets)),document_type=doc.doctype,document_name=doc.name,dedupe_key=f"kot:{doc.name}:{request_key}")
     return {"order":doc.name,"tickets":tickets}
 
 @frappe.whitelist()
+def accept_kitchen_ticket(ticket):
+    _require(KITCHEN_ROLES)
+    doc=_lock("Hotel Kitchen Ticket",ticket)
+    if doc.status in ("Accepted","Cooking","Partially Ready","Ready","Served"):
+        return {"ticket":doc.name,"status":doc.status,"already_processed":True}
+    if doc.status not in ("New","Recalled"):
+        frappe.throw(_("Ticket cannot be accepted from status {0}.").format(doc.status))
+    now=now_datetime(); doc.accepted_at=now; doc.accepted_by=frappe.session.user; doc.last_activity_at=now
+    for row in doc.items:
+        if row.status in ("New","Recalled"):
+            row.status="Accepted"; row.accepted_at=now
+    doc.status=_ticket_status(doc); doc.save(ignore_permissions=True)
+    _publish_kds(doc.property,doc.outlet,doc.name,"accepted")
+    return {"ticket":doc.name,"status":doc.status}
+
+@frappe.whitelist()
+def start_kitchen_ticket(ticket):
+    _require(KITCHEN_ROLES)
+    doc=_lock("Hotel Kitchen Ticket",ticket)
+    if doc.status in ("Cooking","Partially Ready","Ready","Served"):
+        return {"ticket":doc.name,"status":doc.status,"already_processed":True}
+    if doc.status in ("New","Recalled"):
+        accept_kitchen_ticket(ticket); doc=frappe.get_doc("Hotel Kitchen Ticket",ticket)
+    if doc.status!="Accepted": frappe.throw(_("Accept the ticket before starting it."))
+    now=now_datetime(); doc.started_at=doc.started_at or now; doc.last_activity_at=now
+    for row in doc.items:
+        if row.status=="Accepted": row.status="Cooking"; row.started_at=row.started_at or now
+    doc.status=_ticket_status(doc); doc.save(ignore_permissions=True)
+    _publish_kds(doc.property,doc.outlet,doc.name,"started")
+    return {"ticket":doc.name,"status":doc.status}
+
+@frappe.whitelist()
 def update_kitchen_item(ticket,row_name,status):
     _require(KITCHEN_ROLES)
-    if status not in ("Preparing","Ready","Served","Cancelled"): frappe.throw(_("Invalid kitchen status."))
+    if status not in ("Cooking","Ready","Served","Cancelled"): frappe.throw(_("Invalid kitchen status."))
     ticket_doc=_lock("Hotel Kitchen Ticket",ticket); row=next((r for r in ticket_doc.items if r.name==row_name),None)
     if not row: frappe.throw(_("Kitchen item was not found."))
-    now=now_datetime(); row.status=status
-    if status=="Preparing": row.started_at=row.started_at or now; ticket_doc.started_at=ticket_doc.started_at or now
+    now=now_datetime()
+    if status=="Cooking" and row.status in ("New","Recalled"):
+        row.status="Accepted"; row.accepted_at=now
+    row.status=status; ticket_doc.last_activity_at=now
+    if status=="Cooking": row.started_at=row.started_at or now; ticket_doc.started_at=ticket_doc.started_at or now
     elif status=="Ready": row.ready_at=now
     elif status=="Served": row.served_at=now
-    ticket_doc.status="Served" if all(r.status in ("Served","Cancelled") for r in ticket_doc.items) else ("Ready" if all(r.status in ("Ready","Served","Cancelled") for r in ticket_doc.items) else "Preparing")
+    ticket_doc.status=_ticket_status(ticket_doc)
     if ticket_doc.status=="Ready": ticket_doc.ready_at=now
     if ticket_doc.status=="Served": ticket_doc.served_at=now
     ticket_doc.save(ignore_permissions=True)
     order=frappe.get_doc("Hotel Restaurant Order",ticket_doc.restaurant_order)
     for item in order.items:
-        if item.name==row.order_item_row: item.status=status
+        if item.name==row.order_item_row: item.status={"Cooking":"Preparing"}.get(status,status)
     statuses={r.status for r in order.items if r.status!="Cancelled"}
     if statuses and statuses <= {"Ready","Served"}: order.status="Ready"; order.ready_at=now
     if statuses and statuses <= {"Served"}: order.status="Served"; order.served_at=now
     order.save(ignore_permissions=True); _set_table(order.table,order.name,derive_table_status(order.status))
+    _publish_kds(ticket_doc.property,ticket_doc.outlet,ticket_doc.name,"item")
     return {"ticket":ticket_doc.name,"ticket_status":ticket_doc.status,"order_status":order.status}
 
 @frappe.whitelist()
-def get_kitchen_display(outlet=None,station=None):
+def recall_kitchen_ticket(ticket,reason):
     _require(KITCHEN_ROLES)
-    filters={"status":["in",["New","Preparing","Ready"]]}
+    if not reason: frappe.throw(_("Recall reason is required."))
+    doc=_lock("Hotel Kitchen Ticket",ticket)
+    if doc.status=="Cancelled": frappe.throw(_("Cancelled tickets cannot be recalled."))
+    now=now_datetime(); doc.status="Recalled"; doc.recalled_at=now; doc.recalled_by=frappe.session.user
+    doc.recall_reason=reason; doc.recall_count=cint(doc.recall_count)+1; doc.last_activity_at=now
+    for row in doc.items:
+        if row.status in ("Ready","Served"):
+            row.status="Recalled"; row.recalled_at=now
+    doc.save(ignore_permissions=True)
+    _publish_kds(doc.property,doc.outlet,doc.name,"recalled")
+    return {"ticket":doc.name,"status":doc.status,"recall_count":doc.recall_count}
+
+@frappe.whitelist()
+def get_kitchen_display(outlet=None,station=None,course=None):
+    _require(KITCHEN_ROLES)
+    filters={"status":["in",["New","Accepted","Cooking","Partially Ready","Ready","Recalled"]]}
     if outlet: filters["outlet"]=outlet
     if station: filters["kitchen_station"]=station
-    tickets=frappe.get_all("Hotel Kitchen Ticket",filters=filters,fields=["name","restaurant_order","outlet","kitchen_station","daily_kot_number","status","sent_at"],order_by="sent_at asc")
-    for ticket in tickets: ticket["items"]=frappe.get_all("Hotel Kitchen Ticket Item",filters={"parent":ticket.name},fields=["name","item_name","qty","notes","status","started_at"])
-    return {"tickets":tickets}
+    if course: filters["course"]=["like",f"%{course}%"]
+    tickets=frappe.get_all("Hotel Kitchen Ticket",filters=filters,fields=[
+        "name","restaurant_order","outlet","kitchen_station","daily_kot_number","status","sent_at",
+        "accepted_at","started_at","target_ready_at","table","room","guest_name","captain","priority",
+        "course","recall_count","stock_posting_status","stock_entry","last_activity_at"
+    ],order_by="priority desc,sent_at asc")
+    now=now_datetime()
+    for ticket in tickets:
+        ticket["items"]=frappe.get_all("Hotel Kitchen Ticket Item",filters={"parent":ticket.name},fields=[
+            "name","item_name","qty","notes","status","started_at","course","allergy_alert","preparation_minutes"
+        ],order_by="idx asc")
+        ticket["progress"]=kds_progress([i.status for i in ticket["items"]])
+        ticket["age_seconds"]=max(cint(time_diff_in_seconds(now,get_datetime(ticket.sent_at))),0) if ticket.sent_at else 0
+        ticket["is_late"]=bool(ticket.target_ready_at and now>get_datetime(ticket.target_ready_at) and ticket.status not in ("Ready","Served"))
+    return {"tickets":tickets,"server_time":now}
 
 @frappe.whitelist()
 def request_restaurant_bill(order):
@@ -239,6 +339,7 @@ def create_split_invoice(split,request_key,submit=0):
         split_doc.status = "Draft"
         split_doc.save(ignore_permissions=True)
     order=frappe.get_doc("Hotel Restaurant Order",split_doc.restaurant_order); outlet=frappe.get_doc("Hotel Outlet",order.outlet)
+    validate_inventory_configuration(outlet)
     key=make_sync_key("RINVOICE",split_doc.name,request_key)
     if split_doc.settlement_type == "Complimentary":
         if not order.is_complimentary or not order.authorized_by:
@@ -250,10 +351,19 @@ def create_split_invoice(split,request_key,submit=0):
         doctype="POS Invoice"; customer=split_doc.customer or order.customer or outlet.default_customer
         if not customer: frappe.throw(_("Customer or default walk-in customer is required."))
         if not outlet.pos_profile: frappe.throw(_("POS Profile is required for direct restaurant settlement."))
-        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"is_pos":1,"pos_profile":outlet.pos_profile,"set_warehouse":outlet.warehouse,"update_stock":1,"posting_date":nowdate(),"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key,"custom_hotel_cashier_shift":frappe.db.get_value("Hotel Cashier Shift",{"property":order.property,"cashier":frappe.session.user,"status":"Open"},"name")})
-        for line in split_doc.lines: doc.append("items",{"item_code":line.item_code,"qty":line.qty,"rate":line.rate,"warehouse":outlet.warehouse,"cost_center":outlet.cost_center,"income_account":outlet.income_account})
+        stock_fields=invoice_stock_fields(outlet)
+        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"is_pos":1,"pos_profile":outlet.pos_profile,"posting_date":nowdate(),"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key,"custom_hotel_cashier_shift":frappe.db.get_value("Hotel Cashier Shift",{"property":order.property,"cashier":frappe.session.user,"status":"Open"},"name"),**stock_fields})
+        for line in split_doc.lines:
+            item={"item_code":line.item_code,"qty":line.qty,"rate":line.rate,"cost_center":outlet.cost_center,"income_account":outlet.income_account}
+            if stock_fields["update_stock"]: item["warehouse"]=outlet.warehouse
+            doc.append("items",item)
         if template:=_taxes_template(order.outlet): doc.taxes_and_charges=template
         doc.set_missing_values()
+        doc.update_stock = stock_fields["update_stock"]
+        if not doc.update_stock:
+            doc.set_warehouse = None
+            for invoice_item in doc.items:
+                invoice_item.warehouse = None
         doc.calculate_taxes_and_totals()
         doc.set("payments", [])
         if split_doc.mode_of_payment: doc.append("payments",{"mode_of_payment":split_doc.mode_of_payment,"amount":doc.rounded_total or doc.grand_total})
@@ -265,10 +375,14 @@ def create_split_invoice(split,request_key,submit=0):
             folio=frappe.get_doc("Hotel City Ledger Folio",split_doc.city_ledger_folio); customer=folio.billing_customer
         else:
             customer=split_doc.customer or order.customer or outlet.default_customer
-        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"posting_date":nowdate(),"update_stock":1,"set_warehouse":outlet.warehouse,"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key})
+        stock_fields=invoice_stock_fields(outlet)
+        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"posting_date":nowdate(),"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key,**stock_fields})
         if split_doc.settlement_type=="Room Posting": doc.custom_hotel_folio=split_doc.folio
         if split_doc.settlement_type=="City Ledger": doc.custom_hotel_city_ledger_folio=split_doc.city_ledger_folio
-        for line in split_doc.lines: doc.append("items",{"item_code":line.item_code,"qty":line.qty,"rate":line.rate,"warehouse":outlet.warehouse,"cost_center":outlet.cost_center,"income_account":outlet.income_account})
+        for line in split_doc.lines:
+            item={"item_code":line.item_code,"qty":line.qty,"rate":line.rate,"cost_center":outlet.cost_center,"income_account":outlet.income_account}
+            if stock_fields["update_stock"]: item["warehouse"]=outlet.warehouse
+            doc.append("items",item)
     template=_taxes_template(order.outlet)
     if template and not doc.taxes_and_charges: doc.taxes_and_charges=template
     doc.insert(ignore_permissions=True)
@@ -295,6 +409,18 @@ def complete_restaurant_order(order):
     for item in doc.items:
         if item.status != "Cancelled" and money(allocated.get(item.name, 0)) != money(item.qty):
             frappe.throw(_("Bill splits do not exactly allocate item {0}.").format(item.item_name))
+    outlet = frappe.get_doc("Hotel Outlet", doc.outlet)
+    validate_inventory_configuration(outlet)
+    if should_post_recipe(outlet):
+        tickets = frappe.get_all("Hotel Kitchen Ticket", filters={"restaurant_order": doc.name, "status": ["!=", "Cancelled"]}, fields=["name", "stock_posting_status"])
+        incomplete = [t.name for t in tickets if t.stock_posting_status not in ("Submitted", "Not Required")]
+        if incomplete:
+            frappe.throw(_("Submit or reconcile ERPNext recipe Stock Entries before completing the order: {0}").format(", ".join(incomplete)))
+        doc.stock_reconciliation_status="Reconciled"
+        doc.stock_reconciliation_note=_("All active KOT recipe Stock Entries are submitted in ERPNext.")
+    else:
+        doc.stock_reconciliation_status="Not Required"
+        doc.stock_reconciliation_note=None
     doc.status="Billed"; doc.pos_invoice_count=len(splits); doc.save(ignore_permissions=True); _set_table(doc.table,None,"Cleaning")
     return {"order":doc.name,"status":doc.status}
 
@@ -353,6 +479,12 @@ def cancel_restaurant_order(order, reason):
     submitted = frappe.db.sql("""select count(*) from `tabHotel Restaurant Bill Split` s left join `tabPOS Invoice` p on p.name=s.erpnext_document and s.erpnext_document_type='POS Invoice' left join `tabSales Invoice` i on i.name=s.erpnext_document and s.erpnext_document_type='Sales Invoice' where s.restaurant_order=%s and (p.docstatus=1 or i.docstatus=1)""", order)[0][0]
     if submitted:
         frappe.throw(_("Cancel or return submitted ERPNext billing documents before cancelling the restaurant order."))
+    outlet = frappe.get_doc("Hotel Outlet", doc.outlet)
+    if outlet.inventory_posting_policy == "Recipe Material Issue":
+        tickets = frappe.get_all("Hotel Kitchen Ticket", filters={"restaurant_order": doc.name, "status": ["!=", "Cancelled"]}, fields=["name", "stock_posting_status"])
+        incomplete = [row.name for row in tickets if row.stock_posting_status not in ("Submitted", "Not Required")]
+        if incomplete:
+            frappe.throw(_("Reconcile recipe Stock Entries before cancelling a fired order. Consumption is retained as wastage: {0}").format(", ".join(incomplete)))
     doc.status = "Cancelled"
     doc.cancel_reason = reason
     for row in doc.items:

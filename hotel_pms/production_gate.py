@@ -156,14 +156,46 @@ def accounting_reconciliation(property_name=None, from_date=None, to_date=None, 
 def stock_reconciliation(property_name=None, from_date=None, to_date=None):
     from_date=getdate(from_date or add_to_date(nowdate(),days=-30)); to_date=getdate(to_date or nowdate())
     pf=" and o.property=%s" if property_name else ""; vals=[from_date,to_date]+([property_name] if property_name else [])
-    rows=frappe.db.sql(f"""select s.name split_name,s.erpnext_document_type,s.erpnext_document,s.status split_status,d.docstatus,d.update_stock from `tabHotel Restaurant Bill Split` s inner join `tabHotel Restaurant Order` o on o.name=s.restaurant_order left join `tabPOS Invoice` d on s.erpnext_document_type='POS Invoice' and d.name=s.erpnext_document where o.order_date between %s and %s {pf} and s.status='Submitted'""",vals,as_dict=True)
-    invalid=[]; missing_sle=0
+    rows=frappe.db.sql(f"""select s.name split_name,s.restaurant_order,s.erpnext_document_type,s.erpnext_document,s.status split_status,
+        coalesce(pi.docstatus,si.docstatus) docstatus,coalesce(pi.update_stock,si.update_stock,0) update_stock,
+        x.inventory_posting_policy
+        from `tabHotel Restaurant Bill Split` s
+        inner join `tabHotel Restaurant Order` o on o.name=s.restaurant_order
+        inner join `tabHotel Outlet` x on x.name=o.outlet
+        left join `tabPOS Invoice` pi on s.erpnext_document_type='POS Invoice' and pi.name=s.erpnext_document
+        left join `tabSales Invoice` si on s.erpnext_document_type='Sales Invoice' and si.name=s.erpnext_document
+        where o.order_date between %s and %s {pf} and s.status='Submitted'""",vals,as_dict=True)
+    invalid=[]; missing_sle=0; checked_recipe_orders=set(); recipe_ticket_blockers=[]
     for r in rows:
-        if r.erpnext_document_type!='POS Invoice': continue
-        if r.docstatus!=1 or not r.update_stock: invalid.append(dict(r)); continue
-        stock_items=frappe.db.sql("""select count(*) from `tabPOS Invoice Item` pii inner join `tabItem` i on i.name=pii.item_code where pii.parent=%s and i.is_stock_item=1""",r.erpnext_document)[0][0]
-        if stock_items and not frappe.db.exists("Stock Ledger Entry",{"voucher_type":"POS Invoice","voucher_no":r.erpnext_document,"is_cancelled":0}): missing_sle+=1
-    return {"submitted_restaurant_splits":len(rows),"invalid_documents":invalid[:50],"missing_stock_ledger":missing_sle,"blockers":len(invalid)+missing_sle}
+        if r.docstatus!=1:
+            invalid.append(dict(r,reason="ERPNext billing document is not submitted")); continue
+        policy=r.inventory_posting_policy or "ERPNext POS Finished Goods"
+        if policy=="ERPNext POS Finished Goods":
+            if not r.update_stock:
+                invalid.append(dict(r,reason="Finished-goods policy requires invoice update_stock")); continue
+            item_table="POS Invoice Item" if r.erpnext_document_type=="POS Invoice" else "Sales Invoice Item"
+            stock_items=frappe.db.sql(f"""select count(*) from `tab{item_table}` ii inner join `tabItem` i on i.name=ii.item_code where ii.parent=%s and i.is_stock_item=1""",r.erpnext_document)[0][0]
+            if stock_items and not frappe.db.exists("Stock Ledger Entry",{"voucher_type":r.erpnext_document_type,"voucher_no":r.erpnext_document,"is_cancelled":0}): missing_sle+=1
+        elif policy=="Recipe Material Issue":
+            if r.update_stock:
+                invalid.append(dict(r,reason="Recipe policy must disable invoice update_stock to avoid double stock")); continue
+            if r.restaurant_order in checked_recipe_orders: continue
+            checked_recipe_orders.add(r.restaurant_order)
+            tickets=frappe.get_all("Hotel Kitchen Ticket",filters={"restaurant_order":r.restaurant_order,"status":["!=","Cancelled"]},fields=["name","stock_posting_status","stock_entry"])
+            for ticket in tickets:
+                if ticket.stock_posting_status=="Not Required": continue
+                if ticket.stock_posting_status!="Submitted" or not ticket.stock_entry:
+                    recipe_ticket_blockers.append({"order":r.restaurant_order,"ticket":ticket.name,"reason":ticket.stock_posting_status}); continue
+                if frappe.db.get_value("Stock Entry",ticket.stock_entry,"docstatus")!=1:
+                    recipe_ticket_blockers.append({"order":r.restaurant_order,"ticket":ticket.name,"reason":"Stock Entry not submitted"}); continue
+                if not frappe.db.exists("Stock Ledger Entry",{"voucher_type":"Stock Entry","voucher_no":ticket.stock_entry,"is_cancelled":0}):
+                    recipe_ticket_blockers.append({"order":r.restaurant_order,"ticket":ticket.name,"reason":"Missing Stock Ledger Entry"})
+        else:
+            if r.update_stock:
+                invalid.append(dict(r,reason="No Stock Posting policy must keep invoice update_stock disabled"))
+    blockers=len(invalid)+missing_sle+len(recipe_ticket_blockers)
+    return {"submitted_restaurant_splits":len(rows),"invalid_documents":invalid[:50],"missing_stock_ledger":missing_sle,"recipe_ticket_blockers":recipe_ticket_blockers[:50],"blockers":blockers}
+
 
 def public_security_check(property_name=None):
     settings=frappe.get_single("Hotel PMS Settings"); blockers=[]; warnings=[]

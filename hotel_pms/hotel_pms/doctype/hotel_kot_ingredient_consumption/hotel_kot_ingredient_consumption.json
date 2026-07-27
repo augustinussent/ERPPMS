@@ -1,0 +1,93 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-26 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "menu_item",
+  "order_item_row",
+  "ingredient_item",
+  "qty",
+  "stock_uom",
+  "source_warehouse",
+  "stock_entry_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "menu_item",
+   "label": "Menu Item",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet Menu Item"
+  },
+  {
+   "fieldname": "order_item_row",
+   "label": "Order Item Row",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "ingredient_item",
+   "label": "ERPNext Ingredient Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "qty",
+   "label": "Consumed Qty",
+   "fieldtype": "Float",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "stock_uom",
+   "label": "Stock UOM",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_warehouse",
+   "label": "Source Warehouse",
+   "fieldtype": "Link",
+   "options": "Warehouse",
+   "reqd": 1
+  },
+  {
+   "fieldname": "stock_entry_detail",
+   "label": "Stock Entry Detail Row",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-26 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel KOT Ingredient Consumption",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

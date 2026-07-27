@@ -72,3 +72,5 @@ def hotel_production_gate_run_query(user=None):
 
 def hotel_channel_connection_query(user=None): return permission_query("Hotel Channel Connection",user)
 def hotel_guest_message_query(user=None): return permission_query("Hotel Guest Message",user)
+
+def hotel_menu_import_batch_query(user=None): return permission_query("Hotel Menu Import Batch",user)

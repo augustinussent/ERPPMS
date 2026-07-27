@@ -20,7 +20,29 @@
   "ready_at",
   "served_at",
   "printed_at",
-  "request_key"
+  "request_key",
+  "context_section",
+  "table",
+  "room",
+  "guest_name",
+  "captain",
+  "priority",
+  "course",
+  "target_ready_at",
+  "accepted_at",
+  "accepted_by",
+  "recalled_at",
+  "recalled_by",
+  "recall_reason",
+  "recall_count",
+  "last_activity_at",
+  "stock_section",
+  "stock_posting_status",
+  "stock_entry",
+  "stock_sync_key",
+  "stock_posted_at",
+  "stock_error",
+  "ingredient_consumptions"
  ],
  "fields": [
   {
@@ -79,7 +101,7 @@
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "New\nPreparing\nReady\nServed\nCancelled",
+   "options": "New\nAccepted\nCooking\nPartially Ready\nReady\nServed\nRecalled\nCancelled",
    "default": "New",
    "reqd": 1,
    "in_list_view": 1,
@@ -127,6 +149,150 @@
    "fieldtype": "Data",
    "unique": 1,
    "hidden": 1
+  },
+  {
+   "fieldname": "context_section",
+   "label": "Guest / Service Context",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "table",
+   "label": "Table",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table",
+   "read_only": 1
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "read_only": 1
+  },
+  {
+   "fieldname": "guest_name",
+   "label": "Guest Name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "captain",
+   "label": "Captain",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Normal\nRush\nVIP",
+   "default": "Normal",
+   "read_only": 1
+  },
+  {
+   "fieldname": "course",
+   "label": "Course",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "target_ready_at",
+   "label": "Target Ready At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_at",
+   "label": "Accepted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_by",
+   "label": "Accepted By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recalled_at",
+   "label": "Recalled At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recalled_by",
+   "label": "Recalled By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recall_reason",
+   "label": "Recall Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recall_count",
+   "label": "Recall Count",
+   "fieldtype": "Int",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_activity_at",
+   "label": "Last Activity At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_section",
+   "label": "ERPNext Recipe Consumption",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stock_posting_status",
+   "label": "Stock Posting Status",
+   "fieldtype": "Select",
+   "options": "Not Required\nQueued\nDraft Created\nSubmitted\nFailed\nCancelled",
+   "default": "Not Required",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_entry",
+   "label": "ERPNext Stock Entry",
+   "fieldtype": "Link",
+   "options": "Stock Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_sync_key",
+   "label": "Stock Sync Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_posted_at",
+   "label": "Stock Posted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_error",
+   "label": "Stock Posting Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ingredient_consumptions",
+   "label": "Ingredient Consumption Snapshot",
+   "fieldtype": "Table",
+   "options": "Hotel KOT Ingredient Consumption",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

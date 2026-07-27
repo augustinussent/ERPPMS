@@ -27,7 +27,13 @@
   "opening_time",
   "closing_time",
   "daily_kot_date",
-  "daily_kot_counter"
+  "daily_kot_counter",
+  "inventory_policy_section",
+  "inventory_posting_policy",
+  "recipe_stock_entry_mode",
+  "recipe_source_warehouse",
+  "kds_late_minutes",
+  "kds_sound_enabled"
  ],
  "fields": [
   {
@@ -167,6 +173,47 @@
    "fieldtype": "Int",
    "default": "0",
    "read_only": 1
+  },
+  {
+   "fieldname": "inventory_policy_section",
+   "label": "ERPNext Inventory Posting",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "inventory_posting_policy",
+   "label": "Inventory Posting Policy",
+   "fieldtype": "Select",
+   "options": "ERPNext POS Finished Goods\nRecipe Material Issue\nNo Stock Posting",
+   "default": "ERPNext POS Finished Goods",
+   "reqd": 1,
+   "description": "Choose exactly one stock path. Recipe Material Issue disables update_stock on restaurant invoices."
+  },
+  {
+   "fieldname": "recipe_stock_entry_mode",
+   "label": "Recipe Stock Entry Mode",
+   "fieldtype": "Select",
+   "options": "Draft\nSubmit",
+   "default": "Draft",
+   "depends_on": "eval:doc.inventory_posting_policy==\"Recipe Material Issue\""
+  },
+  {
+   "fieldname": "recipe_source_warehouse",
+   "label": "Recipe Source Warehouse",
+   "fieldtype": "Link",
+   "options": "Warehouse",
+   "depends_on": "eval:doc.inventory_posting_policy==\"Recipe Material Issue\""
+  },
+  {
+   "fieldname": "kds_late_minutes",
+   "label": "KDS Late Threshold (Minutes)",
+   "fieldtype": "Int",
+   "default": "20"
+  },
+  {
+   "fieldname": "kds_sound_enabled",
+   "label": "KDS Sound Enabled",
+   "fieldtype": "Check",
+   "default": "1"
   }
  ],
  "index_web_pages_for_search": 1,

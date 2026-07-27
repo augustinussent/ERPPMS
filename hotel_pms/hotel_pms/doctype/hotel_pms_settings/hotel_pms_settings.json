@@ -67,6 +67,10 @@
   "require_captain_confirmation_for_qr",
   "auto_post_laundry_on_return",
   "laundry_overdue_notifications",
+  "fnb_depth_section",
+  "enable_kds_v2",
+  "enable_recipe_stock_posting",
+  "menu_import_max_rows",
   "enable_guest_experience_booking",
   "communications_section",
   "enable_whatsapp_notifications",
@@ -660,6 +664,30 @@
    "label": "Production Approval Note",
    "fieldtype": "HTML",
    "options": "<div class=\"alert alert-warning\">A successful static build is not production approval. Use Hotel Production Gate Run and attach evidence for restore, security, load, reconciliation, parallel run, and departmental sign-off.</div>"
+  },
+  {
+   "fieldname": "fnb_depth_section",
+   "label": "F&B Operational Depth",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_kds_v2",
+   "label": "Enable KDS v2",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_recipe_stock_posting",
+   "label": "Enable Recipe Stock Posting",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Keep disabled until recipe, warehouses, stock UOM, and Stock Entry reconciliation pass staging UAT."
+  },
+  {
+   "fieldname": "menu_import_max_rows",
+   "label": "Menu Import Maximum Rows",
+   "fieldtype": "Int",
+   "default": "1000"
   }
  ],
  "index_web_pages_for_search": 1,

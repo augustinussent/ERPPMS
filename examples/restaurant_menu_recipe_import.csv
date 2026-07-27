@@ -1,0 +1,3 @@
+item_code,menu_name,rate,kitchen_station,course,allergy_alert,preparation_minutes,recipe_json
+FOOD-NASGOR,Nasi Goreng,65000,Main Kitchen,Main,"Contains egg and soy",15,"[{""item_code"":""ING-RICE"",""qty"":0.2,""warehouse"":""Kitchen - TBH""},{""item_code"":""ING-EGG"",""qty"":1,""warehouse"":""Kitchen - TBH""}]"
+BEV-TEA,Teh Hangat,25000,Bar,Beverage,,5,"[{""item_code"":""ING-TEA"",""qty"":0.01,""warehouse"":""Bar - TBH""}]"

@@ -145,7 +145,7 @@ Use `/app/hotel-platform-console`, `/app/hotel-onboarding`, and `/app/hotel-migr
 ## Production approval
 Open `/app/hotel-production-gate`. This release remains a candidate until a specific environment passes all mandatory checks and departmental sign-offs.
 
-## v1.1.0 Localization & Communication
+## v1.0.0-rc2 Localization & Communication
 
 Rilis ini menambahkan country-pack Indonesia, validasi pemetaan pajak ke ERPNext, WhatsApp Meta Cloud API yang asynchronous dan idempotent, communication inbox, serta private guest-document pipeline. Halaman operasional tersedia pada:
 
@@ -153,4 +153,16 @@ Rilis ini menambahkan country-pack Indonesia, validasi pemetaan pajak ke ERPNext
 /app/hotel-communications
 ```
 
-ERPNext tetap menjadi satu-satunya sumber transaksi keuangan dan stok. Modul localization, komunikasi, dan dokumen tamu tidak membuat Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, atau Stock Entry. Rincian implementasi terdapat di `docs/ADOPTION_V110.md`.
+ERPNext tetap menjadi satu-satunya sumber transaksi keuangan dan stok. Modul localization, komunikasi, dan dokumen tamu tidak membuat Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, atau Stock Entry. Rincian implementasi terdapat di `docs/ADOPTION_V100_RC2.md`.
+
+## v1.0.0-rc3 F&B Operational Depth
+
+Operational pages:
+
+```text
+/app/hotel-kitchen-display
+/app/hotel-menu-import
+/app/query-report/Hotel Restaurant Stock Reconciliation
+```
+
+Outlet inventory policy is mutually exclusive: ERPNext POS finished goods, recipe Material Issue, or no stock posting. Recipe mode creates one idempotent ERPNext Stock Entry per KOT and forces restaurant invoices to `update_stock = 0`. See `docs/FNB_DEPTH_V100_RC3.md`.

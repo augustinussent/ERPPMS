@@ -1,6 +1,16 @@
 # Changelog
 
-## 1.1.0 - Localization and Communication Adoption
+## 1.0.0-rc3 - F&B Operational Depth
+
+- Added KDS v2 with accept/start, progress, course, allergy, late aging, recall, sound, and realtime updates.
+- Added ERPNext Item recipes and one idempotent Material Issue Stock Entry per KOT.
+- Added mutually exclusive outlet inventory policies to prevent invoice and recipe stock posting from running together.
+- Added Hotel ERP Sync Log revision-key retry for cancelled Stock Entries.
+- Added menu/recipe CSV preview and commit workflow.
+- Added Restaurant Stock Reconciliation report and recipe-aware Production Gate checks.
+- Corrected the prior localization/communication candidate label to 1.0.0-rc2.
+
+## 1.0.0-rc2 - Localization and Communication Adoption
 
 - Added governed localization packs with Indonesia labels/locale and strict ERPNext tax-template validation.
 - Added Meta Cloud API WhatsApp connections, idempotent message ledger, async delivery, status webhook, and inbound message inbox.

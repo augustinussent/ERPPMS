@@ -1,0 +1,133 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-26 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "row_no",
+  "action",
+  "status",
+  "item_code",
+  "menu_name",
+  "rate",
+  "kitchen_station",
+  "course",
+  "allergy_alert",
+  "preparation_minutes",
+  "recipe_json",
+  "message",
+  "menu_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "row_no",
+   "label": "Row",
+   "fieldtype": "Int",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Select",
+   "options": "Insert\nUpdate\nSkip\nReject",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Preview\nCommitted\nFailed",
+   "default": "Preview",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_code",
+   "label": "ERPNext Item",
+   "fieldtype": "Link",
+   "options": "Item"
+  },
+  {
+   "fieldname": "menu_name",
+   "label": "Menu Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "rate",
+   "label": "Rate",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "kitchen_station",
+   "label": "Kitchen Station",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "course",
+   "label": "Course",
+   "fieldtype": "Select",
+   "options": "Starter\nMain\nDessert\nBeverage\nOther"
+  },
+  {
+   "fieldname": "allergy_alert",
+   "label": "Allergy Alert",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "preparation_minutes",
+   "label": "Preparation Minutes",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "recipe_json",
+   "label": "Recipe JSON",
+   "fieldtype": "Long Text"
+  },
+  {
+   "fieldname": "message",
+   "label": "Validation Message",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "menu_item",
+   "label": "Created Menu Item",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet Menu Item",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-26 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Menu Import Row",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

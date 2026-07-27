@@ -46,6 +46,10 @@ doc_events = {
     "POS Invoice": {
         "on_submit": "hotel_pms.integrations.pos_invoice.on_submit",
         "on_cancel": "hotel_pms.integrations.pos_invoice.on_cancel",
+    },
+    "Stock Entry": {
+        "on_submit": "hotel_pms.fnb_inventory.on_stock_entry_submit",
+        "on_cancel": "hotel_pms.fnb_inventory.on_stock_entry_cancel",
     }
 }
 
@@ -144,6 +148,7 @@ permission_query_conditions = {
     'Hotel Production Gate Run': "hotel_pms.permissions.hotel_production_gate_run_query",
     'Hotel Channel Connection': "hotel_pms.permissions.hotel_channel_connection_query",
     'Hotel Guest Message': "hotel_pms.permissions.hotel_guest_message_query",
+    'Hotel Menu Import Batch': "hotel_pms.permissions.hotel_menu_import_batch_query",
 }
 
 has_permission = {
@@ -213,4 +218,5 @@ has_permission = {
     'Hotel Production Gate Run': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Channel Connection': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Guest Message': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Menu Import Batch': "hotel_pms.permissions.property_document_has_permission",
 }

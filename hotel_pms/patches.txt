@@ -13,3 +13,4 @@ hotel_pms.patches.v0_8.setup_services
 hotel_pms.patches.v0_9.setup_platform
 hotel_pms.patches.v1_0.setup_production_gate
 hotel_pms.patches.v1_1.setup_adoption
+hotel_pms.patches.v1_0_rc3.setup_fnb_depth

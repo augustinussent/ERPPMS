@@ -12,6 +12,7 @@
   "service_type",
   "status",
   "source",
+  "priority",
   "guest_section",
   "table",
   "reservation",
@@ -41,7 +42,9 @@
   "complimentary_reason",
   "authorized_by",
   "cancel_reason",
-  "pos_invoice_count"
+  "pos_invoice_count",
+  "stock_reconciliation_status",
+  "stock_reconciliation_note"
  ],
  "fields": [
   {
@@ -267,6 +270,27 @@
    "fieldname": "pos_invoice_count",
    "label": "ERPNext Invoices",
    "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Kitchen Priority",
+   "fieldtype": "Select",
+   "options": "Normal\nRush\nVIP",
+   "default": "Normal"
+  },
+  {
+   "fieldname": "stock_reconciliation_status",
+   "label": "Recipe Stock Reconciliation",
+   "fieldtype": "Select",
+   "options": "Not Required\nPending\nReconciled",
+   "default": "Not Required",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_reconciliation_note",
+   "label": "Stock Reconciliation Note",
+   "fieldtype": "Small Text",
    "read_only": 1
   }
  ],

@@ -11,6 +11,12 @@
   "item_name",
   "qty",
   "notes",
+  "menu_item",
+  "course",
+  "allergy_alert",
+  "preparation_minutes",
+  "accepted_at",
+  "recalled_at",
   "status",
   "started_at",
   "ready_at",
@@ -51,7 +57,7 @@
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "New\nPreparing\nReady\nServed\nCancelled",
+   "options": "New\nAccepted\nCooking\nReady\nServed\nRecalled\nCancelled",
    "default": "New",
    "reqd": 1,
    "in_list_view": 1,
@@ -72,6 +78,40 @@
   {
    "fieldname": "served_at",
    "label": "Served At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "menu_item",
+   "label": "Menu Item",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet Menu Item"
+  },
+  {
+   "fieldname": "course",
+   "label": "Course",
+   "fieldtype": "Select",
+   "options": "Starter\nMain\nDessert\nBeverage\nOther"
+  },
+  {
+   "fieldname": "allergy_alert",
+   "label": "Allergy Alert",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "preparation_minutes",
+   "label": "Preparation Minutes",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "accepted_at",
+   "label": "Accepted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recalled_at",
+   "label": "Recalled At",
    "fieldtype": "Datetime",
    "read_only": 1
   }

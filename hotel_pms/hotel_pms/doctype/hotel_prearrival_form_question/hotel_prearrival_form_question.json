@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-07-28 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "field_key",
+  "field_type",
+  "label",
+  "help_text",
+  "required",
+  "options"
+ ],
+ "fields": [
+  {
+   "fieldname": "field_key",
+   "label": "Field Key",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "field_type",
+   "label": "Type",
+   "fieldtype": "Select",
+   "options": "Short Text\nLong Text\nNumber\nSelect\nMulti Select\nDate\nTime\nYes No\nPhone\nEmail",
+   "default": "Short Text",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "label",
+   "label": "Label",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "help_text",
+   "label": "Help Text",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "required",
+   "label": "Required",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "options",
+   "label": "Options (one per line)",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-28 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Prearrival Form Question",
+ "owner": "Administrator",
+ "permissions": [],
+ "states": []
+}

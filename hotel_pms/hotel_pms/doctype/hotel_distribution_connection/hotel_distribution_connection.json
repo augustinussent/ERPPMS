@@ -1,0 +1,278 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-28 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "provider",
+  "maturity_status",
+  "enabled",
+  "status",
+  "transport_section",
+  "endpoint",
+  "external_property_id",
+  "api_key",
+  "webhook_secret",
+  "sync_days",
+  "sync_interval_minutes",
+  "column_break_transport",
+  "inbound_enabled",
+  "outbound_ari_enabled",
+  "feed_slug",
+  "feed_token_hash",
+  "buffer_before",
+  "buffer_after",
+  "health_section",
+  "last_test_at",
+  "last_test_status",
+  "last_sync_at",
+  "last_sync_status",
+  "last_push_at",
+  "last_push_status",
+  "failure_count",
+  "last_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HDC-.YYYY.-.#####",
+   "default": "HDC-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "provider",
+   "label": "Provider",
+   "fieldtype": "Select",
+   "options": "Generic iCal\nGeneric JSON\nChannex\nSTAAH\nAioSell\nCustom",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "maturity_status",
+   "label": "Maturity",
+   "fieldtype": "Select",
+   "options": "Shipped\nAdapter\nRecipe\nPlanned",
+   "default": "Planned",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nTested\nReady\nLive\nFailed\nDisabled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "transport_section",
+   "label": "Transport",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "endpoint",
+   "label": "Endpoint / Import URL",
+   "fieldtype": "Password",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "external_property_id",
+   "label": "External Property ID",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "api_key",
+   "label": "API Key / Token",
+   "fieldtype": "Password",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "webhook_secret",
+   "label": "Webhook Secret",
+   "fieldtype": "Password",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "sync_days",
+   "label": "ARI Days",
+   "fieldtype": "Int",
+   "default": "90"
+  },
+  {
+   "fieldname": "sync_interval_minutes",
+   "label": "iCal Sync Interval Minutes",
+   "fieldtype": "Int",
+   "default": "15"
+  },
+  {
+   "fieldname": "column_break_transport",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "inbound_enabled",
+   "label": "Inbound Booking Enabled",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "outbound_ari_enabled",
+   "label": "Outbound ARI Enabled",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "feed_slug",
+   "label": "Public Feed Slug",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "feed_token_hash",
+   "label": "Feed Token Hash",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "buffer_before",
+   "label": "Buffer Before (days)",
+   "fieldtype": "Int",
+   "default": "0"
+  },
+  {
+   "fieldname": "buffer_after",
+   "label": "Buffer After (days)",
+   "fieldtype": "Int",
+   "default": "0"
+  },
+  {
+   "fieldname": "health_section",
+   "label": "Health & Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "last_test_at",
+   "label": "Last Test At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_test_status",
+   "label": "Last Test Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_at",
+   "label": "Last Sync At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_sync_status",
+   "label": "Last Sync Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_push_at",
+   "label": "Last Push At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_push_status",
+   "label": "Last Push Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "failure_count",
+   "label": "Failure Count",
+   "fieldtype": "Int",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Last Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-28 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Distribution Connection",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "provider"
+}

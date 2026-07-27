@@ -38,11 +38,12 @@ class HotelReservation(Document):
             if redemption and self.voucher_redemption != redemption:
                 self.db_set("voucher_redemption", redemption)
             self._post_voucher_discount()
-        try:
-            from hotel_pms.communications import queue_booking_confirmation
-            queue_booking_confirmation(self.name)
-        except Exception:
-            frappe.log_error(frappe.get_traceback(), f"WhatsApp booking confirmation queue failed: {self.name}")
+        if not (self.source == "OTA" and self.distribution_connection):
+            try:
+                from hotel_pms.communications import queue_booking_confirmation
+                queue_booking_confirmation(self.name)
+            except Exception:
+                frappe.log_error(frappe.get_traceback(), f"WhatsApp booking confirmation queue failed: {self.name}")
 
     def on_cancel(self):
         was_checked_in = self.status == "Checked In"
@@ -153,6 +154,14 @@ class HotelReservation(Document):
 
 
     def _apply_revenue_quote(self):
+        if self.external_sell_price_locked:
+            if self.source != "OTA" or not self.distribution_connection or not self.external_reference:
+                frappe.throw(_("External sell-price lock is only valid for an identified OTA distribution booking."))
+            if self.distribution_price_status != "Approved":
+                frappe.throw(_("External distribution price must be approved before the reservation is saved."))
+            if flt(self.external_room_rate_total) < 0 or flt(self.external_gross_total) < 0:
+                frappe.throw(_("External distribution totals cannot be negative."))
+            return
         rows_with_plan = [row for row in self.rooms if row.rate_plan]
         require_quote = frappe.db.get_single_value("Hotel PMS Settings", "require_rate_quote_on_reservation")
         allow_manual = frappe.db.get_single_value("Hotel PMS Settings", "allow_manual_rate_without_plan")
@@ -285,6 +294,17 @@ class HotelReservation(Document):
             )
             if conflicts:
                 frappe.throw(_("Room {0} conflicts with reservation {1}.").format(row.room, conflicts[0].name))
+            if frappe.db.exists("DocType", "Hotel Distribution Event"):
+                external = frappe.db.sql(
+                    """select name, connection from `tabHotel Distribution Event`
+                    where property=%(property)s and room=%(room)s and event_type='Calendar Block'
+                      and status in ('Pending','Processed','Needs Review','Echo')
+                      and arrival_date < %(departure)s and departure_date > %(arrival)s limit 1""",
+                    {"property": self.property, "room": row.room, "arrival": getdate(self.arrival_date), "departure": getdate(self.departure_date)},
+                    as_dict=True,
+                )
+                if external:
+                    frappe.throw(_("Room {0} is blocked by distribution event {1}.").format(row.room, external[0].name))
             requested_by_type[row.room_type] = requested_by_type.get(row.room_type, 0) + 1
 
         # Room-type blocks protect group inventory even before exact room assignment.

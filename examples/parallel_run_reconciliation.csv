@@ -1,4 +1,12 @@
-date,department,legacy_total,hotel_pms_total,erpnext_total,variance,status,evidence,reviewer
-2026-08-01,Front Office,0,0,0,0,Pending,,
-2026-08-01,F&B,0,0,0,0,Pending,,
-2026-08-01,Finance,0,0,0,0,Pending,,
+metric_code,department,business_date,unit,reference,legacy_value,pms_value,tolerance,notes
+RESERVATIONS,Front Office,2026-08-01,Count,Daily total,,,0,
+ROOM_NIGHTS,Front Office,2026-08-01,Count,Occupied rooms,,,0,
+ROOM_REVENUE,Finance,2026-08-01,IDR,Room revenue,,,1,
+TAX_TOTAL,Finance,2026-08-01,IDR,Configured tax total,,,1,
+PAYMENTS,Finance,2026-08-01,IDR,Submitted payments,,,1,
+DEPOSITS,Finance,2026-08-01,IDR,Guest deposits held,,,1,
+REFUNDS,Finance,2026-08-01,IDR,Refunds issued,,,1,
+AR_OUTSTANDING,Finance,2026-08-01,IDR,Outstanding receivables,,,1,
+CASHIER_CASH,Finance,2026-08-01,IDR,Cash expected versus counted,,,1,
+FNB_REVENUE,F&B,2026-08-01,IDR,Restaurant revenue,,,1,
+STOCK_MOVEMENT,F&B,2026-08-01,Base UOM,Stock movement,,,0.001,

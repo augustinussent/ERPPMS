@@ -6,7 +6,7 @@ root = Path(__file__).resolve().parents[1]
 errors = []
 
 version_text=(root / 'hotel_pms/__init__.py').read_text()
-if not any(token in version_text for token in ('1.0.0rc5','1.0.0rc6')):
+if not any(token in version_text for token in ('1.0.0rc5','1.0.0rc6','1.0.0rc7','1.0.0rc8','1.0.0rc9')):
     errors.append('application version no longer includes RC5 staging-execution contracts')
 
 production_gate = (root / 'hotel_pms/production_gate.py').read_text()

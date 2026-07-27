@@ -30,13 +30,13 @@ class HotelPaymentCorrection(Document):
         self.original_payment_type=pe.payment_type
         self.original_transaction_type=getattr(pe,"custom_hotel_transaction_type",None)
         self.original_amount=original_amount
-        self.refundable_amount=refundable
+        self.refundable_amount=float(plan.get("maximum_refundable") or 0)
         self.allowed_actions_json=json.dumps(plan,sort_keys=True)
         if self.requested_action not in plan["allowed_actions"]:
             frappe.throw(_("Requested action is not legal for the current Payment Entry state."))
         if self.requested_action == "Create Refund":
             if not self.reservation: frappe.throw(_("Only hotel-linked Payment Entries can use the governed refund action."))
-            if float(self.amount or 0)<=0 or float(self.amount or 0)>refundable:
+            if float(self.amount or 0)<=0 or float(self.amount or 0)>float(self.refundable_amount or 0):
                 frappe.throw(_("Refund amount must be greater than zero and cannot exceed the refundable balance."))
             if not self.mode_of_payment: frappe.throw(_("Mode of Payment is required for a refund."))
         if not self.idempotency_key:

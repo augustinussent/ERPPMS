@@ -20,7 +20,8 @@
   "status",
   "started_at",
   "ready_at",
-  "served_at"
+  "served_at",
+  "delta_action"
  ],
  "fields": [
   {
@@ -114,6 +115,15 @@
    "label": "Recalled At",
    "fieldtype": "Datetime",
    "read_only": 1
+  },
+  {
+   "fieldname": "delta_action",
+   "label": "Delta Action",
+   "fieldtype": "Select",
+   "options": "Add\nReduce\nModify",
+   "default": "Add",
+   "read_only": 1,
+   "in_list_view": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -121,7 +131,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Kitchen Ticket Item",

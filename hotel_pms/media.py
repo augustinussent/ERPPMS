@@ -177,6 +177,33 @@ def replace_guest_document(registration: str, kind: str, image_data: str, filena
             except Exception:frappe.log_error(frappe.get_traceback(),f"Unable to remove replaced guest document {old_name}")
     return {"registration":doc.name,"field":field,"file_url":file_doc.file_url}
 
+
+def replace_occupant_document(registration: str, occupant_row: str, image_data: str, filename: str | None = None, *, ignore_permissions: bool = False) -> dict:
+    registration_doc = frappe.get_doc("Hotel Guest Registration", registration)
+    if not ignore_permissions:
+        registration_doc.check_permission("write")
+    if registration_doc.id_retention_mode == "Do Not Upload":
+        frappe.throw(_("This registration is configured not to store documents."))
+    occupant = next((row for row in registration_doc.occupants if row.name == occupant_row), None)
+    if not occupant:
+        frappe.throw(_("Occupant row was not found on this registration."))
+    content, ext = sanitize_guest_document(image_data)
+    old = occupant.get("id_file")
+    from frappe.utils.file_manager import save_file
+    file_doc = save_file(
+        f"{registration_doc.name}-occupant-{occupant.idx}.{ext}", content,
+        registration_doc.doctype, registration_doc.name, is_private=1,
+    )
+    frappe.db.set_value("Hotel Registered Occupant", occupant.name, {"id_file": file_doc.file_url, "id_verified": 0}, update_modified=False)
+    if old and old != file_doc.file_url:
+        old_name = frappe.db.get_value("File", {"file_url": old}, "name")
+        if old_name:
+            try:
+                frappe.delete_doc("File", old_name, ignore_permissions=True, force=True)
+            except Exception:
+                frappe.log_error(frappe.get_traceback(), f"Unable to remove replaced occupant document {old_name}")
+    return {"registration": registration_doc.name, "occupant": occupant.name, "file_url": file_doc.file_url}
+
 def purge_registration_documents(registration: str, reason: str="Verify and Discard") -> dict:
     doc=frappe.get_doc("Hotel Guest Registration",registration);removed=[]
     for field in ("id_file","address_proof_file"):
@@ -187,6 +214,14 @@ def purge_registration_documents(registration: str, reason: str="Verify and Disc
         if file_name:
             try:frappe.delete_doc("File",file_name,ignore_permissions=True,force=True);removed.append(file_name)
             except Exception:frappe.log_error(frappe.get_traceback(),f"Guest document purge failed {file_name}")
+    for occupant in doc.occupants:
+        url=occupant.get("id_file")
+        if not url: continue
+        file_name=frappe.db.get_value("File",{"file_url":url},"name")
+        frappe.db.set_value("Hotel Registered Occupant",occupant.name,{"id_file":None,"id_verified":0},update_modified=False)
+        if file_name:
+            try:frappe.delete_doc("File",file_name,ignore_permissions=True,force=True);removed.append(file_name)
+            except Exception:frappe.log_error(frappe.get_traceback(),f"Occupant document purge failed {file_name}")
     doc.db_set("documents_purged_at",frappe.utils.now_datetime())
     return {"registration":doc.name,"removed":removed,"reason":reason}
 

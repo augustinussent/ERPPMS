@@ -9,7 +9,7 @@ for name,spec in endpoints.items():
     paths[route]={spec['method'].lower():op}
     req={'method':spec['method'],'header':([{'key':'X-Idempotency-Key','value':'{{$guid}}'}] if spec.get('idempotency') else []),'url':{'raw':'{{base_url}}'+route,'host':['{{base_url}}'],'path':route.strip('/').split('/')}}
     items.append({'name':spec['summary'],'request':req})
-openapi={'openapi':'3.1.0','info':{'title':'Hotel PMS API','version':'1.0.0-rc3'},'paths':paths,'components':{'securitySchemes':{'tokenAuth':{'type':'apiKey','in':'header','name':'Authorization'}}},'security':[{'tokenAuth':[]}]}
+openapi={'openapi':'3.1.0','info':{'title':'Hotel PMS API','version':'1.0.0-rc9'},'paths':paths,'components':{'securitySchemes':{'tokenAuth':{'type':'apiKey','in':'header','name':'Authorization'}}},'security':[{'tokenAuth':[]}]}
 postman={'info':{'name':'Hotel PMS API v1','schema':'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'},'variable':[{'key':'base_url','value':'https://your-site.example'}],'item':items}
 outputs={root/'docs/openapi-v1.json':json.dumps(openapi,indent=2)+'\n',root/'docs/hotel-pms-v1.postman_collection.json':json.dumps(postman,indent=2)+'\n'}
 check='--check' in sys.argv

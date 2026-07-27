@@ -25,7 +25,13 @@
   "variance",
   "variance_reason",
   "closed_by",
-  "idempotency_key"
+  "idempotency_key",
+  "outlet",
+  "pos_profile",
+  "pos_opening_entry",
+  "pos_closing_entry",
+  "erpnext_session_status",
+  "last_reconciled_at"
  ],
  "fields": [
   {
@@ -160,6 +166,48 @@
    "hidden": 1,
    "unique": 1,
    "no_copy": 1
+  },
+  {
+   "fieldname": "outlet",
+   "label": "Restaurant Outlet",
+   "fieldtype": "Link",
+   "options": "Hotel Outlet",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pos_profile",
+   "label": "ERPNext POS Profile",
+   "fieldtype": "Link",
+   "options": "POS Profile",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pos_opening_entry",
+   "label": "ERPNext POS Opening Entry",
+   "fieldtype": "Link",
+   "options": "POS Opening Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pos_closing_entry",
+   "label": "ERPNext POS Closing Entry",
+   "fieldtype": "Link",
+   "options": "POS Closing Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "erpnext_session_status",
+   "label": "ERPNext POS Session",
+   "fieldtype": "Select",
+   "options": "Not Linked\nOpen\nClosed\nMismatch",
+   "default": "Not Linked",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_reconciled_at",
+   "label": "Last ERPNext Reconciliation",
+   "fieldtype": "Datetime",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 0,
@@ -167,7 +215,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Cashier Shift",

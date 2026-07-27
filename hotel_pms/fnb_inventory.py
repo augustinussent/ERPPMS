@@ -62,6 +62,8 @@ def queue_ticket_stock_posting(ticket: str) -> None:
 def _recipe_lines(ticket_doc, outlet_doc):
     lines = []
     for item in ticket_doc.items:
+        if getattr(item, "delta_action", "Add") != "Add":
+            continue
         if not item.menu_item:
             continue
         menu = frappe.get_doc("Hotel Outlet Menu Item", item.menu_item)
@@ -220,6 +222,8 @@ def _sync_ticket_from_stock_entry(ticket_doc, stock_entry, docstatus):
         values["stock_posted_at"] = now_datetime()
     ticket_doc.db_set(values, update_modified=False)
     for row in ticket_doc.items:
+        if getattr(row, "delta_action", "Add") != "Add":
+            continue
         frappe.db.set_value(
             "Hotel Restaurant Order Item",
             row.order_item_row,

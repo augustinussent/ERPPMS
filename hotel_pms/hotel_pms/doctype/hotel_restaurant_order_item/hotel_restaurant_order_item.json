@@ -21,7 +21,8 @@
   "notes",
   "status",
   "kitchen_ticket",
-  "cancel_reason"
+  "cancel_reason",
+  "production_unit"
  ],
  "fields": [
   {
@@ -129,6 +130,13 @@
    "fieldtype": "Link",
    "options": "Hotel Kitchen Ticket",
    "read_only": 1
+  },
+  {
+   "fieldname": "production_unit",
+   "label": "Production Unit",
+   "fieldtype": "Link",
+   "options": "Hotel Kitchen Production Unit",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -136,7 +144,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Restaurant Order Item",

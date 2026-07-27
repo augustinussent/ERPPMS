@@ -45,7 +45,7 @@
    "fieldname": "purpose",
    "label": "Purpose",
    "fieldtype": "Select",
-   "options": "Guest Portal\nSelf Check-in\nCancellation\nPayment\nPrivacy Request",
+   "options": "Guest Portal\nSelf Check-in\nCancellation\nPayment\nPrivacy Request\nPre-arrival Form",
    "default": "Guest Portal",
    "reqd": 1,
    "in_list_view": 1

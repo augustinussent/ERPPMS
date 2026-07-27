@@ -40,7 +40,7 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
     body.find(".hfd-view").hide(); body.find(`.hfd-${$(this).data("tab")}${$(this).data("tab") === "tape" ? "-view" : ""}`).show();
   });
   body.on("click", "[data-reservation]", function () { frappe.set_route("Form", "Hotel Reservation", $(this).data("reservation")); });
-  body.on("click", "[data-action=checkin]", async function (event) { event.stopPropagation(); await callOp("hotel_pms.api.check_in", { reservation: $(this).data("name") }); });
+  body.on("click", "[data-action=checkin]", async function (event) { event.stopPropagation(); await openCheckin($(this).data("name")); });
   body.on("click", "[data-action=checkout]", function (event) {
     event.stopPropagation();
     frappe.route_options = { reservation: $(this).data("name") };
@@ -48,6 +48,28 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
   });
 
   async function callOp(method, args) { await frappe.call({ method, args, freeze: true }); refreshAll(); }
+
+  async function openCheckin(reservation) {
+    const response = await frappe.call({ method: "hotel_pms.distribution.get_checkin_context", args: { reservation }, freeze: true });
+    const ctx = response.message || {}; const ready = ctx.readiness || {}; const assigned = ctx.assigned_rooms || [];
+    const options = (ctx.available_rooms || []).map(r => ({ label: `${r.room_number} · ${r.housekeeping_status}${r.floor ? ` · ${r.floor}` : ""}`, value: r.name }));
+    assigned.forEach(r => { if (!options.some(x => x.value === r.name)) options.unshift({ label: `${r.room_number} · ${r.housekeeping_status}`, value: r.name }); });
+    const defaultRoom = assigned[0]?.name || ctx.suggestion?.name || "";
+    const chips = [
+      [ready.registration_status === "Verified", `Registration: ${ready.registration_status || "Not Started"}`],
+      [ready.id_on_file, __("ID on file")], [ready.address_on_file, __("Address proof")],
+      [ready.prearrival_status === "Submitted", `Pre-arrival: ${ready.prearrival_status || "Not Issued"}`],
+    ].map(([ok,label]) => `<span style="display:inline-block;margin:2px;padding:3px 8px;border-radius:12px;background:${ok ? "var(--green-100)" : "var(--gray-100)"}">${ok ? "✓" : "·"} ${esc(label)}</span>`).join("");
+    const dialog = new frappe.ui.Dialog({ title: __("Check-in Readiness"), fields: [
+      { fieldtype:"HTML", fieldname:"readiness", options:`<div style="margin-bottom:12px">${chips}</div>${ready.allergies ? `<div class="alert alert-warning"><b>${__("Allergies")}</b>: ${esc(ready.allergies)}</div>` : ""}${ready.accessibility_notes ? `<div class="alert alert-info"><b>${__("Accessibility")}</b>: ${esc(ready.accessibility_notes)}</div>` : ""}` },
+      { fieldname:"room", label:__("Room"), fieldtype:"Select", options:options.map(x=>x.value).join("\n"), default:defaultRoom, reqd:1, description:ctx.suggestion ? `${__("Suggested")}: ${esc(ctx.suggestion.room_number)} · ${esc(ctx.suggestion.reason)}` : "" },
+      { fieldtype:"HTML", fieldname:"room_labels", options:`<small>${options.map(x=>`${esc(x.value)} = ${esc(x.label)}`).join("<br>")}</small>` },
+    ], primary_action_label:__("Confirm Check-in"), primary_action:async values=>{
+      await frappe.call({ method:"hotel_pms.distribution.confirm_checkin", args:{ reservation, room:values.room }, freeze:true });
+      dialog.hide(); refreshAll();
+    }});
+    dialog.show();
+  }
   function esc(value) { return frappe.utils.escape_html(String(value == null ? "" : value)); }
   function money(value) { return format_currency(value || 0); }
   function roomNames(row) { return (row.rooms || []).map(x => x.room).join(", "); }

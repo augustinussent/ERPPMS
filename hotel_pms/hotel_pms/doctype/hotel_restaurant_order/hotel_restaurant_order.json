@@ -44,7 +44,11 @@
   "cancel_reason",
   "pos_invoice_count",
   "stock_reconciliation_status",
-  "stock_reconciliation_note"
+  "stock_reconciliation_note",
+  "table_cluster",
+  "kitchen_revision",
+  "kitchen_snapshot_json",
+  "kitchen_snapshot_hash"
  ],
  "fields": [
   {
@@ -292,6 +296,34 @@
    "label": "Stock Reconciliation Note",
    "fieldtype": "Small Text",
    "read_only": 1
+  },
+  {
+   "fieldname": "table_cluster",
+   "label": "Table Cluster",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table Cluster",
+   "read_only": 1
+  },
+  {
+   "fieldname": "kitchen_revision",
+   "label": "Kitchen Revision",
+   "fieldtype": "Int",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "kitchen_snapshot_json",
+   "label": "Kitchen Snapshot",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "kitchen_snapshot_hash",
+   "label": "Kitchen Snapshot Hash",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -299,7 +331,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Restaurant Order",

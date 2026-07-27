@@ -10,7 +10,7 @@ from frappe.utils import add_days, cint, flt, get_datetime, getdate, now_datetim
 from hotel_pms.guest_rules import blacklist_blocks, can_anonymize, normalize_email, normalize_phone, token_is_usable
 from hotel_pms.sync import create_document_once, make_sync_key
 
-PUBLIC_ACTIONS={"Guest Portal","Self Check-in","Cancellation","Payment","Privacy Request"}
+PUBLIC_ACTIONS={"Guest Portal","Self Check-in","Cancellation","Payment","Privacy Request","Pre-arrival Form"}
 
 def _payload(value):
     if isinstance(value,str):
@@ -83,6 +83,8 @@ def _available_rooms(property_name,room_type,arrival,departure):
 
     rooms=frappe.get_all("Hotel Room",filters={"property":property_name,"room_type":room_type,"enabled":1,"operational_status":("not in",["Out of Order","Out of Service"])},fields=["name","room_number","room_type"],order_by="room_number asc")
     conflicts=set(frappe.db.sql_list("""select distinct rr.room from `tabHotel Reservation` r inner join `tabHotel Reservation Room` rr on rr.parent=r.name where r.property=%(property)s and r.docstatus < 2 and r.status in ('Tentative','Confirmed','Checked In') and r.arrival_date < %(departure)s and r.departure_date > %(arrival)s""",{"property":property_name,"arrival":getdate(arrival),"departure":getdate(departure)}))
+    if frappe.db.exists("DocType", "Hotel Distribution Event"):
+        conflicts.update(frappe.db.sql_list("""select distinct room from `tabHotel Distribution Event` where property=%(property)s and coalesce(room,'')!='' and event_type='Calendar Block' and status in ('Pending','Processed','Needs Review','Echo') and arrival_date < %(departure)s and departure_date > %(arrival)s""", {"property":property_name,"arrival":getdate(arrival),"departure":getdate(departure)}))
     physically_free=[r for r in rooms if r.name not in conflicts]
     sellable=max(cint(get_available_room_type_capacity(property_name,room_type,getdate(arrival),getdate(departure))),0)
     return physically_free[:sellable]
@@ -554,4 +556,18 @@ def upload_self_checkin_document(raw_token:str,registration:str,kind:str,image_d
     from hotel_pms.media import replace_guest_document
     result=replace_guest_document(doc.name,kind,image_data,filename,ignore_permissions=True)
     _log("Guest Document Uploaded",token=token,reservation=doc.reservation,customer=doc.guest,details=f"{kind} document replaced",request_key=f"document:{doc.name}:{kind}:{now_datetime()}")
+    return result
+
+
+@frappe.whitelist(allow_guest=True,methods=["POST"])
+def upload_self_checkin_occupant_document(raw_token:str,registration:str,occupant_row:str,image_data:str,filename:str|None=None)->dict:
+    _rate_limit("checkin-occupant-document",8,600)
+    token=validate_guest_token(raw_token,purpose="Self Check-in",consume=True)
+    doc=frappe.get_doc("Hotel Guest Registration",registration)
+    if doc.reservation!=token.reservation:frappe.throw(_("Registration does not belong to this guest link."),frappe.PermissionError)
+    if frappe.db.get_value("Hotel Reservation",doc.reservation,"status") not in ("Tentative","Confirmed"):
+        frappe.throw(_("Occupant documents can only be uploaded before check-in."),frappe.PermissionError)
+    from hotel_pms.media import replace_occupant_document
+    result=replace_occupant_document(doc.name,occupant_row,image_data,filename,ignore_permissions=True)
+    _log("Occupant Document Uploaded",token=token,reservation=doc.reservation,customer=doc.guest,details=f"occupant {occupant_row} document replaced",request_key=f"occupant-document:{doc.name}:{occupant_row}:{now_datetime()}")
     return result

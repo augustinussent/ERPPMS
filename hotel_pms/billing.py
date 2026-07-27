@@ -393,20 +393,29 @@ def create_payment_request_for_invoice(
 
 
 @frappe.whitelist()
-def open_cashier_shift(property: str, mode_of_payment: str, opening_float: float = 0, request_key: str | None = None) -> dict:
-    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Accounts Manager"])
-    existing = frappe.db.get_value("Hotel Cashier Shift", {"property": property, "cashier": frappe.session.user, "status": ("in", ["Open", "Closing Review"])}, "name")
+def open_cashier_shift(property: str, mode_of_payment: str, opening_float: float = 0, request_key: str | None = None, outlet: str | None = None) -> dict:
+    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Restaurant Cashier", "Accounts Manager"])
+    filters = {"property": property, "cashier": frappe.session.user, "status": ("in", ["Open", "Closing Review"])}
+    if outlet:
+        filters["outlet"] = outlet
+    existing = frappe.db.get_value("Hotel Cashier Shift", filters, "name")
     if existing:
         return {"cashier_shift": existing, "already_open": True}
     property_doc = frappe.get_doc("Hotel Property", property)
     account = frappe.db.get_value("Mode of Payment Account", {"parent": mode_of_payment, "company": property_doc.company}, "default_account")
     if not account:
         frappe.throw(_("Mode of Payment {0} has no default account for company {1}.").format(mode_of_payment, property_doc.company))
-    key = make_sync_key("CASHSHIFT", property, frappe.session.user, request_key or now_datetime())
+    outlet_doc = frappe.get_doc("Hotel Outlet", outlet) if outlet else None
+    if outlet_doc and (outlet_doc.property != property or outlet_doc.company != property_doc.company):
+        frappe.throw(_("Cashier shift outlet must belong to the selected property and company."))
+    key = make_sync_key("CASHSHIFT", property, outlet or "GENERAL", frappe.session.user, request_key or now_datetime())
     doc = frappe.get_doc({
         "doctype": "Hotel Cashier Shift", "property": property, "company": property_doc.company,
         "cashier": frappe.session.user, "mode_of_payment": mode_of_payment, "cash_account": account,
         "opening_float": opening_float, "idempotency_key": key,
+        "outlet": outlet_doc.name if outlet_doc else None,
+        "pos_profile": outlet_doc.pos_profile if outlet_doc else None,
+        "erpnext_session_status": "Not Linked",
     })
     doc.insert()
     return {"cashier_shift": doc.name, "already_open": False}
@@ -469,7 +478,7 @@ def get_cashier_shift_summary(shift: str) -> dict:
 
 @frappe.whitelist()
 def record_cashier_movement(shift: str, movement_type: str, amount: float, reason: str, request_key: str) -> dict:
-    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Accounts Manager"])
+    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Restaurant Cashier", "Accounts Manager"])
     doc = frappe.get_doc("Hotel Cashier Shift", shift)
     if doc.status != "Open":
         frappe.throw(_("Cashier shift is not open."))
@@ -489,7 +498,7 @@ def record_cashier_movement(shift: str, movement_type: str, amount: float, reaso
 
 @frappe.whitelist()
 def close_cashier_shift(shift: str, counted_cash: float, variance_reason: str | None = None) -> dict:
-    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Accounts Manager"])
+    frappe.only_for(["System Manager", "Hotel Manager", "Cashier", "Restaurant Cashier", "Accounts Manager"])
     doc = frappe.get_doc("Hotel Cashier Shift", shift)
     doc.check_permission("write")
     if doc.status not in ("Open", "Closing Review"):
@@ -519,6 +528,16 @@ def close_cashier_shift(shift: str, counted_cash: float, variance_reason: str | 
             "counted_cash": counted_cash,
             "variance": doc.variance,
         }
+    if doc.outlet:
+        outlet = frappe.get_doc("Hotel Outlet", doc.outlet)
+        if outlet.require_pos_opening_entry:
+            closing_ok = False
+            if doc.pos_closing_entry and frappe.db.exists("POS Closing Entry", doc.pos_closing_entry):
+                close_values = frappe.db.get_value("POS Closing Entry", doc.pos_closing_entry, ["docstatus", "status", "pos_profile", "user"], as_dict=True)
+                closing_ok = bool(close_values and close_values.docstatus == 1 and close_values.status == "Closed" and close_values.pos_profile == doc.pos_profile and close_values.user == doc.cashier)
+            if not closing_ok:
+                doc.db_set({"variance_reason": variance_reason, "status": "Closing Review", "erpnext_session_status": "Mismatch", "closed_at": None, "closed_by": None})
+                return {"cashier_shift": doc.name, "status": "Closing Review", "requires_pos_closing_entry": True, **totals, "counted_cash": counted_cash, "variance": doc.variance}
     doc.db_set({"variance_reason": variance_reason, "status": "Closed", "closed_at": now_datetime(), "closed_by": frappe.session.user})
     return {"cashier_shift": doc.name, "status": "Closed", "requires_manager_approval": False, **totals, "counted_cash": counted_cash, "variance": doc.variance}
 

@@ -1,14 +1,18 @@
 from __future__ import annotations
-from abc import ABC,abstractmethod
-_REGISTRY={}
-class ChannelAdapter(ABC):
- @abstractmethod
- def push_inventory(self,property,start_date,end_date):...
- @abstractmethod
- def push_rates(self,property,start_date,end_date):...
- @abstractmethod
- def pull_reservations(self,property,since=None):...
-def register_adapter(name,adapter_cls):_REGISTRY[name]=adapter_cls
-def get_adapter(name,**kwargs):
- if name not in _REGISTRY:raise KeyError(f'Unknown channel adapter: {name}')
- return _REGISTRY[name](**kwargs)
+
+from typing import Protocol
+
+
+class HotelDistributionAdapter(Protocol):
+    """Provider transport contract.
+
+    Adapters translate protocols. Availability, pricing, reservation validation,
+    idempotency, audit and ERPNext consequences stay in hotel_pms.distribution.
+    """
+
+    provider: str
+
+    def test_connection(self, connection) -> dict: ...
+    def push_ari(self, connection, snapshot: list[dict]) -> dict: ...
+    def parse_webhook(self, connection, payload: dict) -> list[dict]: ...
+    def acknowledge_booking(self, connection, event: dict, reservation: str) -> dict: ...

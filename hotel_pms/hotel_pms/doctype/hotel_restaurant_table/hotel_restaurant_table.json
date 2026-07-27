@@ -13,7 +13,8 @@
   "status",
   "active_order",
   "qr_token",
-  "enabled"
+  "enabled",
+  "table_cluster"
  ],
  "fields": [
   {
@@ -74,6 +75,13 @@
    "label": "Enabled",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "table_cluster",
+   "label": "Table Cluster",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table Cluster",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -81,7 +89,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Restaurant Table",

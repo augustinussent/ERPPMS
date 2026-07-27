@@ -8,6 +8,7 @@ from hotel_pms import __version__
 from hotel_pms.platform import assigned_properties, is_privileged
 from hotel_pms.production_gate_rules import gate_status, money_variance, summarize_checks, threshold_status
 from hotel_pms.production_validation import create_validation_evidence, validation_gate_results
+from hotel_pms.intelligence_rules import integration_readiness_reasons
 
 REQUIRED_SIGNOFFS=("Front Office","Housekeeping","Engineering","Sales & Banquet","F&B","Finance","IT","Management")
 SIGNOFF_ROLES={
@@ -61,8 +62,14 @@ CHECKS=(
  ("Operational Readiness","SOP_ESCALATION","SOP, support roster, and escalation approved","Manual",1),
  ("Operational Readiness","GO_LIVE_PLAN","Freeze, cutover, rollback, and decision points approved","Manual",1),
  ("Intelligence & Control","INTELLIGENCE_GOVERNANCE","No unsafe autopilot configuration or unresolved critical intelligence finding","Automated",1),
- ("Intelligence & Control","PAYMENT_CORRECTION_CONTROL","No failed or unapproved payment correction blocks","Automated",1),
- ("Integrations","INTEGRATION_READINESS","Live integrations have shipped/adapter maturity and all mandatory checks passed","Automated",1),
+ ("Intelligence & Control","PAYMENT_CORRECTION_CONTROL","No active, failed, pending-approval, or approved-but-unexecuted payment correction","Automated",1),
+ ("Integrations","INTEGRATION_READINESS","Enabled integrations have valid maturity, health, test evidence, and go-live checks","Automated",1),
+ ("Distribution","DISTRIBUTION_READINESS","Distribution connections, mappings, events, and overlap review are production-ready","Automated",1),
+ ("Guest Journey","PREARRIVAL_SECURITY","One-time pre-arrival links and submitted evidence are secure and complete","Automated",1),
+ ("Housekeeping","TURNOVER_READINESS","Critical turnover rooms have idempotent tasks and no assignment conflict","Automated",1),
+ ("F&B","RESTAURANT_SESSION_CONTROL","Restaurant cashier shifts match ERPNext POS Opening and Closing Entries","Automated",1),
+ ("F&B","KITCHEN_DELTA_CONTROL","Incremental KOT revisions are synchronized and cancellation deltas do not reverse stock automatically","Automated",1),
+ ("F&B","RESTAURANT_PRINT_CONTROL","Restaurant print queue has no failed or dead-letter jobs","Automated",1),
 )
 
 def _require_manager():
@@ -173,6 +180,12 @@ def execute_automated_checks(run_name, from_date=None, to_date=None):
     intel=intelligence_governance_check(doc.property); _check(doc,"INTELLIGENCE_GOVERNANCE","Passed" if not intel['blockers'] else "Failed",intel['blockers'],"0 blockers",json.dumps(intel,default=str))
     corrections=payment_correction_control_check(doc.property); _check(doc,"PAYMENT_CORRECTION_CONTROL","Passed" if not corrections['blockers'] else "Failed",corrections['blockers'],"0 blockers",json.dumps(corrections,default=str))
     integrations=integration_readiness_check(doc.property); _check(doc,"INTEGRATION_READINESS","Passed" if not integrations['blockers'] else "Failed",integrations['blockers'],"0 blockers",json.dumps(integrations,default=str))
+    distribution=distribution_readiness_check(doc.property); _check(doc,"DISTRIBUTION_READINESS","Passed" if not distribution['blockers'] else "Failed",distribution['blockers'],"0 blockers",json.dumps(distribution,default=str))
+    prearrival=prearrival_security_check(doc.property); _check(doc,"PREARRIVAL_SECURITY","Passed" if not prearrival['blockers'] else "Failed",prearrival['blockers'],"0 blockers",json.dumps(prearrival,default=str))
+    turnover=turnover_readiness_check(doc.property); _check(doc,"TURNOVER_READINESS","Passed" if not turnover['blockers'] else "Failed",turnover['blockers'],"0 blockers",json.dumps(turnover,default=str))
+    sessions=restaurant_session_control_check(doc.property); _check(doc,"RESTAURANT_SESSION_CONTROL","Passed" if not sessions['blockers'] else "Failed",sessions['blockers'],"0 blockers",json.dumps(sessions,default=str))
+    kitchen=kitchen_delta_control_check(doc.property); _check(doc,"KITCHEN_DELTA_CONTROL","Passed" if not kitchen['blockers'] else "Failed",kitchen['blockers'],"0 blockers",json.dumps(kitchen,default=str))
+    printing=restaurant_print_control_check(doc.property); _check(doc,"RESTAURANT_PRINT_CONTROL","Passed" if not printing['blockers'] else "Failed",printing['blockers'],"0 blockers",json.dumps(printing,default=str))
     _update_summary(doc); doc.flags.production_gate_internal_update=True; doc.save(ignore_permissions=True); return doc.as_dict()
 
 def accounting_reconciliation(property_name=None, from_date=None, to_date=None, max_variance=1):
@@ -339,20 +352,193 @@ def intelligence_governance_check(property_name=None):
 
 def payment_correction_control_check(property_name=None):
     filters={"property":property_name} if property_name else {}
-    failed=frappe.get_all("Hotel Payment Correction",filters={**filters,"status":"Failed"},fields=["name","payment_entry","requested_action","error_message"],limit_page_length=100)
-    approved=frappe.get_all("Hotel Payment Correction",filters={**filters,"status":"Approved"},fields=["name","payment_entry","requested_action"],limit_page_length=100)
-    blockers=len(failed)+len(approved)
-    return {"failed":failed,"approved_not_executed":approved,"blockers":blockers}
+    active=frappe.get_all(
+        "Hotel Payment Correction",
+        filters={**filters,"status":["in",["Draft","Pending Approval","Approved","Failed"]]},
+        fields=["name","payment_entry","requested_action","status","error_message"],
+        limit_page_length=100,
+    )
+    by_status={}
+    for row in active:
+        by_status.setdefault(row.status,[]).append(row)
+    return {
+        "active_corrections":active,
+        "pending_approval":by_status.get("Pending Approval",[]),
+        "approved_not_executed":by_status.get("Approved",[]),
+        "failed":by_status.get("Failed",[]),
+        "draft":by_status.get("Draft",[]),
+        "blockers":len(active),
+    }
 
 
 def integration_readiness_check(property_name=None):
-    filters={"property":property_name,"status":"Live"} if property_name else {"status":"Live"}
-    rows=frappe.get_all("Hotel Integration Connection",filters=filters,fields=["name","property","integration","status"],limit_page_length=0)
+    filters={"property":property_name,"enabled":1} if property_name else {"enabled":1}
+    rows=frappe.get_all(
+        "Hotel Integration Connection",
+        filters=filters,
+        fields=["name","property","integration","status","last_test_status","last_tested_at"],
+        limit_page_length=0,
+    )
     problems=[]
     for row in rows:
         definition=frappe.get_doc("Hotel Integration Definition",row.integration)
         connection=frappe.get_doc("Hotel Integration Connection",row.name)
         failed=[x.check_code for x in connection.go_live_checks if x.mandatory and x.status!="Passed"]
-        if definition.maturity_status not in ("Shipped","Adapter") or failed:
-            problems.append({"connection":row.name,"maturity":definition.maturity_status,"failed_checks":failed})
-    return {"live_connections":len(rows),"problems":problems,"blockers":len(problems)}
+        reasons=integration_readiness_reasons(
+            maturity_status=definition.maturity_status,
+            connection_status=row.status,
+            last_test_status=row.last_test_status,
+            last_tested_at=row.last_tested_at,
+            failed_mandatory_checks=failed,
+        )
+        if reasons:
+            problems.append({
+                "connection":row.name,
+                "property":row.property,
+                "status":row.status,
+                "maturity":definition.maturity_status,
+                "last_test_status":row.last_test_status,
+                "failed_checks":failed,
+                "reasons":reasons,
+            })
+    return {"enabled_connections":len(rows),"problems":problems,"blockers":len(problems)}
+
+
+def distribution_readiness_check(property_name=None):
+    filters={"enabled":1}
+    if property_name: filters["property"]=property_name
+    connections=frappe.get_all("Hotel Distribution Connection",filters=filters,fields=["name","property","provider","maturity_status","status","last_test_status","last_test_at","feed_token_hash"],limit_page_length=0)
+    problems=[]
+    expected={"Generic iCal":"Shipped","Generic JSON":"Shipped","Channex":"Adapter","STAAH":"Adapter","AioSell":"Adapter","Custom":"Adapter"}
+    for row in connections:
+        reasons=[]
+        if row.maturity_status != expected.get(row.provider,"Adapter"): reasons.append("maturity status does not match shipped code")
+        if row.status in ("Failed","Disabled","Draft"): reasons.append(f"connection status is {row.status}")
+        if not row.last_test_at or not str(row.last_test_status or "").startswith("OK"): reasons.append("successful test evidence is missing")
+        mappings=frappe.get_all("Hotel Distribution Room Mapping",filters={"connection":row.name,"enabled":1},fields=["mapping_mode","room","room_type","external_room_id","incoming_price_basis"],limit_page_length=0)
+        if not mappings: reasons.append("no enabled room mapping")
+        if row.provider=="Generic iCal":
+            if len(mappings)!=1 or mappings[0].mapping_mode!="Room" or not mappings[0].room: reasons.append("Generic iCal requires exactly one Exact Room mapping")
+            if not row.feed_token_hash: reasons.append("outbound feed token has not been rotated")
+        if row.provider in ("Channex","STAAH","AioSell","Custom") and row.status=="Live": reasons.append("uncertified adapter cannot be Live in RC8")
+        if reasons: problems.append({"connection":row.name,"provider":row.provider,"reasons":reasons})
+    event_filters={"status":["in",["Needs Review","Failed"]],"departure_date":[">=",nowdate()]}
+    if property_name: event_filters["property"]=property_name
+    review_events=frappe.get_all("Hotel Distribution Event",filters=event_filters,fields=["name","connection","event_type","external_reference","status","error"],limit_page_length=100)
+    conflicts=[]
+    from hotel_pms.distribution import detect_distribution_conflicts
+    properties=[property_name] if property_name else frappe.get_all("Hotel Property",filters={"enabled":1},pluck="name")
+    for prop in properties:
+        conflicts.extend([x for x in detect_distribution_conflicts(prop) if x.get("classification")=="Possible Double Booking"])
+    return {"connections":len(connections),"connection_problems":problems,"review_events":review_events,"possible_double_bookings":conflicts[:100],"blockers":len(problems)+len(review_events)+len(conflicts)}
+
+
+def prearrival_security_check(property_name=None):
+    filters={}
+    if property_name: filters["property"]=property_name
+    rows=frappe.get_all("Hotel Prearrival Form Submission",filters=filters,fields=["name","property","reservation","token_record","status","answers_hash","submitted_at"],limit_page_length=0)
+    problems=[]; active_by_reservation={}
+    for row in rows:
+        if row.status in ("Issued","Draft"):
+            active_by_reservation.setdefault(row.reservation,[]).append(row.name)
+        token=frappe.db.get_value("Hotel Guest Access Token",row.token_record,["purpose","max_uses","usage_count","status","reservation"],as_dict=True) if row.token_record else None
+        reasons=[]
+        if not token: reasons.append("token record missing")
+        else:
+            if token.purpose!="Pre-arrival Form" or token.reservation!=row.reservation: reasons.append("token scope mismatch")
+            if cint(token.max_uses)!=1: reasons.append("token is not one-time")
+            if row.status=="Submitted" and cint(token.usage_count)!=1: reasons.append("submitted token usage count is not exactly one")
+        if row.status=="Submitted" and (not row.answers_hash or not row.submitted_at): reasons.append("submitted evidence hash/time missing")
+        if reasons: problems.append({"submission":row.name,"reasons":reasons})
+    duplicates=[{"reservation":key,"submissions":names} for key,names in active_by_reservation.items() if len(names)>1]
+    return {"submissions":len(rows),"problems":problems,"duplicate_active_links":duplicates,"blockers":len(problems)+len(duplicates)}
+
+
+def turnover_readiness_check(property_name=None):
+    from hotel_pms.turnover import turnover_plan, cleaner_conflicts
+    properties=[property_name] if property_name else frappe.get_all("Hotel Property",filters={"enabled":1},pluck="name")
+    critical=[]; conflicts=[]
+    for prop in properties:
+        rows=turnover_plan(prop,nowdate(),3)
+        for row in rows:
+            if row.get("risk") in ("Critical","High"):
+                task=row.get("task") or {}
+                task_name=task.get("name") if isinstance(task,dict) else getattr(task,"name",None)
+                target=task.get("target_ready_at") if isinstance(task,dict) else getattr(task,"target_ready_at",None)
+                if not task_name or not target:
+                    critical.append({"property":prop,"room":row.get("room"),"date":str(row.get("departure_date")),"risk":row.get("risk"),"reason":"task or target-ready time missing"})
+        conflicts.extend(cleaner_conflicts(rows))
+    return {"critical_turnovers":critical,"cleaner_conflicts":conflicts,"blockers":len(critical)+len(conflicts)}
+
+def restaurant_session_control_check(property_name=None):
+    outlet_filters={"enabled":1,"require_pos_opening_entry":1}
+    if property_name: outlet_filters["property"]=property_name
+    outlets=frappe.get_all("Hotel Outlet",filters=outlet_filters,fields=["name","property","company","pos_profile"],limit_page_length=0)
+    problems=[]
+    for outlet in outlets:
+        if not outlet.pos_profile:
+            problems.append({"outlet":outlet.name,"reason":"ERPNext POS Profile is missing"})
+    shift_filters={"status":["in",["Open","Closing Review","Closed"]]}
+    if property_name: shift_filters["property"]=property_name
+    shifts=frappe.get_all("Hotel Cashier Shift",filters=shift_filters,fields=["name","outlet","cashier","status","pos_profile","pos_opening_entry","pos_closing_entry","erpnext_session_status"],limit_page_length=0)
+    for shift in shifts:
+        if not shift.outlet:
+            continue
+        outlet=frappe.db.get_value("Hotel Outlet",shift.outlet,["require_pos_opening_entry","pos_profile"],as_dict=True)
+        if not outlet or not cint(outlet.require_pos_opening_entry):
+            continue
+        opening=frappe.db.get_value("POS Opening Entry",shift.pos_opening_entry,["docstatus","status","pos_profile","user"],as_dict=True) if shift.pos_opening_entry else None
+        opening_ok=bool(opening and opening.docstatus==1 and opening.status=="Open" and opening.pos_profile==outlet.pos_profile and opening.user==shift.cashier)
+        if shift.status in ("Open","Closing Review") and not opening_ok:
+            problems.append({"shift":shift.name,"reason":"submitted Open ERPNext POS Opening Entry is missing or mismatched"})
+        if shift.status=="Closed":
+            closing=frappe.db.get_value("POS Closing Entry",shift.pos_closing_entry,["docstatus","status","pos_profile","user"],as_dict=True) if shift.pos_closing_entry else None
+            closing_ok=bool(closing and closing.docstatus==1 and closing.status=="Closed" and closing.pos_profile==outlet.pos_profile and closing.user==shift.cashier)
+            if not closing_ok:
+                problems.append({"shift":shift.name,"reason":"submitted Closed ERPNext POS Closing Entry is missing or mismatched"})
+    return {"controlled_outlets":len(outlets),"shifts_checked":len(shifts),"problems":problems,"blockers":len(problems)}
+
+
+def kitchen_delta_control_check(property_name=None):
+    from hotel_pms.restaurant_controls_rules import build_kitchen_snapshot, stable_hash
+    order_filters={"status":["not in",["Draft","Pending Confirmation","Billed","Cancelled"]]}
+    if property_name: order_filters["property"]=property_name
+    orders=frappe.get_all("Hotel Restaurant Order",filters=order_filters,fields=["name","kitchen_snapshot_hash","kitchen_revision"],limit_page_length=0)
+    problems=[]
+    item_fields=["name","menu_item","item_code","item_name","qty","production_unit","kitchen_station","course","notes","allergy_alert","preparation_minutes","status"]
+    for order in orders:
+        items=frappe.get_all("Hotel Restaurant Order Item",filters={"parent":order.name},fields=item_fields,order_by="idx")
+        current_hash=stable_hash(build_kitchen_snapshot(items))
+        has_qty=any(float(row.get("qty") or 0)>0 for row in build_kitchen_snapshot(items).values())
+        if has_qty and (not order.kitchen_snapshot_hash or current_hash!=order.kitchen_snapshot_hash):
+            problems.append({"order":order.name,"reason":"order changes are not synchronized to the kitchen"})
+    ticket_filters={"ticket_type":"Cancellation"}
+    if property_name: ticket_filters["property"]=property_name
+    cancellations=frappe.get_all("Hotel Kitchen Ticket",filters=ticket_filters,fields=["name","stock_entry","stock_posting_status"],limit_page_length=0)
+    for ticket in cancellations:
+        if ticket.stock_entry or ticket.stock_posting_status not in ("Not Required",None,""):
+            problems.append({"ticket":ticket.name,"reason":"cancellation KOT must not auto-create or reverse ERPNext stock"})
+    duplicate_sql="""select restaurant_order,revision_no,production_unit,ticket_type,count(*) n from `tabHotel Kitchen Ticket` where revision_no>0"""
+    duplicate_values=[]
+    if property_name:
+        duplicate_sql += " and property=%s"
+        duplicate_values.append(property_name)
+    duplicate_sql += " group by restaurant_order,revision_no,production_unit,ticket_type having count(*)>1"
+    duplicate_rows=frappe.db.sql(duplicate_sql,duplicate_values,as_dict=True)
+    for row in duplicate_rows:
+        problems.append({"order":row.restaurant_order,"revision":row.revision_no,"reason":"duplicate KOT revision"})
+    return {"orders_checked":len(orders),"cancellation_tickets":len(cancellations),"problems":problems,"blockers":len(problems)}
+
+
+def restaurant_print_control_check(property_name=None):
+    filters={"status":["in",["Failed","Dead Letter"]]}
+    if property_name: filters["property"]=property_name
+    jobs=frappe.get_all("Hotel Restaurant Print Job",filters=filters,fields=["name","outlet","status","attempts","reference_doctype","reference_name","last_error"],limit_page_length=100)
+    routes_filters={"enabled":1}
+    if property_name: routes_filters["property"]=property_name
+    routes=frappe.get_all("Hotel Restaurant Printer Route",filters=routes_filters,fields=["name","outlet","production_unit","network_printer","copies"],limit_page_length=0)
+    problems=[{"job":row.name,"status":row.status,"attempts":row.attempts,"reference":f"{row.reference_doctype} {row.reference_name}"} for row in jobs]
+    for route in routes:
+        if not route.network_printer or cint(route.copies or 0)<1:
+            problems.append({"route":route.name,"reason":"printer or copy count is invalid"})
+    return {"enabled_routes":len(routes),"failed_jobs":jobs,"problems":problems,"blockers":len(problems)}

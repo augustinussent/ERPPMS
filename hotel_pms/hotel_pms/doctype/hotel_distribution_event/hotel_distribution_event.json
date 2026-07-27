@@ -1,0 +1,228 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-28 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "connection",
+  "direction",
+  "event_type",
+  "status",
+  "external_reference",
+  "idempotency_key",
+  "echo_key",
+  "mapping_section",
+  "room",
+  "room_type",
+  "arrival_date",
+  "departure_date",
+  "summary",
+  "reservation",
+  "payload_section",
+  "payload_hash",
+  "payload_json",
+  "received_at",
+  "processed_at",
+  "error"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HDE-.YYYY.-.#####",
+   "default": "HDE-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "connection",
+   "label": "Connection",
+   "fieldtype": "Link",
+   "options": "Hotel Distribution Connection",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "direction",
+   "label": "Direction",
+   "fieldtype": "Select",
+   "options": "Inbound\nOutbound",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "event_type",
+   "label": "Event Type",
+   "fieldtype": "Select",
+   "options": "Calendar Block\nBooking\nModification\nCancellation\nARI Push\nFeed Access\nConflict",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Pending\nProcessed\nNeeds Review\nIgnored Duplicate\nEcho\nFailed\nCancelled",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "external_reference",
+   "label": "External Reference / UID",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "echo_key",
+   "label": "Echo Key",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "mapping_section",
+   "label": "Mapped Stay",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type"
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival / Start",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure / End",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "summary",
+   "label": "Summary",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Hotel Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "payload_section",
+   "label": "Payload & Audit",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "payload_hash",
+   "label": "Payload SHA-256",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payload_json",
+   "label": "Payload JSON",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "received_at",
+   "label": "Received At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "processed_at",
+   "label": "Processed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error",
+   "label": "Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-28 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Distribution Event",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1
+  },
+  {
+   "role": "Revenue Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "external_reference"
+}

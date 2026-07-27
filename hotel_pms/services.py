@@ -10,6 +10,7 @@ from hotel_pms.services_rules import allocation_conserves, derive_table_status, 
 from hotel_pms.fnb_rules import derive_kds_ticket_status, kds_progress
 from hotel_pms.fnb_inventory import invoice_stock_fields, queue_ticket_stock_posting, validate_inventory_configuration, should_post_recipe
 from hotel_pms.sync import make_sync_key
+from hotel_pms.restaurant_controls import require_restaurant_session, validate_discount, validate_order_item_uom
 
 RESTAURANT_ROLES={"Restaurant Cashier","Restaurant Captain","Kitchen","Hotel Manager","System Manager"}
 CAPTAIN_ROLES={"Restaurant Captain","Restaurant Cashier","Hotel Manager","System Manager"}
@@ -68,7 +69,10 @@ def get_restaurant_console(outlet=None):
 @frappe.whitelist()
 def create_restaurant_order(payload,request_key):
     _require(CAPTAIN_ROLES)
-    data=_json(payload); key=make_sync_key("RORDER",data.get("outlet"),request_key)
+    data=_json(payload)
+    if data.get("source") != "QR Ordering":
+        require_restaurant_session(data.get("outlet"))
+    key=make_sync_key("RORDER",data.get("outlet"),request_key)
     existing=frappe.db.get_value("Hotel Restaurant Order",{"request_key":key},"name")
     if existing:return {"order":existing,"already_created":True}
     if data.get("table"):
@@ -83,6 +87,7 @@ def create_restaurant_order(payload,request_key):
 @frappe.whitelist()
 def confirm_restaurant_order(order):
     _require(CAPTAIN_ROLES); doc=_lock("Hotel Restaurant Order",order)
+    require_restaurant_session(doc.outlet)
     if doc.status in ("Confirmed","In Kitchen","Ready","Served","Bill Requested","Billed"): return {"order":doc.name,"status":doc.status,"already_processed":True}
     if doc.status not in ("Draft","Pending Confirmation"): frappe.throw(_("Order cannot be confirmed from status {0}.").format(doc.status))
     doc.status="Confirmed"; doc.confirmed_at=now_datetime(); doc.save(ignore_permissions=True)
@@ -90,51 +95,18 @@ def confirm_restaurant_order(order):
     return {"order":doc.name,"status":doc.status}
 
 @frappe.whitelist()
-def send_order_to_kitchen(order,request_key):
-    _require(CAPTAIN_ROLES); doc=_lock("Hotel Restaurant Order",order)
-    if doc.status not in ("Confirmed","In Kitchen"): frappe.throw(_("Confirm the order before sending it to the kitchen."))
-    outlet_doc = frappe.get_doc("Hotel Outlet", doc.outlet)
+def send_order_to_kitchen(order,request_key,change_reason=None):
+    _require(CAPTAIN_ROLES)
+    doc=frappe.get_doc("Hotel Restaurant Order",order)
+    require_restaurant_session(doc.outlet)
+    outlet_doc=frappe.get_doc("Hotel Outlet",doc.outlet)
     validate_inventory_configuration(outlet_doc)
-    grouped=defaultdict(list)
-    for row in doc.items:
-        if row.status=="Ordered": grouped[row.kitchen_station or "Main Kitchen"].append(row)
-    tickets=[]
-    for station,items in grouped.items():
-        key=make_sync_key("KOT",doc.name,station,request_key)
-        existing=frappe.db.get_value("Hotel Kitchen Ticket",{"request_key":key},"name")
-        if existing: tickets.append(existing); continue
-        max_minutes=max([cint(item.preparation_minutes or 0) for item in items] or [0])
-        courses=sorted({item.course or "Main" for item in items})
-        priority=doc.priority or "Normal"
-        kot=frappe.get_doc({
-            "doctype":"Hotel Kitchen Ticket","property":doc.property,"outlet":doc.outlet,
-            "restaurant_order":doc.name,"kot_date":nowdate(),"daily_kot_number":_next_kot_number(doc.outlet),
-            "kitchen_station":station,"sent_at":now_datetime(),"last_activity_at":now_datetime(),
-            "target_ready_at":add_to_date(now_datetime(), minutes=max_minutes or 15),
-            "table":doc.table,"room":doc.room,"guest_name":doc.guest_name,"captain":frappe.session.user,
-            "priority":priority,"course":", ".join(courses),"request_key":key,
-        })
-        for item in items:
-            kot.append("items",{
-                "order_item_row":item.name,"menu_item":item.menu_item,"item_code":item.item_code,
-                "item_name":item.item_name,"qty":item.qty,"notes":item.notes,"course":item.course,
-                "allergy_alert":item.allergy_alert,"preparation_minutes":item.preparation_minutes,
-            })
-        kot.insert(ignore_permissions=True); tickets.append(kot.name)
-        for item in items: item.status="Sent"; item.kitchen_ticket=kot.name
-        queue_ticket_stock_posting(kot.name)
-        _publish_kds(doc.property, doc.outlet, kot.name, "new")
-    if grouped:
-        doc.status="In Kitchen"
-        if should_post_recipe(outlet_doc):
-            doc.stock_reconciliation_status="Pending"
-            doc.stock_reconciliation_note=_("Waiting for ERPNext recipe Stock Entries.")
-        else:
-            doc.stock_reconciliation_status="Not Required"
-            doc.stock_reconciliation_note=None
-        doc.save(ignore_permissions=True); _set_table(doc.table,doc.name,"In Kitchen")
-        notify_roles(["Kitchen","Restaurant Captain","Hotel Manager"],property_name=doc.property,subject=_("New kitchen ticket for {0}").format(doc.name),message=_("{0} KOT(s) sent to kitchen.").format(len(tickets)),document_type=doc.doctype,document_name=doc.name,dedupe_key=f"kot:{doc.name}:{request_key}")
-    return {"order":doc.name,"tickets":tickets}
+    from hotel_pms.restaurant_controls import sync_order_to_kitchen
+    result=sync_order_to_kitchen(order,request_key,change_reason)
+    if result.get("tickets"):
+        _set_table(doc.table,doc.name,"In Kitchen")
+        notify_roles(["Kitchen","Restaurant Captain","Hotel Manager"],property_name=doc.property,subject=_("Kitchen change for {0}").format(doc.name),message=_("{0} KOT revision(s) sent to kitchen.").format(len(result["tickets"])),document_type=doc.doctype,document_name=doc.name,dedupe_key=f"kot:{doc.name}:{request_key}")
+    return result
 
 @frappe.whitelist()
 def accept_kitchen_ticket(ticket):
@@ -340,6 +312,17 @@ def create_split_invoice(split,request_key,submit=0):
         split_doc.save(ignore_permissions=True)
     order=frappe.get_doc("Hotel Restaurant Order",split_doc.restaurant_order); outlet=frappe.get_doc("Hotel Outlet",order.outlet)
     validate_inventory_configuration(outlet)
+    validate_discount(split_doc, outlet)
+    for line in split_doc.lines:
+        validate_order_item_uom(line.item_code, line.qty)
+    if split_doc.settlement_type in ("Cash","Card","UPI"):
+        session=require_restaurant_session(order.outlet)
+    else:
+        session={"cashier_shift": None}
+    from hotel_pms.restaurant_controls import restaurant_prebill_context
+    prebill=restaurant_prebill_context(order.name)
+    if not prebill["allowed"]:
+        frappe.throw(_("Restaurant pre-bill controls are not complete: {0}").format("; ".join(row["message"] for row in prebill["blockers"])))
     key=make_sync_key("RINVOICE",split_doc.name,request_key)
     if split_doc.settlement_type == "Complimentary":
         if not order.is_complimentary or not order.authorized_by:
@@ -352,12 +335,15 @@ def create_split_invoice(split,request_key,submit=0):
         if not customer: frappe.throw(_("Customer or default walk-in customer is required."))
         if not outlet.pos_profile: frappe.throw(_("POS Profile is required for direct restaurant settlement."))
         stock_fields=invoice_stock_fields(outlet)
-        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"is_pos":1,"pos_profile":outlet.pos_profile,"posting_date":nowdate(),"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key,"custom_hotel_cashier_shift":frappe.db.get_value("Hotel Cashier Shift",{"property":order.property,"cashier":frappe.session.user,"status":"Open"},"name"),**stock_fields})
+        doc=frappe.get_doc({"doctype":doctype,"company":outlet.company,"customer":customer,"is_pos":1,"pos_profile":outlet.pos_profile,"posting_date":nowdate(),"custom_hotel_restaurant_order":order.name,"custom_hotel_restaurant_split":split_doc.name,"custom_hotel_sync_key":key,"custom_hotel_cashier_shift":session.get("cashier_shift"),**stock_fields})
         for line in split_doc.lines:
             item={"item_code":line.item_code,"qty":line.qty,"rate":line.rate,"cost_center":outlet.cost_center,"income_account":outlet.income_account}
             if stock_fields["update_stock"]: item["warehouse"]=outlet.warehouse
             doc.append("items",item)
         if template:=_taxes_template(order.outlet): doc.taxes_and_charges=template
+        if flt(split_doc.discount_percentage or 0):
+            doc.apply_discount_on="Grand Total"
+            doc.additional_discount_percentage=flt(split_doc.discount_percentage)
         doc.set_missing_values()
         doc.update_stock = stock_fields["update_stock"]
         if not doc.update_stock:
@@ -385,10 +371,20 @@ def create_split_invoice(split,request_key,submit=0):
             doc.append("items",item)
     template=_taxes_template(order.outlet)
     if template and not doc.taxes_and_charges: doc.taxes_and_charges=template
+    if doctype == "Sales Invoice" and flt(split_doc.discount_percentage or 0):
+        doc.apply_discount_on="Grand Total"
+        doc.additional_discount_percentage=flt(split_doc.discount_percentage)
     doc.insert(ignore_permissions=True)
+    split_doc.discount_amount=flt(doc.discount_amount or 0)
     if split_doc.settlement_type in ("Room Posting", "City Ledger"):
         _mirror_restaurant_split_to_folio(split_doc, order, doc)
-    if cint(submit): doc.submit()
+    if cint(submit):
+        doc.submit()
+        try:
+            from hotel_pms.restaurant_printing import queue_restaurant_print_jobs
+            queue_restaurant_print_jobs(doctype, doc.name, "Bill", request_key=key)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"Queue restaurant bill print failed: {doc.name}")
     split_doc.erpnext_document_type=doctype; split_doc.erpnext_document=doc.name; split_doc.status="Submitted" if doc.docstatus==1 else "Invoice Draft Created"; split_doc.save(ignore_permissions=True)
     return {"doctype":doctype,"name":doc.name,"already_created":False,"submitted":doc.docstatus==1}
 
@@ -422,6 +418,9 @@ def complete_restaurant_order(order):
         doc.stock_reconciliation_status="Not Required"
         doc.stock_reconciliation_note=None
     doc.status="Billed"; doc.pos_invoice_count=len(splits); doc.save(ignore_permissions=True); _set_table(doc.table,None,"Cleaning")
+    if doc.table_cluster:
+        from hotel_pms.restaurant_controls import release_restaurant_table_cluster
+        release_restaurant_table_cluster(doc.table_cluster, reason="Order billed")
     return {"order":doc.name,"status":doc.status}
 
 @frappe.whitelist(allow_guest=True,methods=["POST"])
@@ -495,6 +494,9 @@ def cancel_restaurant_order(order, reason):
     for ticket in frappe.get_all("Hotel Kitchen Ticket", filters={"restaurant_order": order, "status": ["!=", "Cancelled"]}, pluck="name"):
         frappe.db.set_value("Hotel Kitchen Ticket", ticket, "status", "Cancelled", update_modified=False)
     _set_table(doc.table, None, "Available")
+    if doc.table_cluster:
+        from hotel_pms.restaurant_controls import release_restaurant_table_cluster
+        release_restaurant_table_cluster(doc.table_cluster, reason=reason)
     return {"order": doc.name, "status": doc.status}
 
 

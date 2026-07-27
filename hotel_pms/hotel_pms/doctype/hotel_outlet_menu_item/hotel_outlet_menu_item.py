@@ -12,6 +12,11 @@ class HotelOutletMenuItem(Document):
             frappe.throw("The ERPNext Item is already configured for this outlet.")
         if not self.menu_name and self.item_code:
             self.menu_name = frappe.db.get_value("Item", self.item_code, "item_name")
+        if self.production_unit:
+            unit = frappe.get_doc("Hotel Kitchen Production Unit", self.production_unit)
+            if unit.outlet != self.outlet or not unit.enabled:
+                frappe.throw("Production Unit must be enabled and belong to the selected outlet.")
+            self.kitchen_station = unit.unit_name
         seen = set()
         for row in self.recipe_items:
             if not row.ingredient_item:

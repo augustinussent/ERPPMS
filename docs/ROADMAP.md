@@ -83,3 +83,14 @@ Implemented property isolation, onboarding, migration dry run, API governance, w
 - Expanded Frappe v16 bench smoke and Production Gate blockers.
 
 RC6 remains a release candidate. The next step is staging execution and resolution of all Gate blockers. A future `v1.1.0` may add cancellation-risk and housekeeping optimization only after `v1.0.0` is promoted from the exact tested fingerprint.
+
+
+## v1.0.0-rc7 Control Hotfix
+
+- Caps governed refunds to the selected source Payment Entry.
+- Keeps enabled failed integrations visible to Production Gate.
+- Preserves Ready/Live status after successful tests and requires successful test evidence for release states.
+- Blocks all unresolved payment-correction requests.
+- Rejects empty parallel-run values.
+
+The next step remains real staging execution and promotion of the exact tested fingerprint.

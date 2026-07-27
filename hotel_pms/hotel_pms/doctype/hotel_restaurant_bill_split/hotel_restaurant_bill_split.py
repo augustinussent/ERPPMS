@@ -6,6 +6,9 @@ from frappe.utils import flt
 class HotelRestaurantBillSplit(Document):
     def validate(self):
         order = frappe.get_doc("Hotel Restaurant Order", self.restaurant_order)
+        outlet = frappe.get_doc("Hotel Outlet", order.outlet)
+        from hotel_pms.restaurant_controls import validate_discount, validate_order_item_uom
+        validate_discount(self, outlet)
         source_rows = {row.name: row for row in order.items if row.status != "Cancelled"}
         total = 0
         for row in self.lines:
@@ -25,8 +28,7 @@ class HotelRestaurantBillSplit(Document):
             )[0][0]
             if flt(already) + flt(row.qty) > flt(source.qty):
                 frappe.throw("Bill split quantity exceeds the original order item quantity.")
-            if row.qty <= 0:
-                frappe.throw("Split quantity must be greater than zero.")
+            row.qty = float(validate_order_item_uom(source.item_code, row.qty))
             row.amount = flt(row.qty) * flt(row.rate)
             total += row.amount
         self.amount = total

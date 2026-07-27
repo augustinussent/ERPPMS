@@ -42,7 +42,13 @@
   "stock_sync_key",
   "stock_posted_at",
   "stock_error",
-  "ingredient_consumptions"
+  "ingredient_consumptions",
+  "production_unit",
+  "table_cluster",
+  "ticket_type",
+  "revision_no",
+  "change_reason",
+  "source_snapshot_hash"
  ],
  "fields": [
   {
@@ -293,6 +299,51 @@
    "fieldtype": "Table",
    "options": "Hotel KOT Ingredient Consumption",
    "read_only": 1
+  },
+  {
+   "fieldname": "production_unit",
+   "label": "Production Unit",
+   "fieldtype": "Link",
+   "options": "Hotel Kitchen Production Unit",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "table_cluster",
+   "label": "Table Cluster",
+   "fieldtype": "Link",
+   "options": "Hotel Restaurant Table Cluster",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ticket_type",
+   "label": "Ticket Type",
+   "fieldtype": "Select",
+   "options": "New\nAddition\nModification\nCancellation\nMixed Change\nReprint",
+   "default": "New",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "revision_no",
+   "label": "Revision",
+   "fieldtype": "Int",
+   "default": "1",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "change_reason",
+   "label": "Change Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_snapshot_hash",
+   "label": "Source Snapshot Hash",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -300,7 +351,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Kitchen Ticket",

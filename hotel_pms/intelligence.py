@@ -564,10 +564,34 @@ REGISTRY = [
         "description": "Dry-run and row-level import review. Legacy deposits remain manual review items.",
     },
     {
-        "integration_key": "generic-channel-adapter", "provider_name": "Generic Channel Manager Adapter", "category": "Channel Manager",
-        "maturity_status": "Planned", "enabled_in_product": 0, "adapter_path": "hotel_pms.channels", "documentation": "docs/ROADMAP.md",
+        "integration_key": "generic-ical-distribution", "provider_name": "Generic iCal Distribution", "category": "Channel Manager",
+        "maturity_status": "Shipped", "enabled_in_product": 1, "adapter_path": "hotel_pms.distribution", "documentation": "docs/DISTRIBUTION_TURNOVER_RC8.md",
+        "supports_test_connection": 1, "financial_behavior": "No Financial Posting",
+        "description": "Secure per-room iCal import/export with token rotation, SSRF guards, buffer days and overlap review.",
+    },
+    {
+        "integration_key": "generic-json-distribution", "provider_name": "Generic JSON Distribution Webhook", "category": "Channel Manager",
+        "maturity_status": "Shipped", "enabled_in_product": 1, "adapter_path": "hotel_pms.distribution", "documentation": "docs/DISTRIBUTION_TURNOVER_RC8.md",
+        "supports_test_connection": 1, "financial_behavior": "No Financial Posting",
+        "description": "Property-scoped normalized booking webhook. Creates only Hotel Reservation operational records; ERPNext posting stays downstream.",
+    },
+    {
+        "integration_key": "channex-channel-adapter", "provider_name": "Channex Channel Adapter", "category": "Channel Manager",
+        "maturity_status": "Adapter", "enabled_in_product": 1, "adapter_path": "hotel_pms.channels", "documentation": "docs/DISTRIBUTION_TURNOVER_RC8.md",
         "supports_test_connection": 0, "financial_behavior": "No Financial Posting",
-        "description": "Future ARI and inbound reservation adapter contract. Not shipped in RC6.",
+        "description": "Provider seam registered but not certified in RC8. Partner credentials and field-level certification are required before Live status.",
+    },
+    {
+        "integration_key": "staah-channel-adapter", "provider_name": "STAAH Channel Adapter", "category": "Channel Manager",
+        "maturity_status": "Adapter", "enabled_in_product": 1, "adapter_path": "hotel_pms.channels", "documentation": "docs/DISTRIBUTION_TURNOVER_RC8.md",
+        "supports_test_connection": 0, "financial_behavior": "No Financial Posting",
+        "description": "Provider seam registered but not certified in RC8.",
+    },
+    {
+        "integration_key": "aiosell-channel-adapter", "provider_name": "AioSell Channel Adapter", "category": "Channel Manager",
+        "maturity_status": "Adapter", "enabled_in_product": 1, "adapter_path": "hotel_pms.channels", "documentation": "docs/DISTRIBUTION_TURNOVER_RC8.md",
+        "supports_test_connection": 0, "financial_behavior": "No Financial Posting",
+        "description": "Provider seam registered but not certified in RC8.",
     },
 ]
 
@@ -623,6 +647,7 @@ def test_integration_connection(connection: str) -> dict:
                 "Sales Invoice": ("custom_hotel_sync_key",),
                 "POS Invoice": ("custom_hotel_sync_key",),
                 "Payment Entry": ("custom_hotel_sync_key", "custom_hotel_reservation"),
+                "Purchase Invoice": ("custom_hotel_sync_key",),
                 "Stock Entry": ("custom_hotel_sync_key", "custom_hotel_kitchen_ticket"),
             }
             missing = {dt: [field for field in fields if not frappe.get_meta(dt).has_field(field)] for dt, fields in required.items()}
@@ -640,17 +665,25 @@ def test_integration_connection(connection: str) -> dict:
         elif key == "generic-csv-migration":
             __import__("hotel_pms.migration")
             result = {"passed": frappe.db.exists("DocType", "Hotel Migration Batch"), "module": "hotel_pms.migration"}
+        elif key in ("generic-ical-distribution", "generic-json-distribution"):
+            provider = "Generic iCal" if key == "generic-ical-distribution" else "Generic JSON"
+            connections = frappe.get_all("Hotel Distribution Connection", filters={"property": doc.property, "provider": provider, "enabled": 1}, fields=["name", "status", "last_test_status"])
+            passed = bool(connections) and all(str(row.last_test_status or "").startswith("OK") for row in connections)
+            result = {"passed": passed, "provider": provider, "connections": connections}
         else:
             result = {"passed": False, "error": "No shipped test adapter is registered for this integration."}
     except Exception as exc:
         result = {"passed": False, "error": str(exc)}
     now = now_datetime()
+    previous_status = doc.status
     doc.last_tested_at = now
     doc.last_test_status = "Passed" if result["passed"] else "Failed"
     doc.last_test_result_json = _json(result)
     if result["passed"]:
         doc.last_success_at = now
-        doc.status = "Tested"
+        # Preserve an already approved Ready/Live state. A health check must not
+        # silently downgrade a production connection merely because it passed.
+        doc.status = previous_status if previous_status in ("Ready", "Live") else "Tested"
     else:
         doc.last_failure_at = now
         doc.failure_count = int(doc.failure_count or 0) + 1

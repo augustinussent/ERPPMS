@@ -6,8 +6,8 @@ import sys
 root = Path(__file__).resolve().parents[1]
 errors = []
 
-if '1.0.0rc6' not in (root / 'hotel_pms/__init__.py').read_text():
-    errors.append('application version is not 1.0.0rc6')
+if not any(token in (root / 'hotel_pms/__init__.py').read_text() for token in ('1.0.0rc6','1.0.0rc7','1.0.0rc8','1.0.0rc9')):
+    errors.append('application version no longer includes RC6 intelligence-control contracts')
 
 required_doctypes = {
     'Hotel Intelligence Config', 'Hotel Intelligence Run', 'Hotel Intelligence Decision',
@@ -49,9 +49,11 @@ if 'hotel_pms.patches.v1_0_rc6.setup_intelligence' not in patches:
     errors.append('RC6 patch missing')
 
 workflow = (root / '.github/workflows/ci.yml').read_text()
-for token in ('run_rc6_contract_checks.py', 'test_intelligence_rc6_rules.py', 'run_rc6_bench_smoke.sh'):
+for token in ('run_rc6_contract_checks.py', 'test_intelligence_rc6_rules.py'):
     if token not in workflow:
         errors.append(f'CI missing {token}')
+if not any(token in workflow for token in ('run_rc6_bench_smoke.sh','run_rc7_bench_smoke.sh')):
+    errors.append('CI missing RC6/RC7 bench smoke')
 
 production_gate = (root / 'hotel_pms/production_gate.py').read_text()
 for code in ('INTELLIGENCE_GOVERNANCE', 'PAYMENT_CORRECTION_CONTROL', 'INTEGRATION_READINESS'):

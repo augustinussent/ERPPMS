@@ -16,6 +16,8 @@ from hotel_pms.setup_adoption import setup_adoption
 from hotel_pms.setup_fnb_depth import setup_fnb_depth
 from hotel_pms.setup_production_validation import setup_production_validation
 from hotel_pms.setup_intelligence import setup_intelligence
+from hotel_pms.setup_distribution_turnover import setup_distribution_turnover
+from hotel_pms.setup_restaurant_controls import setup_restaurant_controls
 
 
 ROLES = ["Hotel Manager", "Front Desk", "Night Auditor", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet", "Revenue Manager", "Cashier", "Credit Manager", "Restaurant Cashier", "Restaurant Captain", "Kitchen", "Laundry", "Guest Services", "Hotel API User", "Hotel Cross Property Manager", "Hotel Intelligence Analyst"]
@@ -80,3 +82,5 @@ def after_install() -> None:
     setup_fnb_depth()
     setup_production_validation()
     setup_intelligence()
+    setup_distribution_turnover()
+    setup_restaurant_controls()

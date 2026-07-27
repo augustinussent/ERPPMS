@@ -142,13 +142,38 @@ def payment_correction_plan(
     else:
         allowed = ["Manual Review"]
         reason = "The current state requires Finance review; no automatic voucher mutation is legal."
+    original = max(float(original_amount or 0), 0.0)
+    refundable = max(float(refundable_amount or 0), 0.0)
+    maximum_refundable = min(original, refundable) if "Create Refund" in allowed else 0.0
     return {
         "allowed_actions": allowed,
         "reason": reason,
-        "original_amount": max(float(original_amount or 0), 0.0),
-        "maximum_refundable": max(float(refundable_amount or 0), 0.0),
+        "original_amount": original,
+        "maximum_refundable": maximum_refundable,
     }
 
 
 def severity_rank(severity: str) -> int:
     return {"Critical": 0, "Warning": 1, "Info": 2}.get(severity, 3)
+
+
+def integration_readiness_reasons(
+    *,
+    maturity_status: str | None,
+    connection_status: str | None,
+    last_test_status: str | None,
+    last_tested_at: object | None,
+    failed_mandatory_checks: list[str] | tuple[str, ...] | None = None,
+) -> list[str]:
+    """Return release-blocking readiness reasons for an enabled integration."""
+    reasons: list[str] = []
+    failed = list(failed_mandatory_checks or [])
+    if maturity_status not in ("Shipped", "Adapter"):
+        reasons.append("Integration maturity is not Shipped or Adapter.")
+    if connection_status == "Failed":
+        reasons.append("Connection health status is Failed.")
+    if connection_status in ("Ready", "Live") and (last_test_status != "Passed" or not last_tested_at):
+        reasons.append("Ready/Live connection has no successful Test Connection result.")
+    if connection_status == "Live" and failed:
+        reasons.append("Mandatory go-live checks are not Passed.")
+    return reasons

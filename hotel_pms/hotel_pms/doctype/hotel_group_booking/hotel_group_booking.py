@@ -484,7 +484,17 @@ def get_available_room_type_capacity(property_name, room_type, arrival_date, dep
             "exclude_group": exclude_group_booking or "",
         },
     )[0][0]
-    return max(cint(total_rooms) - cint(reservation_count) - cint(held_count), 0)
+    distribution_count = 0
+    if frappe.db.exists("DocType", "Hotel Distribution Event"):
+        rows = frappe.db.sql(
+            """select count(distinct echo_key) from `tabHotel Distribution Event`
+            where property=%(property)s and room_type=%(room_type)s
+              and event_type='Calendar Block' and status in ('Pending','Processed','Needs Review','Echo')
+              and arrival_date < %(departure)s and departure_date > %(arrival)s""",
+            {"property": property_name, "room_type": room_type, "arrival": getdate(arrival_date), "departure": getdate(departure_date)},
+        )
+        distribution_count = cint(rows[0][0] if rows else 0)
+    return max(cint(total_rooms) - cint(reservation_count) - cint(held_count) - distribution_count, 0)
 
 
 def get_function_space_capacity(function_space: str, setup_style: str | None, fallback: int = 0) -> int:

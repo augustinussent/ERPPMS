@@ -1,117 +1,16 @@
 frappe.ui.form.on("Hotel Reservation", {
   refresh(frm) {
-    if (frm.doc.docstatus === 1 && ["Confirmed", "Tentative"].includes(frm.doc.status)) {
-      frm.add_custom_button(__("Check In"), () => run("hotel_pms.api.check_in", { reservation: frm.doc.name }), __("Operations"));
-      frm.add_custom_button(__("Cancel Reservation"), () => cancellationDialog(frm, "Cancellation"), __("Operations"));
-      frm.add_custom_button(__("Mark No Show"), () => cancellationDialog(frm, "No Show"), __("Operations"));
-    }
-    if (frm.doc.docstatus === 1 && frm.doc.status === "Checked In") {
-      frm.add_custom_button(__("Check Out"), () => {
-        frappe.route_options = { reservation: frm.doc.name };
-        frappe.set_route("hotel-checkout");
-      }, __("Operations"));
-      frm.add_custom_button(__("Move Room"), () => roomMoveDialog(frm), __("Stay Changes"));
-      frm.add_custom_button(__("Extend / Early Departure"), () => stayAmendDialog(frm), __("Stay Changes"));
-    }
-    if (frm.doc.docstatus === 1 && !["Cancelled", "No Show"].includes(frm.doc.status)) {
-      frm.add_custom_button(__("Issue Guest Portal Link"), async () => {
-        const response = await frappe.call({method:"hotel_pms.guest_portal.issue_portal_link_for_staff",args:{reservation:frm.doc.name,request_key:`STAFF-${Date.now()}`},freeze:true});
-        const token=response.message.raw_token;
-        if (!token) return frappe.msgprint(__("A link already exists, but raw tokens are never stored. Revoke it and issue a new link."));
-        const url=`${window.location.origin}/hotel-guest#token=${encodeURIComponent(token)}`;
-        frappe.msgprint(`<p>${__("Copy this link now. It cannot be recovered later.")}</p><textarea class="form-control" rows="3">${frappe.utils.escape_html(url)}</textarea>`);
+    if (!frm.is_new() && ["Tentative", "Confirmed"].includes(frm.doc.status)) {
+      frm.add_custom_button(__("Issue Pre-arrival Form"), async () => {
+        const templates = await frappe.db.get_list("Hotel Prearrival Form Template", {filters:{property:frm.doc.property,enabled:1},fields:["name","title"]});
+        if (!templates.length) return frappe.msgprint(__("Configure an enabled pre-arrival form template first."));
+        const d = new frappe.ui.Dialog({title:__("Issue Pre-arrival Form"),fields:[{fieldname:"template",label:__("Template"),fieldtype:"Select",options:templates.map(x=>x.name).join("\n"),default:templates[0].name,reqd:1}],primary_action_label:__("Issue One-time Link"),primary_action:async values=>{
+          const r=await frappe.call({method:"hotel_pms.prearrival.issue_prearrival_form",args:{reservation:frm.doc.name,template:values.template,request_key:`${frm.doc.name}:${Date.now()}`},freeze:true});d.hide();const x=r.message;if(x.url)frappe.msgprint({title:__("One-time Pre-arrival Link"),message:`<p>${__("Copy this link now. It is not stored in plaintext and can be submitted once.")}</p><textarea class="form-control" rows="4">${frappe.utils.escape_html(x.url)}</textarea>`,wide:true});else frappe.msgprint(__("A link was already issued. Revoke it before issuing a replacement."));frm.reload_doc();
+        }});d.show();
       }, __("Guest"));
-      frm.add_custom_button(__("Guest Profile 360"), () => { frappe.route_options={customer:frm.doc.guest}; frappe.set_route("hotel-guest-profile-360"); }, __("Guest"));
-      frm.add_custom_button(__("WhatsApp Thread"), () => { frappe.route_options={property:frm.doc.property}; frappe.set_route("hotel-communications"); }, __("Guest"));
-      frm.add_custom_button(__("Registration Card"), async () => {
-        const response = await frappe.call({ method:"hotel_pms.front_desk.ensure_guest_registration", args:{reservation:frm.doc.name}, freeze:true });
-        frappe.set_route("Form", "Hotel Guest Registration", response.message.registration);
-      }, __("Guest"));
-      frm.add_custom_button(__("Record Deposit"), () => paymentDialog(frm, "Deposit"), __("Payments"));
-      const canRefund = ["System Manager", "Hotel Manager", "Accounts User", "Accounts Manager"].some(role => frappe.user_roles.includes(role));
-      if (canRefund && (frm.doc.deposit_received || 0) - (frm.doc.deposit_refunded || 0) > 0) {
-        frm.add_custom_button(__("Create Refund"), () => paymentDialog(frm, "Refund"), __("Payments"));
-      }
     }
-    if (frm.doc.folio) frm.add_custom_button(__("Open Folio"), () => frappe.set_route("Form", "Hotel Folio", frm.doc.folio));
-    if (frm.doc.registration) frm.add_custom_button(__("Open Registration"), () => frappe.set_route("Form", "Hotel Guest Registration", frm.doc.registration));
-  },
+    if (frm.doc.distribution_connection) {
+      frm.add_custom_button(__("Open Distribution Event"), () => frappe.set_route("Form", "Hotel Distribution Event", frm.doc.external_event), __("Distribution"));
+    }
+  }
 });
-
-async function run(method, args) { await frappe.call({ method, args, freeze:true }); cur_frm.reload_doc(); }
-
-async function cancellationDialog(frm, type) {
-  const preview = await frappe.call({ method:"hotel_pms.front_desk.preview_cancellation", args:{reservation:frm.doc.name,transaction_type:type} });
-  const p = preview.message;
-  const dialog = new frappe.ui.Dialog({ title:__(type), fields:[
-    {fieldname:"preview",fieldtype:"HTML",options:`<div class="alert alert-warning">${__("Calculated fee")}: <b>${format_currency(p.fee_amount)}</b><br>${__("Net deposit")}: ${format_currency(p.deposit_received)}<br>${__("Estimated refund due")}: ${format_currency(p.refundable_amount)}</div>`},
-    {fieldname:"reason",label:__("Reason"),fieldtype:"Small Text",reqd:1},
-    {fieldname:"waive_fee",label:__("Waive Fee"),fieldtype:"Check",default:0},
-    {fieldname:"waiver_reason",label:__("Waiver Reason"),fieldtype:"Small Text",depends_on:"eval:doc.waive_fee"},
-  ], primary_action_label:__("Confirm"), primary_action:async values=>{
-    values.reservation=frm.doc.name; values.transaction_type=type; values.idempotency_key=`WEB-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    await frappe.call({method:"hotel_pms.front_desk.cancel_reservation",args:values,freeze:true}); dialog.hide(); frm.reload_doc();
-  }}); dialog.show();
-}
-
-function roomMoveDialog(frm) {
-  const rows = frm.doc.rooms || [];
-  const dialog = new frappe.ui.Dialog({ title:__("Move Room"), fields:[
-    {fieldname:"old_room",label:__("Current Room"),fieldtype:"Select",options:rows.map(x=>x.room).join("\n"),reqd:1},
-    {fieldname:"new_room",label:__("New Room"),fieldtype:"Link",options:"Hotel Room",reqd:1,get_query:()=>({filters:{property:frm.doc.property,operational_status:"Available",enabled:1}})},
-    {fieldname:"reason",label:__("Reason"),fieldtype:"Small Text",reqd:1},
-  ], primary_action_label:__("Move"), primary_action:async values=>{
-    values.reservation=frm.doc.name; values.idempotency_key=`WEB-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    await frappe.call({method:"hotel_pms.front_desk.move_room",args:values,freeze:true}); dialog.hide(); frm.reload_doc();
-  }}); dialog.show();
-}
-
-function stayAmendDialog(frm) {
-  const dialog = new frappe.ui.Dialog({ title:__("Amend Stay Dates"), fields:[
-    {fieldname:"new_arrival_date",label:__("Arrival Date"),fieldtype:"Date",default:frm.doc.arrival_date,reqd:1,read_only:frm.doc.status==="Checked In"},
-    {fieldname:"new_departure_date",label:__("Departure Date"),fieldtype:"Date",default:frm.doc.departure_date,reqd:1},
-    {fieldname:"reason",label:__("Reason"),fieldtype:"Small Text",reqd:1},
-  ], primary_action_label:__("Apply"), primary_action:async values=>{
-    values.reservation=frm.doc.name; values.idempotency_key=`WEB-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    await frappe.call({method:"hotel_pms.front_desk.amend_stay",args:values,freeze:true}); dialog.hide(); frm.reload_doc();
-  }}); dialog.show();
-}
-
-function paymentDialog(frm, type) {
-  const net = (frm.doc.deposit_received||0)-(frm.doc.deposit_refunded||0);
-  const dialog = new frappe.ui.Dialog({ title:__(type), fields:[
-    {fieldname:"amount",label:__("Amount"),fieldtype:"Currency",default:type==="Refund"?net:frm.doc.required_deposit,reqd:1},
-    {fieldname:"mode_of_payment",label:__("Mode of Payment"),fieldtype:"Link",options:"Mode of Payment",reqd:1},
-    {fieldname:"reference_no",label:__("Reference No"),fieldtype:"Data"},
-    {fieldname:"reference_date",label:__("Reference Date"),fieldtype:"Date",default:frappe.datetime.get_today()},
-    {fieldname:"cashier_shift",label:__("Cashier Shift"),fieldtype:"Link",options:"Hotel Cashier Shift",get_query:()=>({filters:{property:frm.doc.property,status:"Open"}})},
-  ], primary_action_label:__("Create Draft Payment Entry"), primary_action:async values=>{
-    values.reservation=frm.doc.name; values.idempotency_key=`WEB-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const method=type==="Deposit"?"hotel_pms.front_desk.create_deposit_payment_entry":"hotel_pms.front_desk.create_refund_payment_entry";
-    const response=await frappe.call({method,args:values,freeze:true}); dialog.hide(); frappe.set_route("Form","Payment Entry",response.message.payment_entry);
-  }}); dialog.show();
-}
-
-frappe.ui.form.on("Hotel Reservation", {
-  refresh(frm) {
-    frm.add_custom_button(__("Rate Quote"), () => revenueQuoteDialog(frm), __("Revenue"));
-    if (!frm.is_new()) {
-      frm.add_custom_button(__("Checkout Screen"), () => {
-        frappe.route_options = { reservation: frm.doc.name };
-        frappe.set_route("hotel-checkout");
-      }, __("Billing"));
-    }
-    if (frm.doc.direct_bill_approval) {
-      frm.add_custom_button(__("Open Direct Bill Approval"), () => frappe.set_route("Form", "Hotel Direct Bill Approval", frm.doc.direct_bill_approval), __("Billing"));
-    }
-  },
-});
-
-function revenueQuoteDialog(frm) {
-  const requests = (frm.doc.rooms || []).map(row => ({ room_type: row.room_type, rate_plan: row.rate_plan, quantity: 1, adults: row.adults, children: row.children, requested_rate: row.nightly_rate || null, rate_approval: frm.doc.rate_approval || null }));
-  if (!requests.length || requests.some(x => !x.rate_plan)) return frappe.msgprint(__("Every room needs a rate plan before quoting."));
-  frappe.call({ method: "hotel_pms.revenue.quote_booking", args: { payload: { property: frm.doc.property, arrival_date: frm.doc.arrival_date, departure_date: frm.doc.departure_date, customer: frm.doc.guest, voucher_code: frm.doc.voucher_code, travel_agent_contract: frm.doc.travel_agent_contract, room_requests: requests } }, freeze: true }).then(r => {
-    const q = r.message;
-    frappe.msgprint({ title: __("Rate Quote"), wide: true, message: `<div class="row"><div class="col-sm-6"><b>${__("Room Total")}</b><br>${format_currency(q.advertised_total_before_voucher)}</div><div class="col-sm-6"><b>${__("Voucher Discount")}</b><br>${format_currency(q.voucher_discount)}</div><div class="col-sm-6"><b>${__("Service Charge")}</b><br>${format_currency(q.service_charge)}</div><div class="col-sm-6"><b>${__("Tax")}</b><br>${format_currency(q.tax)}</div><div class="col-sm-12"><h3>${__("Grand Total")}: ${format_currency(q.grand_total)}</h3></div></div><small>${__("Quote hash")}: ${frappe.utils.escape_html(q.quote_hash)}</small>` });
-  });
-}

@@ -1,3 +1,48 @@
+## [1.0.0-rc9] - 2026-07-28
+
+### Added
+- ERPNext POS Opening/Closing Entry bridge for restaurant cashier shifts.
+- Incremental KOT revisions by production unit, table clusters, durable printer queue, and restaurant alerts.
+- ERPNext-native discount and fractional-UOM controls.
+- Restaurant session, kitchen delta, and print queue Production Gate checks.
+
+### Safety
+- No new accounting, payment, tax, COGS, or stock ledger.
+- Reduction and cancellation KOTs never auto-reverse ERPNext Stock Entries.
+- Financial bill merge was deliberately not introduced; each split remains an independent ERPNext invoice.
+
+## [1.0.0-rc8] - 2026-07-28
+
+### Added
+
+- Added a provider-neutral distribution core with Generic JSON booking webhooks, HMAC authentication, external-reference idempotency, property-scoped room mappings, and ERPNext-safe operational reservation creation.
+- Added secure Generic iCal import/export with exact-room mappings, DTEND-exclusive date handling, echo/host-block filtering, tokenized feeds, request limits, SSRF protection, per-connection sync cadence, and distribution conflict review.
+- Added ARI snapshot and adapter boundaries for Channex, STAAH, and AioSell while keeping them at Adapter maturity until live credentials and certification evidence exist.
+- Added a controlled check-in flow showing registration readiness, pre-arrival answers, room readiness, alternatives, and deterministic room suggestions before the existing reservation check-in action runs.
+- Added one-time multilingual pre-arrival form templates and immutable answer snapshots using hashed Hotel Guest Access Tokens.
+- Added turnover planning with same-day cleaning-window calculations, cleaner conflict detection, and idempotent creation of existing Hotel Housekeeping Tasks.
+- Added occupant ID capture fields and private-file replacement/purge through the existing guest-document security pipeline.
+- Added Production Gate checks for distribution readiness, pre-arrival security, and turnover readiness.
+- Lowered the Python package floor to 3.10 and retained explicit Frappe/ERPNext v16 dependency declarations for Frappe Cloud compatibility.
+
+### Safety
+
+- Distribution, pre-arrival, and turnover modules do not create Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, or Stock Entry documents.
+- Inbound OTA prices remain operational reservation snapshots. ERPNext tax, invoicing, payment, receivable, and stock posting stay authoritative.
+- Foreign-currency inbound bookings are held for Finance review instead of being interpreted as the property currency.
+- Uncertified Channex, STAAH, AioSell, and Custom adapters cannot be marked Live in RC8.
+
+## [1.0.0-rc7] - 2026-07-27
+
+### Fixed
+
+- Cap governed refunds to the lower of source Payment Entry amount and refundable deposit balance.
+- Preserve Ready/Live status after successful integration tests and block failed enabled connections.
+- Require successful integration test evidence for Ready/Live.
+- Block Draft, Pending Approval, Approved, and Failed payment corrections in Production Gate.
+- Reject empty/non-numeric parallel-run values.
+- Expand RC7 bench smoke to GL/Stock Ledger counts and repeat-scan idempotency.
+
 ## 1.0.0-rc6
 - Added governed intelligence lifecycle, night-audit findings, payment correction matrix, integration maturity registry, and real-bench smoke contract.
 - ERPNext remains the sole accounting, payment, tax, receivable, and stock ledger.

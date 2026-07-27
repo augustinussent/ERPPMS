@@ -74,7 +74,17 @@
   "booking_confirmation_message",
   "last_guest_message_at",
   "notes_section",
-  "notes"
+  "notes",
+  "distribution_section",
+  "distribution_connection",
+  "external_reference",
+  "external_event",
+  "external_sell_price_locked",
+  "external_room_rate_total",
+  "external_gross_total",
+  "external_currency",
+  "distribution_price_status",
+  "prearrival_submission"
  ],
  "fields": [
   {
@@ -515,6 +525,74 @@
    "fieldname": "blacklist_override_reason",
    "label": "Blacklist Override Reason",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "distribution_section",
+   "label": "Distribution / OTA",
+   "fieldtype": "Section Break",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "distribution_connection",
+   "label": "Distribution Connection",
+   "fieldtype": "Link",
+   "options": "Hotel Distribution Connection",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_reference",
+   "label": "External Booking Reference",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "external_event",
+   "label": "Distribution Event",
+   "fieldtype": "Link",
+   "options": "Hotel Distribution Event",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_sell_price_locked",
+   "label": "External Sell Price Locked",
+   "fieldtype": "Check",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_room_rate_total",
+   "label": "External Room Rate Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_gross_total",
+   "label": "External Gross Total",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "external_currency",
+   "label": "External Currency",
+   "fieldtype": "Link",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "distribution_price_status",
+   "label": "Distribution Price Status",
+   "fieldtype": "Select",
+   "options": "Not Required\nPending Review\nApproved\nRejected",
+   "default": "Not Required",
+   "read_only": 1
+  },
+  {
+   "fieldname": "prearrival_submission",
+   "label": "Pre-arrival Submission",
+   "fieldtype": "Link",
+   "options": "Hotel Prearrival Form Submission",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

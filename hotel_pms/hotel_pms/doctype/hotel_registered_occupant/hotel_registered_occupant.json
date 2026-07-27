@@ -25,7 +25,9 @@
   "date_of_birth",
   "id_type",
   "id_number",
-  "address"
+  "address",
+  "id_file",
+  "id_verified"
  ],
  "fields": [
   {
@@ -68,6 +70,18 @@
    "fieldname": "address",
    "label": "Address",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "id_file",
+   "label": "Private ID File",
+   "fieldtype": "Attach",
+   "hidden": 1
+  },
+  {
+   "fieldname": "id_verified",
+   "label": "ID Verified",
+   "fieldtype": "Check",
+   "default": "0"
   }
  ],
  "name": "Hotel Registered Occupant",

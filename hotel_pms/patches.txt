@@ -20,3 +20,7 @@ hotel_pms.patches.v1_0_rc4.setup_production_validation
 hotel_pms.patches.v1_0_rc5.setup_staging_execution
 
 hotel_pms.patches.v1_0_rc6.setup_intelligence
+
+hotel_pms.patches.v1_0_rc8.setup_distribution_turnover
+
+hotel_pms.patches.v1_0_rc9.setup_restaurant_controls

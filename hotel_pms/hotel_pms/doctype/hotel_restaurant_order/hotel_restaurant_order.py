@@ -11,6 +11,7 @@ class HotelRestaurantOrder(Document):
         import frappe
         from frappe.utils import flt
         from hotel_pms.revenue_rules import tax_breakdown
+        from hotel_pms.restaurant_controls import validate_order_item_uom
         if self.service_type == "Dine In" and not self.table:
             frappe.throw("A table is required for dine-in orders.")
         if self.table:
@@ -53,11 +54,13 @@ class HotelRestaurantOrder(Document):
                 row.item_name = menu.menu_name
                 row.rate = menu.rate
                 row.kitchen_station = menu.kitchen_station
+                row.production_unit = menu.production_unit
                 row.course = menu.course
                 row.allergy_alert = menu.allergy_alert
                 row.preparation_minutes = menu.preparation_minutes
-            if row.qty <= 0 or row.rate < 0:
-                frappe.throw("Order item quantity must be positive and rate cannot be negative.")
+            row.qty = float(validate_order_item_uom(row.item_code, row.qty))
+            if row.rate < 0:
+                frappe.throw("Order item rate cannot be negative.")
             row.amount = flt(row.qty) * flt(row.rate)
             subtotal += row.amount
         self.subtotal = subtotal

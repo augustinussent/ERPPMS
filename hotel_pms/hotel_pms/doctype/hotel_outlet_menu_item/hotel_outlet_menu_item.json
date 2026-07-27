@@ -21,7 +21,8 @@
   "available",
   "allow_qr_ordering",
   "display_order",
-  "image"
+  "image",
+  "production_unit"
  ],
  "fields": [
   {
@@ -129,6 +130,12 @@
    "fieldtype": "Table",
    "options": "Hotel Menu Recipe Item",
    "depends_on": "eval:doc.recipe_enabled"
+  },
+  {
+   "fieldname": "production_unit",
+   "label": "Production Unit",
+   "fieldtype": "Link",
+   "options": "Hotel Kitchen Production Unit"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -136,7 +143,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Outlet Menu Item",

@@ -33,7 +33,10 @@
   "recipe_stock_entry_mode",
   "recipe_source_warehouse",
   "kds_late_minutes",
-  "kds_sound_enabled"
+  "kds_sound_enabled",
+  "pos_control_section",
+  "require_pos_opening_entry",
+  "cashier_discount_limit"
  ],
  "fields": [
   {
@@ -214,6 +217,25 @@
    "label": "KDS Sound Enabled",
    "fieldtype": "Check",
    "default": "1"
+  },
+  {
+   "fieldname": "pos_control_section",
+   "label": "ERPNext POS Session Control",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "require_pos_opening_entry",
+   "label": "Require ERPNext POS Opening Entry",
+   "fieldtype": "Check",
+   "default": "1",
+   "description": "Blocks restaurant operation and direct settlement until the cashier shift is linked to a submitted Open POS Opening Entry."
+  },
+  {
+   "fieldname": "cashier_discount_limit",
+   "label": "Cashier Discount Limit (%)",
+   "fieldtype": "Percent",
+   "default": "0",
+   "description": "Higher discounts require manager approval; ERPNext calculates the final invoice discount."
   }
  ],
  "index_web_pages_for_search": 1,
@@ -221,7 +243,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Outlet",

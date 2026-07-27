@@ -19,7 +19,11 @@
   "amount",
   "erpnext_document_type",
   "erpnext_document",
-  "request_key"
+  "request_key",
+  "discount_percentage",
+  "discount_reason",
+  "discount_authorized_by",
+  "discount_amount"
  ],
  "fields": [
   {
@@ -121,6 +125,31 @@
    "fieldtype": "Data",
    "unique": 1,
    "hidden": 1
+  },
+  {
+   "fieldname": "discount_percentage",
+   "label": "ERPNext Additional Discount (%)",
+   "fieldtype": "Percent",
+   "default": "0"
+  },
+  {
+   "fieldname": "discount_reason",
+   "label": "Discount Reason",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:doc.discount_percentage>0"
+  },
+  {
+   "fieldname": "discount_authorized_by",
+   "label": "Discount Authorized By",
+   "fieldtype": "Link",
+   "options": "User",
+   "depends_on": "eval:doc.discount_percentage>0"
+  },
+  {
+   "fieldname": "discount_amount",
+   "label": "ERPNext Discount Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -128,7 +157,7 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-21 00:00:00.000000",
+ "modified": "2026-07-28 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Restaurant Bill Split",

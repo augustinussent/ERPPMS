@@ -189,3 +189,41 @@ The command backs up the staging site, migrates it, captures preflight and smoke
 
 ## v1.0.0-rc6 Intelligence & Control
 Governed decision records, night-audit anomaly findings, ERPNext-native payment correction control, honest integration registry, and expanded real-bench smoke tooling. No parallel accounting or stock ledger is introduced.
+
+
+## v1.0.0-rc7 Control Hotfix
+
+RC7 supersedes RC6 for staging validation. It fixes payment-refund caps, integration lifecycle/readiness blockers, unresolved correction gating, and blank parallel-run input. ERPNext remains the single financial and stock source of truth.
+
+## v1.0.0-rc8 Distribution & Turnover
+
+RC8 supersedes RC7 because executable source changed. It adds an ERPNext-safe distribution seam, secure Generic iCal fallback, HMAC-signed Generic JSON inbound bookings, controlled check-in context, one-time pre-arrival forms, and turnover planning.
+
+Operational pages:
+
+```text
+/app/hotel-distribution-console
+/app/hotel-turnover-planner
+/hotel-prearrival?token=<one-time-token>
+```
+
+Provider maturity is explicit:
+
+- **Generic iCal:** Shipped. Import/export only, exact-room inventory blocks, no guest or financial posting.
+- **Generic JSON:** Shipped. HMAC-signed normalized booking webhook through the same Hotel Reservation validation path.
+- **Channex, STAAH, AioSell:** Adapter. Protocol seam and configuration are present, but Live is blocked until credentials, mapping, certification, and staging evidence exist.
+
+Inbound distribution creates Hotel Reservation operational records only. ERPNext remains the sole source for Sales Invoice, Payment Entry, Accounts Receivable, taxes, General Ledger, Stock Entry, and Stock Ledger. See `docs/DISTRIBUTION_TURNOVER_V100_RC8.md`.
+## v1.0.0-rc9 Restaurant ERP Control
+
+RC9 deepens the restaurant workflow while keeping ERPNext authoritative:
+
+- Hotel Cashier Shift is bridged to submitted ERPNext POS Opening Entry and POS Closing Entry.
+- Restaurant quantities follow ERPNext UOM whole-number rules and support three-decimal weighed quantities.
+- Kitchen changes are emitted as idempotent Add, Reduce, or Modify KOT revisions per production unit.
+- Only Add deltas may create ERPNext recipe Material Issue Stock Entries; cancellation does not auto-reverse stock.
+- Cashier discounts are approved against an outlet threshold and posted through ERPNext POS/Sales Invoice discount fields.
+- Table clusters, durable multi-printer jobs, operational alerts, and a Restaurant Control console are included.
+- Production Gate blocks unresolved POS-session, kitchen-delta, and print-queue problems.
+
+See `docs/RESTAURANT_ERP_CONTROL_V100_RC9.md`.

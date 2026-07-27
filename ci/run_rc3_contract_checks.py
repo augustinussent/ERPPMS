@@ -28,12 +28,14 @@ for path in (root / "hotel_pms").rglob("*.py"):
 services = (root / "hotel_pms/services.py").read_text()
 for needle in (
     "invoice_stock_fields(outlet)",
-    "queue_ticket_stock_posting(kot.name)",
     "accept_kitchen_ticket",
     "recall_kitchen_ticket",
 ):
     if needle not in services:
         errors.append(f"services.py missing contract: {needle}")
+controls = (root / "hotel_pms/restaurant_controls.py").read_text()
+if "queue_ticket_stock_posting(kot.name)" not in controls:
+    errors.append("incremental KOT path no longer queues ERPNext recipe stock posting")
 
 inventory = (root / "hotel_pms/fnb_inventory.py").read_text()
 for needle in (

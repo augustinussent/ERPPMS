@@ -29,7 +29,12 @@ add_to_apps_screen = [
 ]
 
 doc_events = {
-    "Hotel Reservation": {"after_insert": "hotel_pms.webhooks.emit_document_event", "on_update": "hotel_pms.webhooks.emit_document_event", "on_submit": "hotel_pms.webhooks.emit_document_event", "on_cancel": "hotel_pms.webhooks.emit_document_event"},
+    "Hotel Reservation": {
+        "after_insert": ["hotel_pms.webhooks.emit_document_event", "hotel_pms.distribution.on_reservation_change"],
+        "on_update": ["hotel_pms.webhooks.emit_document_event", "hotel_pms.distribution.on_reservation_change"],
+        "on_submit": ["hotel_pms.webhooks.emit_document_event", "hotel_pms.distribution.on_reservation_change"],
+        "on_cancel": ["hotel_pms.webhooks.emit_document_event", "hotel_pms.distribution.on_reservation_change"],
+    },
     "Hotel Housekeeping Task": {"after_insert": "hotel_pms.webhooks.emit_document_event", "on_update": "hotel_pms.webhooks.emit_document_event"},
     "Hotel Maintenance Ticket": {"after_insert": "hotel_pms.webhooks.emit_document_event", "on_update": "hotel_pms.webhooks.emit_document_event"},
     "Hotel Restaurant Order": {"after_insert": "hotel_pms.webhooks.emit_document_event", "on_update": "hotel_pms.webhooks.emit_document_event"},
@@ -59,13 +64,15 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        "*/5 * * * *": ["hotel_pms.platform.worker_heartbeat", "hotel_pms.webhooks.process_webhook_queue", "hotel_pms.communications.process_message_queue"],
-        "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas", "hotel_pms.services.monitor_guest_services"],
+        "*/5 * * * *": ["hotel_pms.platform.worker_heartbeat", "hotel_pms.webhooks.process_webhook_queue", "hotel_pms.communications.process_message_queue", "hotel_pms.restaurant_controls.monitor_restaurant_operations", "hotel_pms.restaurant_printing.retry_failed_restaurant_print_jobs"],
+        "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas", "hotel_pms.services.monitor_guest_services", "hotel_pms.distribution.sync_all_ical_connections"],
         "17 * * * *": ["hotel_pms.platform.capture_health_snapshot"],
+        "7 * * * *": ["hotel_pms.distribution.push_all_ari"],
         "30 4 * * *": ["hotel_pms.intelligence.run_scheduled_intelligence"],
     },
     "daily": [
         "hotel_pms.tasks.create_housekeeping_tasks",
+        "hotel_pms.turnover.create_turnover_tasks",
         "hotel_pms.tasks.create_preventive_maintenance_tasks",
         "hotel_pms.tasks.expire_tentative_group_holds",
         "hotel_pms.tasks.release_group_room_blocks_at_cutoff",
@@ -163,6 +170,16 @@ permission_query_conditions = {
     'Hotel Night Audit Finding': "hotel_pms.permissions.hotel_night_audit_finding_query",
     'Hotel Payment Correction': "hotel_pms.permissions.hotel_payment_correction_query",
     'Hotel Integration Connection': "hotel_pms.permissions.hotel_integration_connection_query",
+    'Hotel Distribution Connection': "hotel_pms.permissions.hotel_distribution_connection_query",
+    'Hotel Distribution Room Mapping': "hotel_pms.permissions.hotel_distribution_room_mapping_query",
+    'Hotel Distribution Event': "hotel_pms.permissions.hotel_distribution_event_query",
+    'Hotel Prearrival Form Template': "hotel_pms.permissions.hotel_prearrival_form_template_query",
+    'Hotel Prearrival Form Submission': "hotel_pms.permissions.hotel_prearrival_form_submission_query",
+    'Hotel Kitchen Production Unit': "hotel_pms.permissions.hotel_kitchen_production_unit_query",
+    'Hotel Restaurant Printer Route': "hotel_pms.permissions.hotel_restaurant_printer_route_query",
+    'Hotel Restaurant Print Job': "hotel_pms.permissions.hotel_restaurant_print_job_query",
+    'Hotel Restaurant Table Cluster': "hotel_pms.permissions.hotel_restaurant_table_cluster_query",
+    'Hotel Restaurant Alert': "hotel_pms.permissions.hotel_restaurant_alert_query",
 }
 
 has_permission = {
@@ -242,4 +259,21 @@ has_permission = {
     'Hotel Night Audit Finding': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Payment Correction': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Integration Connection': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Distribution Connection': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Distribution Room Mapping': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Distribution Event': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Prearrival Form Template': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Prearrival Form Submission': "hotel_pms.permissions.property_document_has_permission",
 }
+# RC9 restaurant-control property scoping. Appended to avoid duplicating the large base maps.
+permission_query_conditions.update({
+    "Hotel Kitchen Production Unit": "hotel_pms.permissions.hotel_kitchen_production_unit_query",
+    "Hotel Restaurant Printer Route": "hotel_pms.permissions.hotel_restaurant_printer_route_query",
+    "Hotel Restaurant Print Job": "hotel_pms.permissions.hotel_restaurant_print_job_query",
+    "Hotel Restaurant Table Cluster": "hotel_pms.permissions.hotel_restaurant_table_cluster_query",
+    "Hotel Restaurant Alert": "hotel_pms.permissions.hotel_restaurant_alert_query",
+})
+has_permission.update({doctype: "hotel_pms.permissions.property_document_has_permission" for doctype in (
+    "Hotel Kitchen Production Unit", "Hotel Restaurant Printer Route", "Hotel Restaurant Print Job",
+    "Hotel Restaurant Table Cluster", "Hotel Restaurant Alert",
+)})

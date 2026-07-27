@@ -223,6 +223,14 @@ def get_available_rooms(
             {"property": property, "arrival": arrival, "departure": departure, "exclude": exclude_reservation or ""},
         )
     )
+    if frappe.db.exists("DocType", "Hotel Distribution Event"):
+        conflicts.update(frappe.db.sql_list(
+            """select distinct room from `tabHotel Distribution Event`
+            where property=%(property)s and coalesce(room,'')!='' and event_type='Calendar Block'
+              and status in ('Pending','Processed','Needs Review','Echo')
+              and arrival_date < %(departure)s and departure_date > %(arrival)s""",
+            {"property": property, "arrival": arrival, "departure": departure},
+        ))
     return [room for room in rooms if room.name not in conflicts]
 
 
@@ -578,17 +586,19 @@ def cancel_reservation(
 def process_cancellation_internal(
     reservation: str, reason: str, idempotency_key: str, transaction_type: str = "Cancellation",
     waive_fee: int = 0, waiver_reason: str | None = None, guest_authorized: bool = False,
+    authorized_source: str | None = None,
 ) -> dict:
     if transaction_type not in ("Cancellation", "No Show"):
         frappe.throw(_("Transaction type must be Cancellation or No Show."))
     if not reason:
         frappe.throw(_("A cancellation or no-show reason is required."))
     doc = get_locked_reservation(reservation)
-    if guest_authorized:
+    if guest_authorized or authorized_source == "Distribution":
         if transaction_type != "Cancellation":
-            frappe.throw(_("Guest links cannot process no-shows."), frappe.PermissionError)
-        # The caller must first validate a reservation-scoped guest token.
-        # This internal function is intentionally not whitelisted.
+            frappe.throw(_("External authorization cannot process no-shows."), frappe.PermissionError)
+        # The caller must validate either a reservation-scoped guest token or a
+        # property-scoped distribution webhook secret before entering here.
+        # This function remains intentionally non-whitelisted.
         doc.flags.ignore_permissions = True
     else:
         doc.check_permission("write")

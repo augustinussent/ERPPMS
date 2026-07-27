@@ -1,0 +1,27 @@
+{% extends "templates/web.html" %}
+{% block page_content %}
+<div class="container" style="max-width:720px;padding:32px 16px">
+  <div id="hp-prearrival"><p>{{ _("Loading pre-arrival form…") }}</p></div>
+</div>
+<script>
+(async function(){
+ const root=document.getElementById('hp-prearrival');
+ const token=new URLSearchParams(location.search).get('token')||'';
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ try{
+  const r=await fetch('/api/method/hotel_pms.prearrival.get_prearrival_form?raw_token='+encodeURIComponent(token));
+  const j=await r.json(); const d=j.message; if(!r.ok||!d) throw new Error(j.exc||'Invalid link');
+  if(d.status==='Submitted'){root.innerHTML=`<h2>${esc(d.title)}</h2><div class="alert alert-success">{{ _("This form has already been submitted.") }}</div>`;return;}
+  root.innerHTML=`<small>${esc(d.property)}</small><h2>${esc(d.title)}</h2><p>${esc(d.guest)} · ${esc(d.arrival_date)} → ${esc(d.departure_date)}</p>${d.privacy_notice?`<div class="alert alert-info">${esc(d.privacy_notice)}</div>`:''}<form id="pref">${d.questions.map(q=>{
+    const req=q.required?'required':''; const label=`<label>${esc(q.label)}${q.required?' *':''}</label>`;
+    if(q.field_type==='Long Text')return `<div class="form-group">${label}<textarea class="form-control" name="${esc(q.field_key)}" ${req}></textarea></div>`;
+    if(q.field_type==='Select')return `<div class="form-group">${label}<select class="form-control" name="${esc(q.field_key)}" ${req}><option value=""></option>${q.options.map(x=>`<option>${esc(x)}</option>`).join('')}</select></div>`;
+    if(q.field_type==='Yes No')return `<div class="form-group">${label}<select class="form-control" name="${esc(q.field_key)}" ${req}><option value=""></option><option value="Yes">{{ _("Yes") }}</option><option value="No">{{ _("No") }}</option></select></div>`;
+    const types={'Number':'number','Date':'date','Time':'time','Phone':'tel','Email':'email'};
+    return `<div class="form-group">${label}<input class="form-control" type="${types[q.field_type]||'text'}" name="${esc(q.field_key)}" ${req}>${q.help_text?`<small>${esc(q.help_text)}</small>`:''}</div>`;
+  }).join('')}<button class="btn btn-primary" type="submit">{{ _("Submit") }}</button></form>`;
+  document.getElementById('pref').addEventListener('submit',async e=>{e.preventDefault();const answers=Object.fromEntries(new FormData(e.target).entries());const body=new URLSearchParams({raw_token:token,answers:JSON.stringify(answers)});const rr=await fetch('/api/method/hotel_pms.prearrival.submit_prearrival_form',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});const jj=await rr.json();if(!rr.ok||!jj.message){frappe.msgprint(jj.exception||'Submit failed');return;}root.innerHTML='<div class="alert alert-success"><h3>{{ _("Thank you") }}</h3><p>{{ _("Your pre-arrival details were submitted.") }}</p></div>';});
+ }catch(e){root.innerHTML=`<div class="alert alert-danger">${esc(e.message)}</div>`;}
+})();
+</script>
+{% endblock %}

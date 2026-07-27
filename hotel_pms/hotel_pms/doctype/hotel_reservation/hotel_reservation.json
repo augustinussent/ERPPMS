@@ -1,0 +1,290 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "company",
+  "status",
+  "guest_section",
+  "guest",
+  "guest_contact",
+  "billing_customer",
+  "column_break_guest",
+  "source",
+  "source_reference",
+  "stay_section",
+  "arrival_date",
+  "departure_date",
+  "arrival_time",
+  "departure_time",
+  "column_break_stay",
+  "adults",
+  "children",
+  "rooms_section",
+  "rooms",
+  "finance_section",
+  "cost_center",
+  "deposit_amount",
+  "deposit_payment_entry",
+  "folio",
+  "notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HRES-.YYYY.-.#####",
+   "default": "HRES-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "fetch_from": "property.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Tentative\nConfirmed\nChecked In\nChecked Out\nCancelled\nNo Show",
+   "default": "Tentative",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "guest_section",
+   "label": "Guest & Billing",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "guest",
+   "label": "Guest Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "guest_contact",
+   "label": "Guest Contact",
+   "fieldtype": "Link",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "billing_customer",
+   "label": "Billing Customer",
+   "fieldtype": "Link",
+   "options": "Customer",
+   "description": "Use a company/customer here for corporate billing; defaults to guest."
+  },
+  {
+   "fieldname": "column_break_guest",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "source",
+   "label": "Booking Source",
+   "fieldtype": "Select",
+   "options": "Direct\nWalk-in\nWebsite\nOTA\nCorporate\nTravel Agent",
+   "default": "Direct",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_reference",
+   "label": "Source Reference",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "stay_section",
+   "label": "Stay",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "arrival_date",
+   "label": "Arrival Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "label": "Departure Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "arrival_time",
+   "label": "Expected Arrival Time",
+   "fieldtype": "Time"
+  },
+  {
+   "fieldname": "departure_time",
+   "label": "Expected Departure Time",
+   "fieldtype": "Time"
+  },
+  {
+   "fieldname": "column_break_stay",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "adults",
+   "label": "Total Adults",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "children",
+   "label": "Total Children",
+   "fieldtype": "Int",
+   "default": "0"
+  },
+  {
+   "fieldname": "rooms_section",
+   "label": "Rooms",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "rooms",
+   "label": "Rooms",
+   "fieldtype": "Table",
+   "options": "Hotel Reservation Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "finance_section",
+   "label": "ERPNext Finance",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "cost_center",
+   "label": "Cost Center",
+   "fieldtype": "Link",
+   "options": "Cost Center",
+   "fetch_from": "property.default_cost_center"
+  },
+  {
+   "fieldname": "deposit_amount",
+   "label": "Deposit Amount",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "deposit_payment_entry",
+   "label": "Deposit Payment Entry",
+   "fieldtype": "Link",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "folio",
+   "label": "Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Folio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes_section",
+   "label": "Notes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Text Editor"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Reservation",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Accounts User",
+   "read": 1,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "guest",
+ "search_fields": "guest,source_reference,property"
+}

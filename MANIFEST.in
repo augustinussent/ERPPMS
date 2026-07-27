@@ -1,0 +1,12 @@
+recursive-include hotel_pms *.css
+recursive-include hotel_pms *.csv
+recursive-include hotel_pms *.html
+recursive-include hotel_pms *.ico
+recursive-include hotel_pms *.js
+recursive-include hotel_pms *.json
+recursive-include hotel_pms *.md
+recursive-include hotel_pms *.png
+recursive-include hotel_pms *.py
+recursive-include hotel_pms *.svg
+recursive-include hotel_pms *.txt
+recursive-exclude hotel_pms *.pyc

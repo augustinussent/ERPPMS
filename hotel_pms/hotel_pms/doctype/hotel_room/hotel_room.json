@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{property}-{room_number}",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "room_number",
+  "property",
+  "room_type",
+  "floor",
+  "enabled",
+  "status_section",
+  "operational_status",
+  "housekeeping_status",
+  "mapping_section",
+  "default_warehouse",
+  "asset",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_number",
+   "label": "Room Number",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "floor",
+   "label": "Floor / Zone",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status_section",
+   "label": "Room Status",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "operational_status",
+   "label": "Operational Status",
+   "fieldtype": "Select",
+   "options": "Available\nOccupied\nOut of Order\nOut of Service",
+   "default": "Available",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "housekeeping_status",
+   "label": "Housekeeping Status",
+   "fieldtype": "Select",
+   "options": "Clean\nDirty\nInspected\nPickup",
+   "default": "Clean",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mapping_section",
+   "label": "ERPNext Mapping",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "label": "Room / Minibar Warehouse",
+   "fieldtype": "Link",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "asset",
+   "label": "Room Asset",
+   "fieldtype": "Link",
+   "options": "Asset"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Room",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "room_number",
+ "search_fields": "property,room_type,floor"
+}

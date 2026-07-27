@@ -1,0 +1,211 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "task_title",
+  "enabled",
+  "target_section",
+  "asset",
+  "location",
+  "priority",
+  "schedule_section",
+  "trigger_type",
+  "interval_days",
+  "next_due_date",
+  "column_break_meter",
+  "meter_unit",
+  "interval_meter",
+  "current_meter",
+  "next_due_meter",
+  "checklist_section",
+  "checklist"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPMS-.YYYY.-.#####",
+   "default": "HPMS-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "task_title",
+   "label": "Task Title",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "target_section",
+   "label": "Target",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "asset",
+   "label": "ERPNext Asset",
+   "fieldtype": "Link",
+   "options": "Asset"
+  },
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Critical - Guest Complaint\nCritical - Safety / Spreading Damage\nHigh - Guest Visible\nMedium\nLow",
+   "default": "Medium"
+  },
+  {
+   "fieldname": "schedule_section",
+   "label": "Schedule",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "trigger_type",
+   "label": "Trigger Type",
+   "fieldtype": "Select",
+   "options": "Calendar\nMeter",
+   "default": "Calendar",
+   "reqd": 1
+  },
+  {
+   "fieldname": "interval_days",
+   "label": "Interval Days",
+   "fieldtype": "Int",
+   "depends_on": "eval:doc.trigger_type==\"Calendar\""
+  },
+  {
+   "fieldname": "next_due_date",
+   "label": "Next Due Date",
+   "fieldtype": "Date",
+   "depends_on": "eval:doc.trigger_type==\"Calendar\"",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_meter",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "meter_unit",
+   "label": "Meter Unit",
+   "fieldtype": "Select",
+   "options": "Hours\nKilometers\nCycles",
+   "depends_on": "eval:doc.trigger_type==\"Meter\""
+  },
+  {
+   "fieldname": "interval_meter",
+   "label": "Meter Interval",
+   "fieldtype": "Float",
+   "depends_on": "eval:doc.trigger_type==\"Meter\""
+  },
+  {
+   "fieldname": "current_meter",
+   "label": "Current Meter",
+   "fieldtype": "Float",
+   "depends_on": "eval:doc.trigger_type==\"Meter\""
+  },
+  {
+   "fieldname": "next_due_meter",
+   "label": "Next Due Meter",
+   "fieldtype": "Float",
+   "depends_on": "eval:doc.trigger_type==\"Meter\""
+  },
+  {
+   "fieldname": "checklist_section",
+   "label": "Checklist / SOP",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "checklist",
+   "label": "Checklist",
+   "fieldtype": "Text Editor",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Preventive Maintenance Schedule",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Engineering",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "task_title",
+ "search_fields": "asset,location,task_title"
+}

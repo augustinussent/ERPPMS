@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{property}-{rate_plan_name}",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "rate_plan_name",
+  "property",
+  "room_type",
+  "enabled",
+  "validity_section",
+  "valid_from",
+  "valid_to",
+  "meal_plan",
+  "rate_section",
+  "rate",
+  "min_stay",
+  "max_stay",
+  "refundable"
+ ],
+ "fields": [
+  {
+   "fieldname": "rate_plan_name",
+   "label": "Rate Plan Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Hotel Room Type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "validity_section",
+   "label": "Validity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "valid_from",
+   "label": "Valid From",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "valid_to",
+   "label": "Valid To",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "meal_plan",
+   "label": "Meal Plan",
+   "fieldtype": "Select",
+   "options": "Room Only\nBreakfast Included\nHalf Board\nFull Board",
+   "default": "Room Only"
+  },
+  {
+   "fieldname": "rate_section",
+   "label": "Rate Rules",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "rate",
+   "label": "Nightly Rate",
+   "fieldtype": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "min_stay",
+   "label": "Minimum Stay",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "max_stay",
+   "label": "Maximum Stay",
+   "fieldtype": "Int"
+  },
+  {
+   "fieldname": "refundable",
+   "label": "Refundable",
+   "fieldtype": "Check",
+   "default": "1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Rate Plan",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "rate_plan_name",
+ "search_fields": "property,room_type"
+}

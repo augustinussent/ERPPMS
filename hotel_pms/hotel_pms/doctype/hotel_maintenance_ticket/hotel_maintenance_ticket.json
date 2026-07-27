@@ -1,0 +1,280 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "subject",
+  "status",
+  "priority",
+  "source",
+  "location_section",
+  "room",
+  "location",
+  "asset",
+  "description",
+  "assignment_section",
+  "assigned_to",
+  "vendor",
+  "reported_at",
+  "due_date",
+  "column_break_cost",
+  "cost_estimate",
+  "actual_cost",
+  "purchase_order",
+  "evidence_section",
+  "before_photo",
+  "after_photo",
+  "resolution_section",
+  "root_cause",
+  "corrective_action",
+  "prevention_notes",
+  "preventive_section",
+  "is_preventive",
+  "preventive_schedule"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HMT-.YYYY.-.#####",
+   "default": "HMT-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "subject",
+   "label": "Subject",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Open\nAssigned\nIn Progress\nWaiting Vendor\nResolved\nClosed\nCancelled",
+   "default": "Open",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Critical - Guest Complaint\nCritical - Safety / Spreading Damage\nHigh - Guest Visible\nMedium\nLow",
+   "default": "Medium",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source",
+   "label": "Source",
+   "fieldtype": "Select",
+   "options": "Guest Complaint\nInspection\nPreventive Maintenance\nBreakdown\nHousekeeping\nOther",
+   "default": "Inspection"
+  },
+  {
+   "fieldname": "location_section",
+   "label": "Location & Asset",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "location",
+   "label": "Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "asset",
+   "label": "ERPNext Asset",
+   "fieldtype": "Link",
+   "options": "Asset"
+  },
+  {
+   "fieldname": "description",
+   "label": "Problem Description",
+   "fieldtype": "Text Editor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assignment_section",
+   "label": "Assignment & Cost",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "assigned_to",
+   "label": "Assigned To",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "vendor",
+   "label": "Vendor",
+   "fieldtype": "Link",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "reported_at",
+   "label": "Reported At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "due_date",
+   "label": "Due Date",
+   "fieldtype": "Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_cost",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost_estimate",
+   "label": "Cost Estimate",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "actual_cost",
+   "label": "Actual Cost",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "purchase_order",
+   "label": "Purchase Order",
+   "fieldtype": "Link",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "evidence_section",
+   "label": "Before / After Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "before_photo",
+   "label": "Before Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "after_photo",
+   "label": "After Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "resolution_section",
+   "label": "Resolution & Prevention",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "root_cause",
+   "label": "Root Cause",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "corrective_action",
+   "label": "Corrective Action",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "prevention_notes",
+   "label": "Prevention / HIKMAH",
+   "fieldtype": "Text Editor",
+   "description": "Explain how to prevent this damage from recurring."
+  },
+  {
+   "fieldname": "preventive_section",
+   "label": "Preventive Link",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "is_preventive",
+   "label": "Preventive Task",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "preventive_schedule",
+   "label": "Preventive Schedule",
+   "fieldtype": "Link",
+   "options": "Hotel Preventive Maintenance Schedule"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Maintenance Ticket",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Engineering",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "subject",
+ "search_fields": "room,location,asset,subject"
+}

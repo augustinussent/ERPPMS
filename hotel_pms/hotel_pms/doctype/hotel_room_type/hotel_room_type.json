@@ -1,0 +1,110 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{property}-{room_type_name}",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "room_type_name",
+  "property",
+  "enabled",
+  "capacity_section",
+  "max_adults",
+  "max_children",
+  "housekeeping_minutes",
+  "revenue_section",
+  "base_rate",
+  "room_revenue_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_type_name",
+   "label": "Room Type Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "capacity_section",
+   "label": "Capacity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "max_adults",
+   "label": "Max Adults",
+   "fieldtype": "Int",
+   "default": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "max_children",
+   "label": "Max Children",
+   "fieldtype": "Int",
+   "default": "1"
+  },
+  {
+   "fieldname": "housekeeping_minutes",
+   "label": "Housekeeping Minutes",
+   "fieldtype": "Int",
+   "default": "30"
+  },
+  {
+   "fieldname": "revenue_section",
+   "label": "Revenue Mapping",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "base_rate",
+   "label": "Base Rate",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "room_revenue_item",
+   "label": "Room Revenue Item",
+   "fieldtype": "Link",
+   "options": "Item",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Room Type",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "room_type_name",
+ "search_fields": "property"
+}

@@ -1,0 +1,137 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:property_name",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "property_name",
+  "company",
+  "abbreviation",
+  "enabled",
+  "defaults_section",
+  "default_cost_center",
+  "default_warehouse",
+  "timezone",
+  "check_in_time",
+  "column_break_1",
+  "check_out_time",
+  "address",
+  "selling_price_list",
+  "default_sales_taxes_template"
+ ],
+ "fields": [
+  {
+   "fieldname": "property_name",
+   "label": "Property Name",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "abbreviation",
+   "label": "Abbreviation",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "defaults_section",
+   "label": "Defaults",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_cost_center",
+   "label": "Default Cost Center",
+   "fieldtype": "Link",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "label": "Default Warehouse",
+   "fieldtype": "Link",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "timezone",
+   "label": "Timezone",
+   "fieldtype": "Data",
+   "default": "Asia/Jakarta"
+  },
+  {
+   "fieldname": "check_in_time",
+   "label": "Standard Check-in Time",
+   "fieldtype": "Time",
+   "default": "14:00:00"
+  },
+  {
+   "fieldname": "column_break_1",
+   "label": "",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "check_out_time",
+   "label": "Standard Check-out Time",
+   "fieldtype": "Time",
+   "default": "12:00:00"
+  },
+  {
+   "fieldname": "address",
+   "label": "Address",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "label": "Selling Price List",
+   "fieldtype": "Link",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "default_sales_taxes_template",
+   "label": "Default Sales Taxes and Charges Template",
+   "fieldtype": "Link",
+   "options": "Sales Taxes and Charges Template"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Property",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "property_name",
+ "search_fields": "company,abbreviation"
+}

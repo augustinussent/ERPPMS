@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-19 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "default_property",
+  "allow_overbooking",
+  "auto_create_folio",
+  "night_audit_section",
+  "night_audit_hour",
+  "night_audit_minute"
+ ],
+ "fields": [
+  {
+   "fieldname": "default_property",
+   "label": "Default Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property"
+  },
+  {
+   "fieldname": "allow_overbooking",
+   "label": "Allow Overbooking",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Keep disabled unless management explicitly accepts inventory risk."
+  },
+  {
+   "fieldname": "auto_create_folio",
+   "label": "Auto-create Folio on Reservation Submit",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "night_audit_section",
+   "label": "Night Audit",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "night_audit_hour",
+   "label": "Night Audit Hour",
+   "fieldtype": "Int",
+   "default": "2"
+  },
+  {
+   "fieldname": "night_audit_minute",
+   "label": "Night Audit Minute",
+   "fieldtype": "Int",
+   "default": "0"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 1,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-19 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel PMS Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

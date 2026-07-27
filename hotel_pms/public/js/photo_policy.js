@@ -78,3 +78,49 @@ frappe.ui.form.on("Hotel PMS Settings", {
 frappe.realtime.on("hotel_pms_photo_policy_changed", (data) => {
     hotel_pms.photo_policy._enabled = Boolean(data && data.enabled);
 });
+
+frappe.ui.form.on("Hotel Room Inspection", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply(frm, ["inspection_photo"], null);
+    },
+});
+
+frappe.ui.form.on("Hotel Lost and Found", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply(frm, ["item_photo"], "item_section");
+    },
+});
+
+frappe.ui.form.on("Hotel SOP Candidate", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply(frm, ["before_photo", "after_photo", "reference_photo"], "evidence_section");
+    },
+});
+
+hotel_pms.photo_policy.apply_child = async function (frm, table_fieldname, child_fieldnames) {
+    const enabled = await hotel_pms.photo_policy.get_enabled();
+    const grid = frm.fields_dict[table_fieldname] && frm.fields_dict[table_fieldname].grid;
+    if (!grid) return;
+    for (const fieldname of child_fieldnames) {
+        grid.update_docfield_property(fieldname, "hidden", !enabled);
+    }
+    grid.refresh();
+};
+
+frappe.ui.form.on("Hotel Housekeeping Task", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply_child(frm, "checklist_items", ["photo"]);
+    },
+});
+
+frappe.ui.form.on("Hotel Room Inspection", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply_child(frm, "items", ["photo"]);
+    },
+});
+
+frappe.ui.form.on("Hotel Lost and Found", {
+    refresh(frm) {
+        hotel_pms.photo_policy.apply_child(frm, "custody_logs", ["handover_photo"]);
+    },
+});

@@ -1,0 +1,284 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "title",
+  "property",
+  "source_ticket",
+  "room",
+  "problem_category",
+  "problem_code",
+  "status",
+  "repeat_count",
+  "idempotency_key",
+  "content_section",
+  "symptoms",
+  "root_cause",
+  "diagnosis_steps",
+  "repair_steps",
+  "cleaning_steps",
+  "materials_and_tools",
+  "warnings",
+  "prevention",
+  "evidence_section",
+  "before_photo",
+  "after_photo",
+  "reference_photo",
+  "review_section",
+  "engineering_reviewer",
+  "housekeeping_reviewer",
+  "approved_by",
+  "approved_at",
+  "published_at",
+  "published_reference"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HSC-.YYYY.-.#####",
+   "default": "HSC-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "label": "SOP Candidate Title",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "source_ticket",
+   "label": "Source Maintenance Ticket",
+   "fieldtype": "Link",
+   "options": "Hotel Maintenance Ticket",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "room",
+   "label": "Room / Location",
+   "fieldtype": "Link",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "problem_category",
+   "label": "Problem Category",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "problem_code",
+   "label": "Problem Code",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft Candidate\nEngineering Review\nHousekeeping Review\nManagement Approval\nApproved\nPublished\nRejected",
+   "default": "Draft Candidate",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "repeat_count",
+   "label": "Similar Occurrences",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "content_section",
+   "label": "Practical Procedure",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "symptoms",
+   "label": "Symptoms / Problem",
+   "fieldtype": "Text Editor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "root_cause",
+   "label": "Root Cause",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "diagnosis_steps",
+   "label": "Diagnosis Steps",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "repair_steps",
+   "label": "Repair Steps",
+   "fieldtype": "Text Editor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cleaning_steps",
+   "label": "Post-repair Cleaning Steps",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "materials_and_tools",
+   "label": "Materials & Tools",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "warnings",
+   "label": "Warnings / Prohibitions",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "prevention",
+   "label": "Prevention / HIKMAH",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "evidence_section",
+   "label": "Reference Evidence",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "before_photo",
+   "label": "Before Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "after_photo",
+   "label": "After Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "reference_photo",
+   "label": "Reference Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "review_section",
+   "label": "Review & Publication",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "engineering_reviewer",
+   "label": "Engineering Reviewer",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "housekeeping_reviewer",
+   "label": "Housekeeping Reviewer",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "approved_by",
+   "label": "Approved By",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "approved_at",
+   "label": "Approved At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "published_at",
+   "label": "Published At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "published_reference",
+   "label": "Published SOP Reference",
+   "fieldtype": "Data"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel SOP Candidate",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Engineering Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "title",
+ "search_fields": "source_ticket,problem_category,problem_code,status"
+}

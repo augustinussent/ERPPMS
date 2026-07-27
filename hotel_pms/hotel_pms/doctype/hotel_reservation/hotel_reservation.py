@@ -5,6 +5,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate
 
+from hotel_pms.room_status import set_room_status
+
 
 BLOCKING_STATUSES = ("Tentative", "Confirmed", "Checked In")
 
@@ -60,7 +62,14 @@ class HotelReservation(Document):
                 ))
         self.db_set({"status": "Checked In", "actual_check_in_at": frappe.utils.now_datetime()})
         for row in self.rooms:
-            frappe.db.set_value("Hotel Room", row.room, {"operational_status": "Occupied"})
+            set_room_status(
+                row.room,
+                operational_status="Occupied",
+                event_type="Guest Check-in",
+                source_doctype=self.doctype,
+                source_name=self.name,
+                idempotency_key=f"checkin:{self.name}:{row.room}",
+            )
         self._ensure_folio()
 
     def check_out(self):
@@ -80,6 +89,7 @@ class HotelReservation(Document):
                 task_date=getdate(),
                 task_type="Checkout Clean",
                 reservation=self.name,
+                source="Checkout",
             )
 
     def _validate_dates(self):
@@ -197,11 +207,12 @@ class HotelReservation(Document):
 
     def _release_rooms(self, dirty=False):
         for row in self.rooms:
-            frappe.db.set_value(
-                "Hotel Room",
+            set_room_status(
                 row.room,
-                {
-                    "operational_status": "Available",
-                    "housekeeping_status": "Dirty" if dirty else "Clean",
-                },
+                operational_status="Available",
+                housekeeping_status="Dirty" if dirty else "Clean",
+                event_type="Guest Check-out" if dirty else "Reservation Released",
+                source_doctype=self.doctype,
+                source_name=self.name,
+                idempotency_key=f"release:{self.name}:{row.room}:{'dirty' if dirty else 'clean'}",
             )

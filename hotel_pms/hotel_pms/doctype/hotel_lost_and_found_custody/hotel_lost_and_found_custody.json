@@ -1,0 +1,86 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "event_at",
+  "action",
+  "from_user",
+  "to_user",
+  "location",
+  "notes",
+  "handover_photo",
+  "idempotency_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "event_at",
+   "label": "Event At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Select",
+   "options": "Found\nReceived by Supervisor\nStored\nGuest Contacted\nTransferred\nClaimed\nShipped\nReturned\nDisposed\nNote",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "from_user",
+   "label": "From",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "to_user",
+   "label": "To",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "location",
+   "label": "Storage / Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "handover_photo",
+   "label": "Handover Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "hidden": 1,
+   "unique": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Lost and Found Custody",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

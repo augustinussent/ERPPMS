@@ -1,0 +1,266 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "room",
+  "reservation",
+  "housekeeping_task",
+  "status",
+  "sensitive_item",
+  "idempotency_key",
+  "item_section",
+  "item_category",
+  "item_description",
+  "found_at",
+  "found_location",
+  "found_by",
+  "witnessed_by",
+  "item_photo",
+  "custody_section",
+  "bag_or_seal_number",
+  "storage_location",
+  "custody_logs",
+  "guest_section",
+  "guest_contacted_at",
+  "guest_contact_notes",
+  "returned_at",
+  "returned_to",
+  "disposal_date",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HLF-.YYYY.-.#####",
+   "default": "HLF-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "housekeeping_task",
+   "label": "Housekeeping Task",
+   "fieldtype": "Link",
+   "options": "Hotel Housekeeping Task"
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Found\nReceived by Supervisor\nStored\nGuest Contacted\nClaimed\nShipped\nReturned\nDisposed\nUnclaimed",
+   "default": "Found",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sensitive_item",
+   "label": "Sensitive / High-value Item",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "item_section",
+   "label": "Item Details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "item_category",
+   "label": "Category",
+   "fieldtype": "Select",
+   "options": "Cash\nDocument / ID\nJewelry\nElectronics\nClothing\nMedicine\nBag / Luggage\nKey / Card\nOther",
+   "default": "Other",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_description",
+   "label": "Item Description",
+   "fieldtype": "Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "found_at",
+   "label": "Found At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "found_location",
+   "label": "Exact Found Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "found_by",
+   "label": "Found By",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "witnessed_by",
+   "label": "Witnessed By",
+   "fieldtype": "Link",
+   "options": "User"
+  },
+  {
+   "fieldname": "item_photo",
+   "label": "Item Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "custody_section",
+   "label": "Storage & Chain of Custody",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "bag_or_seal_number",
+   "label": "Bag / Seal Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "storage_location",
+   "label": "Storage Location",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "custody_logs",
+   "label": "Custody Logs",
+   "fieldtype": "Table",
+   "options": "Hotel Lost and Found Custody"
+  },
+  {
+   "fieldname": "guest_section",
+   "label": "Guest Communication / Return",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "guest_contacted_at",
+   "label": "Guest Contacted At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "guest_contact_notes",
+   "label": "Guest Contact Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "returned_at",
+   "label": "Returned / Shipped At",
+   "fieldtype": "Datetime"
+  },
+  {
+   "fieldname": "returned_to",
+   "label": "Returned To",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "disposal_date",
+   "label": "Disposal Date",
+   "fieldtype": "Date"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Text"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Lost and Found",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "item_description",
+ "search_fields": "room,reservation,item_description,status"
+}

@@ -20,21 +20,16 @@
 - Deposit and refund draft Payment Entry workflow
 - Front-office change audit log
 
-## Next release: v0.5.0 Housekeeping & Engineering Mobile
+## Completed operations release: v0.5.0
 
-1. Mobile Housekeeping route with prioritized queue.
-2. Checkout push notifications and assignment.
-3. Start, pause, resume, and finish timers with excluded waiting time.
-4. Cleaning checklist templates by room type and task type.
-5. Supervisor inspection, pass/reclean, and scoring.
-6. Lost & Found with chain of custody.
-7. Unified FO/HK service request to Engineering with SLA.
-8. Post-maintenance cleaning and supervisor release.
-9. Unified room history and recurring-problem warning.
-10. Housekeeper productivity/quality reports and Engineering SLA reports.
-11. SOP Candidate and controlled approval/revision workflow.
+- Responsive Housekeeping/Engineering route and realtime notifications
+- Priority queue, assignment, timer, checklist, inspection, and reclean
+- Lost & Found with chain of custody
+- Unified Engineering request, SLA, room block, and post-maintenance cleaning
+- Room-status timeline, Room History, Housekeeping KPI, and Maintenance SLA reports
+- Recurring-problem counter and SOP Candidate workflow
 
-## v0.6.0 Revenue and Billing
+## Next release: v0.6.0 Revenue and Billing
 
 - Rate calendar, derived rates, restrictions, seasons, vouchers, and travel-agent commissions
 - Folio split, transfer, city ledger, unified checkout, payment links, cashier shift, and closing

@@ -1,0 +1,210 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "room",
+  "housekeeping_task",
+  "reservation",
+  "inspection_type",
+  "attempt_no",
+  "result",
+  "score",
+  "pass_score",
+  "inspected_by",
+  "inspected_at",
+  "idempotency_key",
+  "items_section",
+  "items",
+  "inspection_photo",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HRI-.YYYY.-.#####",
+   "default": "HRI-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "room",
+   "label": "Room",
+   "fieldtype": "Link",
+   "options": "Hotel Room",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "housekeeping_task",
+   "label": "Housekeeping Task",
+   "fieldtype": "Link",
+   "options": "Hotel Housekeeping Task",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "inspection_type",
+   "label": "Inspection Type",
+   "fieldtype": "Select",
+   "options": "Cleaning Inspection\nPost-Maintenance Inspection\nDeep Cleaning Inspection\nSpot Check",
+   "default": "Cleaning Inspection",
+   "reqd": 1
+  },
+  {
+   "fieldname": "attempt_no",
+   "label": "Attempt",
+   "fieldtype": "Int",
+   "default": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "result",
+   "label": "Result",
+   "fieldtype": "Select",
+   "options": "Pass\nReclean Required",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "score",
+   "label": "Score",
+   "fieldtype": "Percent",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pass_score",
+   "label": "Required Score",
+   "fieldtype": "Percent",
+   "read_only": 1
+  },
+  {
+   "fieldname": "inspected_by",
+   "label": "Inspected By",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "inspected_at",
+   "label": "Inspected At",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "items_section",
+   "label": "Inspection Results",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "label": "Items",
+   "fieldtype": "Table",
+   "options": "Hotel Room Inspection Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "inspection_photo",
+   "label": "Overall Inspection Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Supervisor Notes",
+   "fieldtype": "Text"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Room Inspection",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "share": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Front Desk",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering",
+   "read": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "naming_rule": "By \"Naming Series\" field",
+ "title_field": "room",
+ "search_fields": "room,housekeeping_task,reservation"
+}

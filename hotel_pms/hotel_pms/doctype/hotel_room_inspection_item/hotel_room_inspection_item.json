@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "area",
+  "item_label",
+  "result",
+  "is_critical",
+  "weight",
+  "notes",
+  "photo"
+ ],
+ "fields": [
+  {
+   "fieldname": "area",
+   "label": "Area",
+   "fieldtype": "Data",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_label",
+   "label": "Inspection Item",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "result",
+   "label": "Result",
+   "fieldtype": "Select",
+   "options": "OK\nNot OK\nNot Applicable\nReported to Engineering",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_critical",
+   "label": "Critical",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "weight",
+   "label": "Weight",
+   "fieldtype": "Float",
+   "default": "1"
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "photo",
+   "label": "Inspection Photo",
+   "fieldtype": "Attach Image"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Room Inspection Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

@@ -1,0 +1,17 @@
+Template Name,Task Type,Area,Sequence,Checklist Item,Critical,Weight,Photo Required,Instructions
+Departure Room Standard,Checkout Clean,Bedroom,10,Replace all used bed linen,1,2,0,Confirm linen is clean and stain-free
+Departure Room Standard,Checkout Clean,Bedroom,20,Check under bed and furniture for guest belongings,1,2,0,Report every item through Lost and Found
+Departure Room Standard,Checkout Clean,Bedroom,30,Clean headboard tables wardrobe and remote controls,0,1,0,Use material-safe cleaner
+Departure Room Standard,Checkout Clean,Bedroom,40,Test lights sockets TV remote and AC,1,2,0,Report defects to Engineering
+Departure Room Standard,Checkout Clean,Bedroom,50,Check curtains windows and door locks,1,2,0,Report safety defects immediately
+Departure Room Standard,Checkout Clean,Bedroom,60,Replenish amenities and minibar according to standard,0,1,0,Record stock separately when stock workflow is enabled
+Departure Room Standard,Checkout Clean,Bathroom,70,Clean and disinfect toilet shower sink and floor,1,3,0,No stains odor or standing water
+Departure Room Standard,Checkout Clean,Bathroom,80,Test hot water drainage flush and water pressure,1,2,0,Report leaks or blockage to Engineering
+Departure Room Standard,Checkout Clean,Bathroom,90,Check mirror grout silicone and fittings,0,1,0,Report mold cracks corrosion or loose fittings
+Departure Room Standard,Checkout Clean,Final,100,Confirm room odor temperature and presentation,1,2,0,Do a final doorway inspection
+Departure Room Standard,Checkout Clean,Final,110,Confirm no guest belongings remain,1,3,0,Lost and Found report is mandatory when found
+Post Maintenance Standard,Post-Maintenance Cleaning,Work Area,10,Read Engineering cleaning and curing instructions,1,2,0,Do not wet or use chemicals before allowed curing time
+Post Maintenance Standard,Post-Maintenance Cleaning,Work Area,20,Remove dust debris packaging and tool marks,1,2,0,Do not discard parts marked for retention
+Post Maintenance Standard,Post-Maintenance Cleaning,Work Area,30,Clean surfaces using material-safe method,1,2,0,Follow ticket instructions
+Post Maintenance Standard,Post-Maintenance Cleaning,Verification,40,Verify repaired fixture is clean and usable,1,3,0,Report recurrence immediately
+Post Maintenance Standard,Post-Maintenance Cleaning,Verification,50,Supervisor final inspection,1,3,0,Room remains unavailable until inspection passes

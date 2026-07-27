@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.0 - 2026-07-20
+
+- Added responsive Housekeeping and Engineering mobile operations page.
+- Added realtime checkout, assignment, inspection, room-ready, Engineering, Lost & Found, and SLA notifications.
+- Added prioritized cleaning queue with guest-waiting and next-arrival scoring.
+- Added start, pause, resume, completion, inspection-wait, and reclean timing with excluded waiting time.
+- Added versioned cleaning checklist templates and task checklist rows by property, room type, and task type.
+- Added supervisor inspection scoring, critical-item guards, first-pass tracking, and reclean workflow.
+- Added Lost & Found with sensitive-item handling and chain of custody.
+- Expanded Maintenance Ticket into a unified FO/HK/Engineering service request with guest impact, safety risk, room block, response/resolution SLA, work log, recurring-problem detection, and post-maintenance cleaning.
+- Reused an originating housekeeping task after repair to avoid duplicate work orders; checklist defects reset to Pending for verification.
+- Added controlled room-status timeline and consolidated Room History report.
+- Added Housekeeping Activity, Housekeeping Performance, and Maintenance SLA reports.
+- Added SOP Candidate with Engineering/Housekeeping review and controlled publication.
+- Extended global photo policy to checklist, inspection, Lost & Found custody, and SOP evidence fields.
+- Added operation-level idempotency keys and state-idempotent action endpoints.
+- Made `Reported to Engineering` checklist results create and link one deterministic Engineering ticket automatically.
+- Added duplicate-safe Lost & Found custody events.
+- Added pure-rule tests for cleaning priority, inspection scoring, timer exclusion, SLA status, and SOP threshold.
+
 ## 0.4.0 - 2026-07-20
 
 - Added a dedicated Hotel Front Desk page with arrivals, departures, in-house stays, no-show review, and room-state summaries.

@@ -18,8 +18,10 @@ The PMS and ERPNext share one Frappe site and one database. Hotel documents rema
 - Idempotent night audit room-charge posting
 - Sales Invoice generation from uninvoiced folio charges
 - POS Invoice mirroring into the folio without duplicating revenue
-- Housekeeping tasks and before/after photos
-- Maintenance tickets, preventive schedules, vendors, assets, costs, and prevention notes
+- Mobile Housekeeping queue with priority, assignment, timer, checklist, supervisor inspection, and reclean
+- Lost & Found with chain of custody
+- Maintenance tickets with FO/HK intake, SLA, room blocks, post-maintenance cleaning, preventive schedules, vendors, assets, costs, and prevention notes
+- Unified Room History, Housekeeping KPI, Maintenance SLA, and SOP Candidate
 - Front Desk dashboard and physical-room tape chart
 - Idempotent quick multi-room booking
 - Controlled room move, extend stay, and early departure with change logs
@@ -67,7 +69,8 @@ bench --site your-site.example install-app hotel_pms
 6. Create rooms. Optionally map each room to an ERPNext Asset and a room/minibar Warehouse.
 7. Create rate plans.
 8. Configure `Hotel PMS Settings` and leave overbooking disabled during rollout.
-9. Assign roles: Hotel Manager, Front Desk, Night Auditor, Housekeeping, Engineering, and ERPNext Accounts roles.
+9. Assign roles: Hotel Manager, Front Desk, Night Auditor, Housekeeping, Housekeeping Supervisor, Engineering, Engineering Supervisor, and ERPNext Accounts roles where financially required.
+10. Configure cleaning checklist templates and Engineering SLA values before enabling enforcement.
 
 ## Primary workflow
 
@@ -85,15 +88,14 @@ Room inventory               Night Audit / Service Charges
 Check-out → Room Dirty → Housekeeping → Clean / Inspected
 ```
 
-## Front Desk v0.4.0
+## Front Desk and Operations
 
-Open `/app/hotel-front-desk` after migration. Before using cancellation, no-show, deposit, or refund actions, configure a cancellation policy, fee Item, and ERPNext Mode of Payment accounts. See `docs/FRONT_OFFICE_V040.md`.
+Open `/app/hotel-front-desk` for Front Office and `/app/hotel-housekeeping-mobile` for Housekeeping/Engineering mobile operations. Before using cancellation, no-show, deposit, or refund actions, configure a cancellation policy, fee Item, and ERPNext Mode of Payment accounts. Configure checklist templates and SLA values before enabling strict operational enforcement. See `docs/FRONT_OFFICE_V040.md` and `docs/OPERATIONS_V050.md`.
 
 ## Production gaps to complete before go-live
 
 This repository is a serious starter, not a finished replacement for OPERA, eZee, or other mature PMS products. Before production, implement and test:
 
-- Mobile housekeeping queue, checklists, supervisor inspection, Lost & Found, and unified room history
 - Split folios, charge transfers, city ledger settlement, and unified checkout across multiple invoices
 - Cashier shift, cash drawer, and night-audit close lock
 - Tax/service-charge rules for Indonesian operations

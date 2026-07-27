@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2026-07-19 00:00:00.000000",
+ "creation": "2026-07-20 00:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -10,15 +10,36 @@
   "property",
   "room",
   "reservation",
+  "maintenance_ticket",
+  "source",
   "idempotency_key",
   "task_date",
   "task_type",
   "status",
+  "priority",
+  "priority_score",
+  "guest_waiting",
+  "next_arrival_at",
+  "target_ready_at",
   "assignment_section",
   "assigned_to",
+  "assigned_at",
+  "accepted_at",
   "started_at",
+  "paused_at",
+  "pause_reason",
   "completed_at",
+  "inspected_at",
   "inspected_by",
+  "total_pause_minutes",
+  "cleaning_minutes",
+  "turnaround_minutes",
+  "first_pass",
+  "time_logs",
+  "checklist_section",
+  "checklist_template",
+  "checklist_items",
+  "inspection",
   "evidence_section",
   "before_photo",
   "after_photo",
@@ -56,6 +77,19 @@
    "options": "Hotel Reservation"
   },
   {
+   "fieldname": "maintenance_ticket",
+   "label": "Maintenance Ticket",
+   "fieldtype": "Link",
+   "options": "Hotel Maintenance Ticket"
+  },
+  {
+   "fieldname": "source",
+   "label": "Source",
+   "fieldtype": "Select",
+   "options": "Checkout\nStayover Schedule\nFront Office\nHousekeeping\nEngineering\nPreventive\nManual",
+   "default": "Manual"
+  },
+  {
    "fieldname": "idempotency_key",
    "label": "Idempotency Key",
    "fieldtype": "Data",
@@ -75,7 +109,7 @@
    "fieldname": "task_type",
    "label": "Task Type",
    "fieldtype": "Select",
-   "options": "Stayover Clean\nCheckout Clean\nDeep Clean\nPickup\nInspection\nTurndown",
+   "options": "Stayover Clean\nCheckout Clean\nPost-Maintenance Cleaning\nReclean\nDeep Clean\nPickup\nInspection\nTurndown",
    "reqd": 1,
    "in_list_view": 1
   },
@@ -83,37 +117,160 @@
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "Open\nAssigned\nIn Progress\nReady for Inspection\nCompleted\nCancelled",
+   "options": "Open\nAssigned\nIn Progress\nPaused\nWaiting Engineering\nReady for Inspection\nReclean Required\nCompleted\nCancelled",
    "default": "Open",
    "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "priority",
+   "label": "Priority",
+   "fieldtype": "Select",
+   "options": "Critical\nHigh\nNormal\nLow",
+   "default": "Normal",
    "in_list_view": 1
   },
   {
+   "fieldname": "priority_score",
+   "label": "Priority Score",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "guest_waiting",
+   "label": "Guest Waiting",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "next_arrival_at",
+   "label": "Next Arrival At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "target_ready_at",
+   "label": "Target Ready At",
+   "fieldtype": "Datetime"
+  },
+  {
    "fieldname": "assignment_section",
-   "label": "Assignment",
+   "label": "Assignment & Timer",
    "fieldtype": "Section Break"
   },
   {
    "fieldname": "assigned_to",
    "label": "Assigned To",
    "fieldtype": "Link",
-   "options": "User"
+   "options": "User",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "assigned_at",
+   "label": "Assigned At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_at",
+   "label": "Accepted At",
+   "fieldtype": "Datetime",
+   "read_only": 1
   },
   {
    "fieldname": "started_at",
    "label": "Started At",
-   "fieldtype": "Datetime"
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "paused_at",
+   "label": "Paused At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pause_reason",
+   "label": "Pause Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
   },
   {
    "fieldname": "completed_at",
-   "label": "Completed At",
-   "fieldtype": "Datetime"
+   "label": "Cleaning Completed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "inspected_at",
+   "label": "Inspected At",
+   "fieldtype": "Datetime",
+   "read_only": 1
   },
   {
    "fieldname": "inspected_by",
    "label": "Inspected By",
    "fieldtype": "Link",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_pause_minutes",
+   "label": "Pause Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cleaning_minutes",
+   "label": "Net Cleaning Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "turnaround_minutes",
+   "label": "Checkout-to-Ready Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "first_pass",
+   "label": "Passed First Inspection",
+   "fieldtype": "Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_logs",
+   "label": "Time Logs",
+   "fieldtype": "Table",
+   "options": "Hotel Housekeeping Time Log",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checklist_section",
+   "label": "Cleaning Checklist",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "checklist_template",
+   "label": "Checklist Template",
+   "fieldtype": "Link",
+   "options": "Hotel Cleaning Checklist Template",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checklist_items",
+   "label": "Checklist Items",
+   "fieldtype": "Table",
+   "options": "Hotel Housekeeping Checklist Item"
+  },
+  {
+   "fieldname": "inspection",
+   "label": "Latest Inspection",
+   "fieldtype": "Link",
+   "options": "Hotel Room Inspection",
+   "read_only": 1
   },
   {
    "fieldname": "evidence_section",
@@ -141,11 +298,10 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-19 00:00:00.000000",
+ "modified": "2026-07-20 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Housekeeping Task",
- "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
@@ -169,6 +325,13 @@
    "share": 1
   },
   {
+   "role": "Housekeeping Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
    "role": "Housekeeping",
    "create": 1,
    "read": 1,
@@ -178,7 +341,16 @@
   {
    "role": "Front Desk",
    "read": 1,
-   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering Supervisor",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering",
+   "read": 1,
    "report": 1
   }
  ],
@@ -186,6 +358,7 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
+ "naming_rule": "By \"Naming Series\" field",
  "title_field": "room",
- "search_fields": "room,assigned_to"
+ "search_fields": "room,assigned_to,reservation,maintenance_ticket"
 }

@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2026-07-19 00:00:00.000000",
+ "creation": "2026-07-20 00:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,18 +12,41 @@
   "status",
   "priority",
   "source",
+  "problem_category",
+  "problem_code",
+  "similar_occurrence_count",
+  "recurring_problem",
   "idempotency_key",
   "location_section",
   "room",
+  "reservation",
+  "originating_housekeeping_task",
   "location",
   "asset",
+  "reported_by",
+  "guest_impact",
+  "safety_risk",
+  "affects_room_sale",
   "description",
   "assignment_section",
   "assigned_to",
   "vendor",
   "reported_at",
+  "acknowledged_at",
+  "started_at",
+  "resolved_at",
+  "closed_at",
   "due_date",
-  "column_break_cost",
+  "response_due_at",
+  "resolution_due_at",
+  "sla_status",
+  "response_minutes",
+  "resolution_minutes",
+  "response_breach_notified",
+  "resolution_breach_notified",
+  "waiting_reason",
+  "work_logs",
+  "cost_section",
   "cost_estimate",
   "actual_cost",
   "purchase_order",
@@ -33,7 +56,13 @@
   "resolution_section",
   "root_cause",
   "corrective_action",
+  "materials_used",
   "prevention_notes",
+  "post_maintenance_cleaning_required",
+  "cleaning_instructions",
+  "post_cleaning_task",
+  "room_returned_at",
+  "sop_candidate",
   "preventive_section",
   "is_preventive",
   "preventive_schedule"
@@ -66,10 +95,11 @@
    "fieldname": "status",
    "label": "Status",
    "fieldtype": "Select",
-   "options": "Open\nAssigned\nIn Progress\nWaiting Vendor\nResolved\nClosed\nCancelled",
+   "options": "Open\nAcknowledged\nAssigned\nIn Progress\nPaused\nWaiting Vendor\nWaiting Parts\nRepair Completed\nPost-Maintenance Cleaning\nResolved\nClosed\nCancelled",
    "default": "Open",
    "reqd": 1,
-   "in_list_view": 1
+   "in_list_view": 1,
+   "read_only": 1
   },
   {
    "fieldname": "priority",
@@ -84,8 +114,35 @@
    "fieldname": "source",
    "label": "Source",
    "fieldtype": "Select",
-   "options": "Guest Complaint\nInspection\nPreventive Maintenance\nBreakdown\nHousekeeping\nOther",
-   "default": "Inspection"
+   "options": "Guest Complaint\nFront Office\nHousekeeping\nInspection\nPreventive Maintenance\nBreakdown\nOther",
+   "default": "Inspection",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "problem_category",
+   "label": "Problem Category",
+   "fieldtype": "Select",
+   "options": "Electrical\nPlumbing\nHVAC / AC\nWater Heater\nFurniture / Fixture\nBuilding / Leakage\nNetwork / Wi-Fi\nAppliance\nLift\nSafety\nOther",
+   "default": "Other"
+  },
+  {
+   "fieldname": "problem_code",
+   "label": "Problem Code",
+   "fieldtype": "Data",
+   "description": "Use a consistent code to identify recurring problems."
+  },
+  {
+   "fieldname": "similar_occurrence_count",
+   "label": "Similar Occurrences",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recurring_problem",
+   "label": "Recurring Problem",
+   "fieldtype": "Check",
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "idempotency_key",
@@ -98,14 +155,28 @@
   },
   {
    "fieldname": "location_section",
-   "label": "Location & Asset",
+   "label": "Location, Guest Impact & Asset",
    "fieldtype": "Section Break"
   },
   {
    "fieldname": "room",
    "label": "Room",
    "fieldtype": "Link",
-   "options": "Hotel Room"
+   "options": "Hotel Room",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "originating_housekeeping_task",
+   "label": "Originating Housekeeping Task",
+   "fieldtype": "Link",
+   "options": "Hotel Housekeeping Task",
+   "read_only": 1
   },
   {
    "fieldname": "location",
@@ -119,6 +190,32 @@
    "options": "Asset"
   },
   {
+   "fieldname": "reported_by",
+   "label": "Reported By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "guest_impact",
+   "label": "Guest Impact",
+   "fieldtype": "Select",
+   "options": "None\nMinor Inconvenience\nMajor Inconvenience\nGuest Cannot Use Facility\nRoom Move Required",
+   "default": "None"
+  },
+  {
+   "fieldname": "safety_risk",
+   "label": "Safety / Spreading Risk",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "affects_room_sale",
+   "label": "Block Room From Sale",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
    "fieldname": "description",
    "label": "Problem Description",
    "fieldtype": "Text Editor",
@@ -126,14 +223,15 @@
   },
   {
    "fieldname": "assignment_section",
-   "label": "Assignment & Cost",
+   "label": "Assignment & SLA",
    "fieldtype": "Section Break"
   },
   {
    "fieldname": "assigned_to",
    "label": "Assigned To",
    "fieldtype": "Link",
-   "options": "User"
+   "options": "User",
+   "in_list_view": 1
   },
   {
    "fieldname": "vendor",
@@ -144,18 +242,104 @@
   {
    "fieldname": "reported_at",
    "label": "Reported At",
-   "fieldtype": "Datetime"
+   "fieldtype": "Datetime",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "acknowledged_at",
+   "label": "Acknowledged At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "started_at",
+   "label": "Started At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolved_at",
+   "label": "Resolved At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closed_at",
+   "label": "Closed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
   },
   {
    "fieldname": "due_date",
-   "label": "Due Date",
+   "label": "Operational Due Date",
    "fieldtype": "Date",
    "in_list_view": 1
   },
   {
-   "fieldname": "column_break_cost",
-   "label": "",
-   "fieldtype": "Column Break"
+   "fieldname": "response_due_at",
+   "label": "Response Due At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolution_due_at",
+   "label": "Resolution Due At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sla_status",
+   "label": "SLA Status",
+   "fieldtype": "Select",
+   "options": "On Track\nResponse Breached\nResolution Breached\nMet",
+   "default": "On Track",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "response_minutes",
+   "label": "Response Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolution_minutes",
+   "label": "Resolution Minutes",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "response_breach_notified",
+   "label": "Response Breach Notified",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolution_breach_notified",
+   "label": "Resolution Breach Notified",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "waiting_reason",
+   "label": "Waiting / Pause Reason",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "work_logs",
+   "label": "Work Logs",
+   "fieldtype": "Table",
+   "options": "Hotel Maintenance Work Log",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_section",
+   "label": "Cost & Procurement",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "cost_estimate",
@@ -190,7 +374,7 @@
   },
   {
    "fieldname": "resolution_section",
-   "label": "Resolution & Prevention",
+   "label": "Resolution, Cleaning & Prevention",
    "fieldtype": "Section Break"
   },
   {
@@ -204,10 +388,46 @@
    "fieldtype": "Text Editor"
   },
   {
+   "fieldname": "materials_used",
+   "label": "Materials / Parts Used",
+   "fieldtype": "Text Editor"
+  },
+  {
    "fieldname": "prevention_notes",
    "label": "Prevention / HIKMAH",
    "fieldtype": "Text Editor",
    "description": "Explain how to prevent this damage from recurring."
+  },
+  {
+   "fieldname": "post_maintenance_cleaning_required",
+   "label": "Post-maintenance Cleaning Required",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "cleaning_instructions",
+   "label": "Practical Cleaning Instructions",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "post_cleaning_task",
+   "label": "Post-maintenance Cleaning Task",
+   "fieldtype": "Link",
+   "options": "Hotel Housekeeping Task",
+   "read_only": 1
+  },
+  {
+   "fieldname": "room_returned_at",
+   "label": "Room Returned to Service At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sop_candidate",
+   "label": "SOP Candidate",
+   "fieldtype": "Link",
+   "options": "Hotel SOP Candidate",
+   "read_only": 1
   },
   {
    "fieldname": "preventive_section",
@@ -232,11 +452,10 @@
  "issingle": 0,
  "is_submittable": 0,
  "links": [],
- "modified": "2026-07-19 00:00:00.000000",
+ "modified": "2026-07-20 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Hotel PMS",
  "name": "Hotel Maintenance Ticket",
- "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
@@ -260,6 +479,13 @@
    "share": 1
   },
   {
+   "role": "Engineering Supervisor",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
    "role": "Engineering",
    "create": 1,
    "read": 1,
@@ -268,6 +494,13 @@
   },
   {
    "role": "Front Desk",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
    "create": 1,
    "read": 1,
    "write": 1,
@@ -285,6 +518,7 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
+ "naming_rule": "By \"Naming Series\" field",
  "title_field": "subject",
- "search_fields": "room,location,asset,subject"
+ "search_fields": "room,location,asset,subject,problem_code"
 }

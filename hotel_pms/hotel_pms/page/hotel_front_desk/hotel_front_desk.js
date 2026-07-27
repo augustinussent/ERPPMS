@@ -13,6 +13,7 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
   });
   page.set_primary_action(__("Quick Booking"), () => quickBooking(), "add");
   page.add_inner_button(__("Refresh"), () => refreshAll());
+  page.add_inner_button(__("Operations Mobile"), () => frappe.set_route("hotel-housekeeping-mobile"));
 
   const body = $(`<div>
     <style>
@@ -94,5 +95,7 @@ frappe.pages["hotel-front-desk"].on_page_load = function (wrapper) {
   }
 
   async function refreshAll() { if (!state.property) return; await Promise.all([loadToday(), loadTape()]); }
+  frappe.realtime.on("hotel_room_status_changed", refreshAll);
+  frappe.realtime.on("hotel_operations_update", refreshAll);
   frappe.db.get_single_value("Hotel PMS Settings", "default_property").then(value => { if (value) { propertyField.set_value(value); state.property=value; refreshAll(); } });
 };

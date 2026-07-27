@@ -10,8 +10,11 @@ PHOTO_FIELDS_BY_DOCTYPE = {
     "Hotel Housekeeping Task": {"before_photo", "after_photo"},
     "Hotel Maintenance Ticket": {"before_photo", "after_photo"},
     # Future modules can use the same global policy without changing the File hook.
-    "Hotel Lost and Found": {"item_photo", "handover_photo"},
+    "Hotel Lost and Found": {"item_photo"},
+    "Hotel Lost and Found Custody": {"handover_photo"},
     "Hotel Room Inspection": {"inspection_photo"},
+    "Hotel Room Inspection Item": {"photo"},
+    "Hotel Housekeeping Checklist Item": {"photo"},
     "Hotel Guest Registration": {"id_file"},
     "Hotel Inspection Finding": {"finding_photo", "resolution_photo"},
     "Hotel SOP Candidate": {"before_photo", "after_photo", "reference_photo"},
@@ -25,7 +28,7 @@ def photo_uploads_enabled() -> bool:
 
 @frappe.whitelist()
 def get_photo_policy() -> dict:
-    frappe.only_for(["System Manager", "Hotel Manager", "Front Desk", "Housekeeping", "Engineering", "Hotel Sales", "Banquet"])
+    frappe.only_for(["System Manager", "Hotel Manager", "Front Desk", "Housekeeping", "Housekeeping Supervisor", "Engineering", "Engineering Supervisor", "Hotel Sales", "Banquet"])
     enabled = photo_uploads_enabled()
     return {
         "enabled": enabled,

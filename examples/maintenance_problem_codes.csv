@@ -1,0 +1,11 @@
+Problem Code,Category,Description,Suggested Priority
+AC-NO-COOL,HVAC / AC,AC runs but room is not cooling,Critical - Guest Complaint
+AC-LEAK,HVAC / AC,Indoor AC unit leaking water,Critical - Safety / Spreading Damage
+PLB-SHOWER-LEAK,Plumbing,Shower or fitting leaks,High - Guest Visible
+PLB-DRAIN-SLOW,Plumbing,Bathroom drain slow or blocked,High - Guest Visible
+ELEC-SOCKET-DEAD,Electrical,Socket has no power,High - Guest Visible
+ELEC-SHORT,Electrical,Short circuit burning smell or sparking,Critical - Safety / Spreading Damage
+WIFI-NO-CONNECT,Network / Wi-Fi,Signal exists but guest cannot connect,Critical - Guest Complaint
+BLD-CEILING-LEAK,Building / Leakage,Water leak or seepage from ceiling,Critical - Safety / Spreading Damage
+FUR-LOOSE,Furniture / Fixture,Loose furniture fitting or hardware,High - Guest Visible
+WH-NO-HOT,Water Heater,No hot water available,Critical - Guest Complaint

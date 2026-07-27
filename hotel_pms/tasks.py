@@ -14,8 +14,10 @@ def ensure_housekeeping_task(
     task_date,
     task_type: str,
     reservation: str | None = None,
+    maintenance_ticket: str | None = None,
+    source: str | None = None,
 ) -> tuple[str, bool]:
-    key = make_sync_key("HK", room, getdate(task_date).isoformat(), task_type, reservation or "-")
+    key = make_sync_key("HK", room, getdate(task_date).isoformat(), task_type, reservation or "-", maintenance_ticket or "-")
     existing = frappe.db.get_value("Hotel Housekeeping Task", {"idempotency_key": key}, "name")
     if existing:
         return existing, True
@@ -26,12 +28,24 @@ def ensure_housekeeping_task(
                 "property": property_name,
                 "room": room,
                 "reservation": reservation,
+                "maintenance_ticket": maintenance_ticket,
+                "source": source or ("Engineering" if maintenance_ticket else "Manual"),
                 "task_date": getdate(task_date),
                 "task_type": task_type,
                 "status": "Open",
                 "idempotency_key": key,
             }
         ).insert(ignore_permissions=True)
+        from hotel_pms.notifications import notify_roles
+        notify_roles(
+            ["Housekeeping", "Housekeeping Supervisor", "Hotel Manager"],
+            property_name=property_name,
+            subject=f"Housekeeping task created for room {room}",
+            message=f"{task.task_type} · priority {task.priority} · target {task.target_ready_at or '-'}",
+            document_type="Hotel Housekeeping Task",
+            document_name=task.name,
+            dedupe_key=f"hk-created:{task.name}",
+        )
         return task.name, False
     except DuplicateEntryError:
         existing = frappe.db.get_value("Hotel Housekeeping Task", {"idempotency_key": key}, "name")

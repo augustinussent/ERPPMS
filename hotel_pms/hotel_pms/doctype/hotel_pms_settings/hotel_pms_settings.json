@@ -16,6 +16,22 @@
   "no_show_cutoff_hours",
   "default_id_retention_mode",
   "require_verified_registration_before_check_in",
+  "operations_section",
+  "enable_realtime_operations_notifications",
+  "require_housekeeping_checklist",
+  "require_housekeeping_inspection",
+  "lost_found_retention_days",
+  "auto_create_sop_candidate",
+  "sop_repeat_threshold",
+  "sla_section",
+  "critical_response_minutes",
+  "critical_resolution_minutes",
+  "high_response_minutes",
+  "high_resolution_minutes",
+  "medium_response_minutes",
+  "medium_resolution_minutes",
+  "low_response_minutes",
+  "low_resolution_minutes",
   "storage_section",
   "enable_photo_uploads",
   "photo_policy_note",
@@ -90,6 +106,102 @@
    "description": "Enable only after the registration-card workflow is trained and tested."
   },
   {
+   "fieldname": "operations_section",
+   "label": "Housekeeping & Engineering Operations",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "enable_realtime_operations_notifications",
+   "label": "Enable Realtime Operations Notifications",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "require_housekeeping_checklist",
+   "label": "Require Cleaning Checklist Before Completion",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Enable after checklist templates are configured for all room and task types."
+  },
+  {
+   "fieldname": "require_housekeeping_inspection",
+   "label": "Require Supervisor Inspection Before Room Ready",
+   "fieldtype": "Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "lost_found_retention_days",
+   "label": "Lost & Found Retention Days",
+   "fieldtype": "Int",
+   "default": "90"
+  },
+  {
+   "fieldname": "auto_create_sop_candidate",
+   "label": "Auto-create SOP Candidate for Repeated Problems",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Keep disabled until problem codes and review responsibilities are consistently used."
+  },
+  {
+   "fieldname": "sop_repeat_threshold",
+   "label": "Repeated Problem Threshold",
+   "fieldtype": "Int",
+   "default": "3"
+  },
+  {
+   "fieldname": "sla_section",
+   "label": "Engineering SLA Minutes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "critical_response_minutes",
+   "label": "Critical Response",
+   "fieldtype": "Int",
+   "default": "10"
+  },
+  {
+   "fieldname": "critical_resolution_minutes",
+   "label": "Critical Resolution",
+   "fieldtype": "Int",
+   "default": "60"
+  },
+  {
+   "fieldname": "high_response_minutes",
+   "label": "High Response",
+   "fieldtype": "Int",
+   "default": "20"
+  },
+  {
+   "fieldname": "high_resolution_minutes",
+   "label": "High Resolution",
+   "fieldtype": "Int",
+   "default": "180"
+  },
+  {
+   "fieldname": "medium_response_minutes",
+   "label": "Medium Response",
+   "fieldtype": "Int",
+   "default": "60"
+  },
+  {
+   "fieldname": "medium_resolution_minutes",
+   "label": "Medium Resolution",
+   "fieldtype": "Int",
+   "default": "480"
+  },
+  {
+   "fieldname": "low_response_minutes",
+   "label": "Low Response",
+   "fieldtype": "Int",
+   "default": "240"
+  },
+  {
+   "fieldname": "low_resolution_minutes",
+   "label": "Low Resolution",
+   "fieldtype": "Int",
+   "default": "1440"
+  },
+  {
    "fieldname": "storage_section",
    "label": "Storage & Photo Evidence",
    "fieldtype": "Section Break"
@@ -160,6 +272,14 @@
    "role": "Hotel Manager",
    "read": 1,
    "write": 1
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "read": 1
+  },
+  {
+   "role": "Engineering Supervisor",
+   "read": 1
   }
  ],
  "sort_field": "modified",

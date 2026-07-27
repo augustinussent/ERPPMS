@@ -1,0 +1,113 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "",
+ "creation": "2026-07-20 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "template_item",
+  "sequence",
+  "area",
+  "item_label",
+  "result",
+  "is_critical",
+  "weight",
+  "requires_photo",
+  "notes",
+  "photo",
+  "maintenance_ticket"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_item",
+   "label": "Template Item",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sequence",
+   "label": "Sequence",
+   "fieldtype": "Int",
+   "default": "10",
+   "read_only": 1
+  },
+  {
+   "fieldname": "area",
+   "label": "Area",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_label",
+   "label": "Checklist Item",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "result",
+   "label": "Result",
+   "fieldtype": "Select",
+   "options": "Pending\nOK\nNot OK\nNot Applicable\nReported to Engineering",
+   "default": "Pending",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_critical",
+   "label": "Critical",
+   "fieldtype": "Check",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "weight",
+   "label": "Weight",
+   "fieldtype": "Float",
+   "default": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "requires_photo",
+   "label": "Photo Required",
+   "fieldtype": "Check",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "label": "Notes",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "photo",
+   "label": "Evidence Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "maintenance_ticket",
+   "label": "Maintenance Ticket",
+   "fieldtype": "Link",
+   "options": "Hotel Maintenance Ticket",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Housekeeping Checklist Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

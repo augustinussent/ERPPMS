@@ -99,6 +99,16 @@
   },
   {
    "role": "Hotel Manager"
+  },
+  {
+   "role": "Housekeeping Supervisor",
+   "read": 1,
+   "report": 1
+  },
+  {
+   "role": "Engineering Supervisor",
+   "read": 1,
+   "report": 1
   }
  ],
  "sort_field": "modified",

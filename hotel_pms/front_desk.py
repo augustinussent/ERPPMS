@@ -12,6 +12,7 @@ from frappe.exceptions import DuplicateEntryError
 from frappe.utils import add_days, cint, flt, get_datetime, getdate, now_datetime, nowdate
 
 from hotel_pms.front_desk_rules import calculate_fee, money, quote_cancellation, room_nights, stay_total
+from hotel_pms.room_status import set_room_status
 from hotel_pms.sync import create_document_once, make_sync_key
 
 BLOCKING_STATUSES = ("Tentative", "Confirmed", "Checked In")
@@ -382,10 +383,18 @@ def move_room(reservation: str, old_room: str, new_room: str, reason: str, idemp
         frappe.throw(_("Target room conflicts with another stay."))
 
     frappe.db.set_value("Hotel Reservation Room", row.name, "room", new_room)
-    frappe.db.set_value("Hotel Room", old_room, {"operational_status": "Available", "housekeeping_status": "Dirty"})
-    frappe.db.set_value("Hotel Room", new_room, {"operational_status": "Occupied", "housekeeping_status": "Clean"})
+    set_room_status(
+        old_room, operational_status="Available", housekeeping_status="Dirty",
+        event_type="Room Move - Old Room Released", source_doctype="Hotel Reservation", source_name=doc.name,
+        notes=reason, idempotency_key=f"move-old:{key}",
+    )
+    set_room_status(
+        new_room, operational_status="Occupied", housekeeping_status="Inspected",
+        event_type="Room Move - New Room Occupied", source_doctype="Hotel Reservation", source_name=doc.name,
+        notes=reason, idempotency_key=f"move-new:{key}",
+    )
     from hotel_pms.tasks import ensure_housekeeping_task
-    ensure_housekeeping_task(property_name=doc.property, room=old_room, task_date=getdate(), task_type="Checkout Clean", reservation=doc.name)
+    ensure_housekeeping_task(property_name=doc.property, room=old_room, task_date=getdate(), task_type="Checkout Clean", reservation=doc.name, source="Front Office")
     log = _insert_change_log(
         reservation=doc, change_type="Room Move", idempotency_key=key, old_room=old_room, new_room=new_room, reason=reason
     )
@@ -602,7 +611,11 @@ def cancel_reservation(
     )
     for row in doc.rooms:
         if frappe.db.get_value("Hotel Room", row.room, "operational_status") != "Occupied":
-            frappe.db.set_value("Hotel Room", row.room, "operational_status", "Available")
+            set_room_status(
+                row.room, operational_status="Available", event_type=f"Reservation {new_status}",
+                source_doctype="Hotel Cancellation", source_name=cancellation.name,
+                idempotency_key=f"cancel-release:{cancellation.name}:{row.room}",
+            )
     return {"reservation": doc.name, "cancellation": cancellation.name, "status": new_status, "already_processed": False}
 
 

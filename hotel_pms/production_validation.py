@@ -31,6 +31,7 @@ REHEARSAL_TYPES = (
     "Concurrency",
     "Performance",
     "Security",
+    "Smoke",
 )
 def _require_manager() -> None:
     if not is_privileged() and "Hotel Manager" not in frappe.get_roles():

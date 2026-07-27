@@ -172,3 +172,16 @@ Operational pages:
 ```
 
 Outlet inventory policy is mutually exclusive: ERPNext POS finished goods, recipe Material Issue, or no stock posting. Recipe mode creates one idempotent ERPNext Stock Entry per KOT and forces restaurant invoices to `update_stock = 0`. See `docs/FNB_DEPTH_V100_RC3.md`.
+
+## v1.0.0-rc5 staging execution
+
+RC5 adds an executable staging-validation layer over the RC4 Production Gate. From a Frappe v16 bench, run:
+
+```bash
+BENCH_ROOT="$HOME/frappe-bench" \
+SITE="staging.example.com" \
+GATE_RUN="HPG-2026-00001" \
+apps/hotel_pms/ci/run_staging_execution.sh
+```
+
+The command backs up the staging site, migrates it, captures preflight and smoke evidence, reads accounting/stock reconciliation, builds a private cutover bundle, and verifies every generated evidence file by SHA-256. It does not create Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, or Stock Entry.

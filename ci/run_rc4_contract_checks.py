@@ -24,8 +24,8 @@ for doctype in sorted(required_doctypes - found):
     errors.append(f"missing RC4 doctype: {doctype}")
 
 version = (root / "hotel_pms/__init__.py").read_text()
-if '1.0.0rc4' not in version:
-    errors.append("application version is not 1.0.0rc4")
+if '1.0.0rc' not in version and '1.0.0"' not in version:
+    errors.append("application version no longer belongs to the v1.0 release line")
 
 production_gate = (root / "hotel_pms/production_gate.py").read_text()
 for code in (

@@ -22,6 +22,8 @@ SIGNOFF_ROLES={
 }
 CHECKS=(
  ("Platform","APP_VERSION","Release version and installed applications","Automated",1),
+ ("Platform","STAGING_PREFLIGHT","Staging environment preflight captured for exact artifact","Automated",1),
+ ("Platform","SMOKE_REHEARSAL","Read-only smoke rehearsal matches frozen release","Automated",1),
  ("Platform","MANIFEST_INTEGRITY","Frozen release manifest matches installed source and image","Automated",1),
  ("Platform","BLANK_INSTALL_REHEARSAL","Blank-install rehearsal matches frozen release","Automated",1),
  ("Platform","UPGRADE_REHEARSAL","Upgrade rehearsal matches frozen release","Automated",1),
@@ -33,6 +35,7 @@ CHECKS=(
  ("Platform","WEBHOOK_DLQ","Webhook dead-letter queue clean","Automated",1),
  ("Platform","PROPERTY_ACCESS","Property access assignments complete","Automated",1),
  ("Accounting","ACCOUNTING_RECON","Folio and ERPNext invoice reconciliation","Automated",1),
+ ("Accounting","RECON_SNAPSHOT","Immutable accounting, stock and sync-key snapshot","Automated",1),
  ("Accounting","CASHIER_RECON","Cashier shifts reconciled","Automated",1),
  ("Accounting","ACCOUNTANT_REVIEW","Tax, service charge, and chart mapping reviewed","Manual",1),
  ("Inventory & Operations","STOCK_RECON","Restaurant invoice and stock-ledger reconciliation","Automated",1),
@@ -52,6 +55,7 @@ CHECKS=(
  ("Performance","LOAD_TEST","Peak booking, checkout, and POS load test","Manual",1),
  ("Performance","SLOW_QUERY_REVIEW","Slow query and index review","Manual",1),
  ("Operational Readiness","PARALLEL_RECON","Parallel-run batch reconciles without warning or failure","Automated",1),
+ ("Operational Readiness","CUTOVER_BUNDLE","Private cutover evidence bundle generated for exact artifact","Automated",1),
  ("Operational Readiness","PARALLEL_RUN","Parallel run reviewed and accepted by departments","Manual",1),
  ("Operational Readiness","TRAINING","Department training completed","Manual",1),
  ("Operational Readiness","SOP_ESCALATION","SOP, support roster, and escalation approved","Manual",1),
@@ -124,7 +128,7 @@ def execute_automated_checks(run_name, from_date=None, to_date=None):
     doc.actual_source_fingerprint=(manifest.get("environment") or {}).get("source_fingerprint")
     doc.actual_artifact_sha256=(manifest.get("environment") or {}).get("artifact_sha256")
     _check(doc,"MANIFEST_INTEGRITY","Passed" if manifest.get("passed") else "Failed",doc.actual_source_fingerprint,doc.expected_source_fingerprint,json.dumps(manifest,default=str))
-    rehearsal_codes={"Blank Install":"BLANK_INSTALL_REHEARSAL","Upgrade":"UPGRADE_REHEARSAL","Concurrency":"CONCURRENCY_REHEARSAL","Security":"SECURITY_REHEARSAL","Restore":"RESTORE_REHEARSAL","Rollback":"ROLLBACK_REHEARSAL","Performance":"PERFORMANCE_REHEARSAL"}
+    rehearsal_codes={"Blank Install":"BLANK_INSTALL_REHEARSAL","Upgrade":"UPGRADE_REHEARSAL","Concurrency":"CONCURRENCY_REHEARSAL","Security":"SECURITY_REHEARSAL","Restore":"RESTORE_REHEARSAL","Rollback":"ROLLBACK_REHEARSAL","Performance":"PERFORMANCE_REHEARSAL","Smoke":"SMOKE_REHEARSAL"}
     for run_type,code in rehearsal_codes.items():
         result=validation["rehearsals"].get(run_type) or {}
         record=result.get("record") or {}
@@ -132,6 +136,16 @@ def execute_automated_checks(run_name, from_date=None, to_date=None):
     parallel=validation.get("parallel") or {}
     parallel_status=validation.get("parallel_status")
     _check(doc,"PARALLEL_RECON","Passed" if parallel_status=="Passed" else ("Warning" if parallel_status=="Warning" else "Failed"),parallel.get("name") or "missing","latest batch Passed with no warnings/failures",json.dumps(parallel,default=str))
+    from hotel_pms.staging_execution import latest_matching_evidence
+    for evidence_code in ("STAGING_PREFLIGHT","RECON_SNAPSHOT","CUTOVER_BUNDLE"):
+        evidence=latest_matching_evidence(doc.name,evidence_code)
+        metadata=(evidence or {}).get("metadata") or {}
+        artifact_match=bool(evidence and evidence.get("matches_current_environment"))
+        content_pass=True
+        if evidence_code=="STAGING_PREFLIGHT": content_pass=(metadata.get("summary") or {}).get("status")=="Passed"
+        elif evidence_code=="RECON_SNAPSHOT": content_pass=metadata.get("status")=="Passed"
+        passed=artifact_match and content_pass
+        _check(doc,evidence_code,"Passed" if passed else "Failed",(evidence or {}).get("name") or "missing","matching immutable evidence for exact source/image",json.dumps(evidence or {},default=str))
     try: frappe.db.sql("select 1"); _check(doc,"DATABASE","Passed","OK","select 1")
     except Exception as e:_check(doc,"DATABASE","Failed",details=str(e))
     heartbeat=settings.get("last_worker_heartbeat"); age=(now_datetime()-frappe.utils.get_datetime(heartbeat)).total_seconds()/60 if heartbeat else 999999

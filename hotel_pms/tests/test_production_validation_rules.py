@@ -28,9 +28,9 @@ def test_parallel_classification_and_summary():
 
 
 def test_rehearsal_must_match_frozen_artifact():
-    row = {'status': 'Passed', 'release_version': '1.0.0rc4', 'source_fingerprint': 'abc', 'image_digest': 'sha256:1'}
-    assert rehearsal_matches(row, '1.0.0rc4', 'abc', 'sha256:1')
-    assert not rehearsal_matches(row, '1.0.0rc4', 'different', 'sha256:1')
+    row = {'status': 'Passed', 'release_version': '1.0.0rc5', 'source_fingerprint': 'abc', 'image_digest': 'sha256:1'}
+    assert rehearsal_matches(row, '1.0.0rc5', 'abc', 'sha256:1')
+    assert not rehearsal_matches(row, '1.0.0rc5', 'different', 'sha256:1')
 
 
 def test_promotion_requires_every_gate():
@@ -54,7 +54,7 @@ def test_normalized_fingerprint_allows_only_version_label_change(tmp_path):
     (tmp_path / "ci").mkdir()
     version = tmp_path / "hotel_pms/__init__.py"
     logic = tmp_path / "hotel_pms/logic.py"
-    version.write_text('__version__ = "1.0.0rc4"\n')
+    version.write_text('__version__ = "1.0.0rc5"\n')
     logic.write_text('VALUE = 1\n')
     first = source_fingerprint(tmp_path)
     version.write_text('__version__ = "1.0.0"\n')

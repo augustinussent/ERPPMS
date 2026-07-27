@@ -14,9 +14,10 @@ jobs:
       - run: python ci/run_rc2_contract_checks.py
       - run: python ci/run_rc3_contract_checks.py
       - run: python ci/run_rc4_contract_checks.py
-      - run: python -m py_compile ci/run_concurrency_gate.py ci/run_performance_gate.py
+      - run: python ci/run_rc5_contract_checks.py
+      - run: python -m py_compile ci/run_concurrency_gate.py ci/run_performance_gate.py ci/build_evidence_manifest.py ci/verify_staging_bundle.py
       - run: python ci/generate_api_docs.py --check
-      - run: python -m pytest -q hotel_pms/tests/test_front_desk_rules.py hotel_pms/tests/test_guest_rules.py hotel_pms/tests/test_operations_rules.py hotel_pms/tests/test_revenue_rules.py hotel_pms/tests/test_services_rules.py hotel_pms/tests/test_platform_rules.py hotel_pms/tests/test_production_gate_rules.py hotel_pms/tests/test_adoption_rc2.py hotel_pms/tests/test_fnb_rc3_rules.py hotel_pms/tests/test_production_validation_rules.py
+      - run: python -m pytest -q hotel_pms/tests/test_front_desk_rules.py hotel_pms/tests/test_guest_rules.py hotel_pms/tests/test_operations_rules.py hotel_pms/tests/test_revenue_rules.py hotel_pms/tests/test_services_rules.py hotel_pms/tests/test_platform_rules.py hotel_pms/tests/test_production_gate_rules.py hotel_pms/tests/test_adoption_rc2.py hotel_pms/tests/test_fnb_rc3_rules.py hotel_pms/tests/test_production_validation_rules.py hotel_pms/tests/test_staging_execution_rules.py
   bench-integration:
     if: vars.RUN_FRAPPE_INTEGRATION == 'true'
     runs-on: [self-hosted, frappe-v16]

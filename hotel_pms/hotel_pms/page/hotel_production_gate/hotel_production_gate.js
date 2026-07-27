@@ -70,7 +70,7 @@ frappe.pages["hotel-production-gate"].on_page_load = function (wrapper) {
     page.add_inner_button(__("Record Rehearsal"), () => {
       frappe.prompt([
         {fieldname:"property",label:__("Property"),fieldtype:"Link",options:"Hotel Property"},
-        {fieldname:"run_type",label:__("Type"),fieldtype:"Select",options:"Blank Install\nUpgrade\nRestore\nRollback\nConcurrency\nPerformance\nSecurity",reqd:1},
+        {fieldname:"run_type",label:__("Type"),fieldtype:"Select",options:"Blank Install\nUpgrade\nRestore\nRollback\nConcurrency\nPerformance\nSecurity\nSmoke",reqd:1},
         {fieldname:"environment_name",label:__("Environment"),fieldtype:"Select",options:"Staging\nPre-production\nProduction",default:"Staging",reqd:1},
         {fieldname:"status",label:__("Status"),fieldtype:"Select",options:"Passed\nFailed",reqd:1},
         {fieldname:"started_at",label:__("Started At"),fieldtype:"Datetime",reqd:1},
@@ -102,6 +102,34 @@ frappe.pages["hotel-production-gate"].on_page_load = function (wrapper) {
         frappe.show_alert({message:__("Parallel batch: {0} ({1})",[r.message.name,r.message.status]),indicator:r.message.status === "Passed" ? "green" : "orange"});
         load();
       }, __("Parallel-run Reconciliation"));
+    });
+
+    page.add_inner_button(__("Capture Preflight"), async () => {
+      if (!run.get_value()) return frappe.msgprint(__("Select a gate run."));
+      const r = await frappe.call({method:"hotel_pms.staging_execution.capture_staging_preflight",args:{gate_run:run.get_value()},freeze:true});
+      frappe.show_alert({message:__("Preflight: {0}",[r.message.result.summary.status]),indicator:r.message.result.summary.status === "Passed" ? "green" : "red"});
+      load();
+    });
+
+    page.add_inner_button(__("Run Smoke Suite"), async () => {
+      if (!run.get_value()) return frappe.msgprint(__("Select a gate run."));
+      const r = await frappe.call({method:"hotel_pms.staging_execution.run_smoke_suite",args:{gate_run:run.get_value()},freeze:true});
+      frappe.show_alert({message:__("Smoke suite: {0}",[r.message.summary.status]),indicator:r.message.summary.status === "Passed" ? "green" : "red"});
+      load();
+    });
+
+    page.add_inner_button(__("Capture Reconciliation"), async () => {
+      if (!run.get_value()) return frappe.msgprint(__("Select a gate run."));
+      const r = await frappe.call({method:"hotel_pms.staging_execution.capture_reconciliation_snapshot",args:{gate_run:run.get_value()},freeze:true});
+      frappe.show_alert({message:__("Reconciliation snapshot: {0}",[r.message.result.status]),indicator:r.message.result.status === "Passed" ? "green" : "red"});
+      load();
+    });
+
+    page.add_inner_button(__("Build Cutover Bundle"), async () => {
+      if (!run.get_value()) return frappe.msgprint(__("Select a gate run."));
+      const r = await frappe.call({method:"hotel_pms.staging_execution.build_cutover_bundle",args:{gate_run:run.get_value()},freeze:true});
+      frappe.show_alert({message:__("Cutover bundle created: {0}",[r.message.file_url]),indicator:"green"});
+      load();
     });
 
     page.add_inner_button(__("Run Automated Checks"), async () => {

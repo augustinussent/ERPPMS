@@ -152,3 +152,18 @@
 - Added Hotel Group Confirmation Letter print/PDF facility.
 - Extended night audit to post due group-package components.
 - Fixed the Hotel PMS Settings controller class name for Frappe controller loading.
+
+## [1.0.0-rc5] - 2026-07-27
+
+### Added
+
+- Staging environment preflight with immutable evidence tied to the frozen release fingerprint, package checksum, and image digest.
+- Read-only Smoke rehearsal required by the Production Gate.
+- Reconciliation snapshot for accounting, stock, and duplicate active ERP sync keys.
+- Private cutover evidence bundle with deterministic SHA-256 manifest.
+- Bench staging execution script and offline evidence-bundle verifier.
+
+### Changed
+
+- Production promotion now requires a matching Smoke rehearsal plus preflight, reconciliation snapshot, and cutover bundle evidence.
+- No business transaction or ERPNext financial/stock document is created by staging validation.

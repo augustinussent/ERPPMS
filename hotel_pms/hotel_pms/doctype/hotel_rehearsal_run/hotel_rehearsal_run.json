@@ -50,7 +50,7 @@
    "fieldname": "run_type",
    "label": "Rehearsal Type",
    "fieldtype": "Select",
-   "options": "Blank Install\nUpgrade\nRestore\nRollback\nConcurrency\nPerformance\nSecurity",
+   "options": "Blank Install\nUpgrade\nRestore\nRollback\nConcurrency\nPerformance\nSecurity\nSmoke",
    "reqd": 1,
    "in_list_view": 1
   },

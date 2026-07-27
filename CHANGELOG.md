@@ -1,3 +1,7 @@
+## 1.0.0-rc6
+- Added governed intelligence lifecycle, night-audit findings, payment correction matrix, integration maturity registry, and real-bench smoke contract.
+- ERPNext remains the sole accounting, payment, tax, receivable, and stock ledger.
+
 # Changelog
 
 ## 1.0.0-rc4 - Production Validation Pack

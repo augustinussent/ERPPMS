@@ -10,7 +10,7 @@ for path in root.glob('hotel_pms/hotel_pms/doctype/*/*.json'):
 hooks=ast.parse((root/'hotel_pms/hooks.py').read_text());scoped=set()
 for node in hooks.body:
  if isinstance(node,ast.Assign) and any(isinstance(x,ast.Name) and x.id=='permission_query_conditions' for x in node.targets):scoped={k.value for k in node.value.keys if isinstance(k,ast.Constant)}
-shared={'Hotel PMS Settings','Hotel Guest Profile','Hotel Guest Blacklist','Hotel Guest Merge Request','Hotel Onboarding Session','Hotel System Health Snapshot','Hotel Backup Verification','Hotel Release Manifest'}
+shared={'Hotel PMS Settings','Hotel Guest Profile','Hotel Guest Blacklist','Hotel Guest Merge Request','Hotel Onboarding Session','Hotel System Health Snapshot','Hotel Backup Verification','Hotel Release Manifest','Hotel Integration Definition'}
 for path in root.glob('hotel_pms/hotel_pms/doctype/*/*.json'):
  d=json.loads(path.read_text());
  if not d.get('istable') and d['name'] not in scoped and d['name'] not in shared:errors.append(f'{d["name"]}: missing property-scope declaration')

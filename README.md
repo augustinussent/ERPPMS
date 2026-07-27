@@ -185,3 +185,7 @@ apps/hotel_pms/ci/run_staging_execution.sh
 ```
 
 The command backs up the staging site, migrates it, captures preflight and smoke evidence, reads accounting/stock reconciliation, builds a private cutover bundle, and verifies every generated evidence file by SHA-256. It does not create Sales Invoice, POS Invoice, Payment Entry, Journal Entry, Purchase Invoice, or Stock Entry.
+
+
+## v1.0.0-rc6 Intelligence & Control
+Governed decision records, night-audit anomaly findings, ERPNext-native payment correction control, honest integration registry, and expanded real-bench smoke tooling. No parallel accounting or stock ledger is introduced.

@@ -72,3 +72,14 @@
 
 ## v0.9.0 Platform Hardening
 Implemented property isolation, onboarding, migration dry run, API governance, webhook queue, observability, backup verification, and CI/security scaffolding. Remaining production gate is v1.0.0 validation on a real bench and operational environment.
+
+## v1.0.0-rc6 Intelligence & Control
+
+- Governed intelligence configuration, runs, decisions, outcomes, and immutable input snapshots.
+- Night Audit anomaly findings sourced from PMS operational records and ERPNext financial/stock documents.
+- ERPNext-native Payment Correction matrix with manager approval and idempotent refund draft creation.
+- Honest integration maturity registry with Shipped, Adapter, Recipe, and Planned states.
+- Grounded explanation guard that never executes transactions.
+- Expanded Frappe v16 bench smoke and Production Gate blockers.
+
+RC6 remains a release candidate. The next step is staging execution and resolution of all Gate blockers. A future `v1.1.0` may add cancellation-risk and housekeeping optimization only after `v1.0.0` is promoted from the exact tested fingerprint.

@@ -1,0 +1,32 @@
+{
+ "content": null,
+ "creation": "2026-07-27 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "hotel-intelligence-console",
+ "owner": "Administrator",
+ "page_name": "hotel-intelligence-console",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Hotel Manager"
+  },
+  {
+   "role": "Night Auditor"
+  },
+  {
+   "role": "Hotel Intelligence Analyst"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Hotel Intelligence Console"
+}

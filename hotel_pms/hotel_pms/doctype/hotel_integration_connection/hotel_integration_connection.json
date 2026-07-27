@@ -1,0 +1,169 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "integration",
+  "enabled",
+  "status",
+  "configuration_section",
+  "configuration_json",
+  "credential_secret",
+  "go_live_checks",
+  "health_section",
+  "last_tested_at",
+  "last_test_status",
+  "last_test_result_json",
+  "last_success_at",
+  "last_failure_at",
+  "failure_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HICON-.YYYY.-.#####",
+   "default": "HICON-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "integration",
+   "label": "Integration",
+   "fieldtype": "Link",
+   "options": "Hotel Integration Definition",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nTested\nReady\nLive\nFailed\nDisabled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "configuration_section",
+   "label": "Configuration",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "configuration_json",
+   "label": "Configuration JSON",
+   "fieldtype": "Code",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "credential_secret",
+   "label": "Credential / Secret",
+   "fieldtype": "Password"
+  },
+  {
+   "fieldname": "go_live_checks",
+   "label": "Go-live Checks",
+   "fieldtype": "Table",
+   "options": "Hotel Integration Go Live Check"
+  },
+  {
+   "fieldname": "health_section",
+   "label": "Health",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "last_tested_at",
+   "label": "Last Tested At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_test_status",
+   "label": "Last Test Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_test_result_json",
+   "label": "Last Test Result JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_success_at",
+   "label": "Last Success At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_failure_at",
+   "label": "Last Failure At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "failure_count",
+   "label": "Failure Count",
+   "fieldtype": "Int",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Integration Connection",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "integration",
+ "search_fields": "property,integration,status"
+}

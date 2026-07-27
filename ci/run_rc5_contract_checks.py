@@ -5,8 +5,9 @@ import sys
 root = Path(__file__).resolve().parents[1]
 errors = []
 
-if '1.0.0rc5' not in (root / 'hotel_pms/__init__.py').read_text():
-    errors.append('application version is not 1.0.0rc5')
+version_text=(root / 'hotel_pms/__init__.py').read_text()
+if not any(token in version_text for token in ('1.0.0rc5','1.0.0rc6')):
+    errors.append('application version no longer includes RC5 staging-execution contracts')
 
 production_gate = (root / 'hotel_pms/production_gate.py').read_text()
 for code in ('STAGING_PREFLIGHT', 'SMOKE_REHEARSAL', 'RECON_SNAPSHOT', 'CUTOVER_BUNDLE'):

@@ -24,7 +24,7 @@
    "fieldname": "category",
    "label": "Category",
    "fieldtype": "Select",
-   "options": "Platform\nAccounting\nInventory & Operations\nSecurity\nReliability & DR\nPerformance\nOperational Readiness",
+   "options": "Platform\nAccounting\nInventory & Operations\nSecurity\nReliability & DR\nPerformance\nOperational Readiness\nIntelligence & Control\nIntegrations",
    "reqd": 1,
    "in_list_view": 1,
    "read_only": 1

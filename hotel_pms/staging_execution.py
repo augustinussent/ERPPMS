@@ -49,6 +49,8 @@ SMOKE_REQUIRED = {
     "FINANCE_LINK_FIELDS",
     "STOCK_LINK_FIELDS",
     "API_IMPORTS",
+    "INTELLIGENCE_IMPORTS",
+    "INTEGRATION_REGISTRY",
 }
 
 CORE_DOCTYPES = (
@@ -61,6 +63,13 @@ CORE_DOCTYPES = (
     "Hotel Validation Evidence",
     "Hotel Parallel Run Batch",
     "Hotel ERP Sync Log",
+    "Hotel Intelligence Config",
+    "Hotel Intelligence Run",
+    "Hotel Intelligence Decision",
+    "Hotel Night Audit Finding",
+    "Hotel Payment Correction",
+    "Hotel Integration Definition",
+    "Hotel Integration Connection",
 )
 
 ERP_CUSTOM_FIELDS = {
@@ -261,6 +270,14 @@ def _smoke_checks(gate_run: str) -> list[dict]:
         except Exception as exc:
             import_errors[module] = str(exc)
     checks.append(_row("API_IMPORTS", not import_errors, len(imports) - len(import_errors), len(imports), import_errors))
+    intelligence_imports=("hotel_pms.intelligence","hotel_pms.intelligence_rules")
+    intelligence_errors={}
+    for module in intelligence_imports:
+        try: __import__(module)
+        except Exception as exc: intelligence_errors[module]=str(exc)
+    checks.append(_row("INTELLIGENCE_IMPORTS",not intelligence_errors,len(intelligence_imports)-len(intelligence_errors),len(intelligence_imports),intelligence_errors))
+    shipped=frappe.db.count("Hotel Integration Definition",{"maturity_status":"Shipped"})
+    checks.append(_row("INTEGRATION_REGISTRY",shipped>=5,shipped,">=5 shipped definitions"))
     return checks
 
 

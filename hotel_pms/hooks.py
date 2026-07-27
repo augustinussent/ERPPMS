@@ -9,6 +9,10 @@ required_apps = ["erpnext"]
 
 app_include_js = ["/assets/hotel_pms/js/photo_policy.js", "/assets/hotel_pms/js/property_scope.js"]
 
+doctype_js = {
+    "Payment Entry": "public/js/payment_entry.js",
+}
+
 override_whitelisted_methods = {
     "frappe.handler.upload_file": "hotel_pms.media.upload_file",
     "upload_file": "hotel_pms.media.upload_file",
@@ -58,6 +62,7 @@ scheduler_events = {
         "*/5 * * * *": ["hotel_pms.platform.worker_heartbeat", "hotel_pms.webhooks.process_webhook_queue", "hotel_pms.communications.process_message_queue"],
         "*/15 * * * *": ["hotel_pms.front_desk.process_no_show_candidates", "hotel_pms.operations.monitor_operation_slas", "hotel_pms.services.monitor_guest_services"],
         "17 * * * *": ["hotel_pms.platform.capture_health_snapshot"],
+        "30 4 * * *": ["hotel_pms.intelligence.run_scheduled_intelligence"],
     },
     "daily": [
         "hotel_pms.tasks.create_housekeeping_tasks",
@@ -152,6 +157,12 @@ permission_query_conditions = {
     'Hotel Rehearsal Run': "hotel_pms.permissions.hotel_rehearsal_run_query",
     'Hotel Parallel Run Batch': "hotel_pms.permissions.hotel_parallel_run_batch_query",
     'Hotel Validation Evidence': "hotel_pms.permissions.hotel_validation_evidence_query",
+    'Hotel Intelligence Config': "hotel_pms.permissions.hotel_intelligence_config_query",
+    'Hotel Intelligence Run': "hotel_pms.permissions.hotel_intelligence_run_query",
+    'Hotel Intelligence Decision': "hotel_pms.permissions.hotel_intelligence_decision_query",
+    'Hotel Night Audit Finding': "hotel_pms.permissions.hotel_night_audit_finding_query",
+    'Hotel Payment Correction': "hotel_pms.permissions.hotel_payment_correction_query",
+    'Hotel Integration Connection': "hotel_pms.permissions.hotel_integration_connection_query",
 }
 
 has_permission = {
@@ -225,4 +236,10 @@ has_permission = {
     'Hotel Rehearsal Run': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Parallel Run Batch': "hotel_pms.permissions.property_document_has_permission",
     'Hotel Validation Evidence': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Intelligence Config': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Intelligence Run': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Intelligence Decision': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Night Audit Finding': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Payment Correction': "hotel_pms.permissions.property_document_has_permission",
+    'Hotel Integration Connection': "hotel_pms.permissions.property_document_has_permission",
 }

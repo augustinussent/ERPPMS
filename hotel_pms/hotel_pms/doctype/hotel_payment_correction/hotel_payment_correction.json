@@ -1,0 +1,278 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "payment_entry",
+  "reservation",
+  "status",
+  "requested_action",
+  "reason",
+  "amount",
+  "mode_of_payment",
+  "matrix_section",
+  "original_docstatus",
+  "original_payment_type",
+  "original_transaction_type",
+  "original_amount",
+  "refundable_amount",
+  "allowed_actions_json",
+  "idempotency_key",
+  "approval_section",
+  "requested_by",
+  "requested_at",
+  "approved_by",
+  "approved_at",
+  "execution_section",
+  "result_doctype",
+  "result_name",
+  "execution_result_json",
+  "executed_at",
+  "error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HPC-.YYYY.-.#####",
+   "default": "HPC-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "label": "Payment Entry",
+   "fieldtype": "Link",
+   "options": "Payment Entry",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Hotel Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Draft\nPending Approval\nApproved\nExecuted\nFailed\nCancelled",
+   "default": "Draft",
+   "reqd": 1,
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "requested_action",
+   "label": "Requested Action",
+   "fieldtype": "Select",
+   "options": "Delete Draft\nCreate Refund\nManual Review",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reason",
+   "label": "Reason",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "label": "Correction Amount",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "label": "Mode of Payment",
+   "fieldtype": "Link",
+   "options": "Mode of Payment"
+  },
+  {
+   "fieldname": "matrix_section",
+   "label": "Correction Matrix Snapshot",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "original_docstatus",
+   "label": "Original Docstatus",
+   "fieldtype": "Int",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_payment_type",
+   "label": "Original Payment Type",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_transaction_type",
+   "label": "Hotel Transaction Type",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_amount",
+   "label": "Original Amount",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "refundable_amount",
+   "label": "Maximum Refundable",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "allowed_actions_json",
+   "label": "Allowed Actions JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "idempotency_key",
+   "label": "Idempotency Key",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_section",
+   "label": "Approval",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "requested_by",
+   "label": "Requested By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "requested_at",
+   "label": "Requested At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "label": "Approved By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_at",
+   "label": "Approved At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution_section",
+   "label": "ERPNext Result",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "result_doctype",
+   "label": "Result DocType",
+   "fieldtype": "Link",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "result_name",
+   "label": "Result Document",
+   "fieldtype": "Dynamic Link",
+   "options": "result_doctype",
+   "read_only": 1
+  },
+  {
+   "fieldname": "execution_result_json",
+   "label": "Execution Result JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "executed_at",
+   "label": "Executed At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "label": "Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Payment Correction",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Accounts User",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "payment_entry",
+ "search_fields": "payment_entry,reservation"
+}

@@ -1,0 +1,254 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "business_date",
+  "finding_type",
+  "severity",
+  "status",
+  "fingerprint",
+  "entity_section",
+  "reference_doctype",
+  "reference_name",
+  "reservation",
+  "folio",
+  "amount",
+  "confidence",
+  "details_section",
+  "description",
+  "recommended_action",
+  "evidence_json",
+  "intelligence_run",
+  "decision",
+  "lifecycle_section",
+  "first_seen_at",
+  "last_seen_at",
+  "acknowledged_by",
+  "resolved_by",
+  "resolution_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HNAF-.YYYY.-.#####",
+   "default": "HNAF-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "business_date",
+   "label": "Business Date",
+   "fieldtype": "Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "finding_type",
+   "label": "Finding Type",
+   "fieldtype": "Select",
+   "options": "Missing Folio\nStale In-house Stay\nOpen Folio After Checkout\nMissing Tax Profile\nInvoice Link Mismatch\nDuplicate Sync Key\nFailed ERP Sync\nCashier Variance\nRestaurant Stock Posting\nPrivate Document Retention",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "severity",
+   "label": "Severity",
+   "fieldtype": "Select",
+   "options": "Critical\nWarning\nInfo",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Select",
+   "options": "Open\nAcknowledged\nResolved\nFalse Positive",
+   "default": "Open",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "fingerprint",
+   "label": "Finding Fingerprint",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "entity_section",
+   "label": "Affected Entity",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "label": "Reference DocType",
+   "fieldtype": "Link",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "label": "Reference",
+   "fieldtype": "Dynamic Link",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "reservation",
+   "label": "Reservation",
+   "fieldtype": "Link",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "folio",
+   "label": "Folio",
+   "fieldtype": "Link",
+   "options": "Hotel Folio"
+  },
+  {
+   "fieldname": "amount",
+   "label": "Amount / Variance",
+   "fieldtype": "Currency"
+  },
+  {
+   "fieldname": "confidence",
+   "label": "Confidence",
+   "fieldtype": "Percent"
+  },
+  {
+   "fieldname": "details_section",
+   "label": "Details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Long Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "recommended_action",
+   "label": "Recommended Action",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "evidence_json",
+   "label": "Evidence JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "intelligence_run",
+   "label": "Intelligence Run",
+   "fieldtype": "Link",
+   "options": "Hotel Intelligence Run",
+   "read_only": 1
+  },
+  {
+   "fieldname": "decision",
+   "label": "Decision",
+   "fieldtype": "Link",
+   "options": "Hotel Intelligence Decision",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lifecycle_section",
+   "label": "Lifecycle",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "first_seen_at",
+   "label": "First Seen At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_seen_at",
+   "label": "Last Seen At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "acknowledged_by",
+   "label": "Acknowledged By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolved_by",
+   "label": "Resolved By",
+   "fieldtype": "Link",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resolution_notes",
+   "label": "Resolution Notes",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Night Audit Finding",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Night Auditor",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  },
+  {
+   "role": "Hotel Intelligence Analyst",
+   "read": 1,
+   "print": 1,
+   "report": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "finding_type",
+ "search_fields": "finding_type,reference_name,reservation,folio"
+}

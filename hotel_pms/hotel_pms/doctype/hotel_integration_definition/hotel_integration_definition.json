@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:integration_key",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "integration_key",
+  "provider_name",
+  "category",
+  "maturity_status",
+  "enabled_in_product",
+  "adapter_path",
+  "documentation",
+  "supports_test_connection",
+  "financial_behavior",
+  "description",
+  "go_live_checks"
+ ],
+ "fields": [
+  {
+   "fieldname": "integration_key",
+   "label": "Integration Key",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "provider_name",
+   "label": "Provider",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "category",
+   "label": "Category",
+   "fieldtype": "Select",
+   "options": "ERP & Accounting\nPayments\nGuest Messaging\nWebhooks\nChannel Manager\nDoor Locks\nEmail\nData Migration\nAPI\nBusiness Intelligence\nOther",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "maturity_status",
+   "label": "Maturity",
+   "fieldtype": "Select",
+   "options": "Shipped\nAdapter\nRecipe\nPlanned",
+   "default": "Planned",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled_in_product",
+   "label": "Available in Product",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "adapter_path",
+   "label": "Adapter Path",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "documentation",
+   "label": "Documentation",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "supports_test_connection",
+   "label": "Supports Test Connection",
+   "fieldtype": "Check",
+   "default": "0"
+  },
+  {
+   "fieldname": "financial_behavior",
+   "label": "Financial Behavior",
+   "fieldtype": "Select",
+   "options": "No Financial Posting\nERPNext Native\nExternal Handoff",
+   "default": "No Financial Posting",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "label": "Description",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "go_live_checks",
+   "label": "Default Go-live Checks",
+   "fieldtype": "Table",
+   "options": "Hotel Integration Go Live Check"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Integration Definition",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "read": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "provider_name",
+ "search_fields": "provider_name,category,maturity_status"
+}

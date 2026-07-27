@@ -1,0 +1,164 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-27 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "property",
+  "agent_type",
+  "enabled",
+  "mode",
+  "confidence_threshold",
+  "autopilot_allowed",
+  "schedule_cron",
+  "config_section",
+  "config_json",
+  "model_state_json",
+  "status_section",
+  "last_run_at",
+  "last_run_status",
+  "last_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "HIC-.YYYY.-.#####",
+   "default": "HIC-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "property",
+   "label": "Property",
+   "fieldtype": "Link",
+   "options": "Hotel Property",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "agent_type",
+   "label": "Agent Type",
+   "fieldtype": "Select",
+   "options": "Night Audit Anomaly\nPayment Control\nCancellation Risk\nHousekeeping Optimizer\nRevenue Briefing",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "enabled",
+   "label": "Enabled",
+   "fieldtype": "Check",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mode",
+   "label": "Mode",
+   "fieldtype": "Select",
+   "options": "Manual\nSuggest\nAutopilot",
+   "default": "Suggest",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "confidence_threshold",
+   "label": "Confidence Threshold",
+   "fieldtype": "Percent",
+   "default": "85"
+  },
+  {
+   "fieldname": "autopilot_allowed",
+   "label": "Autopilot Approved",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Requires explicit Production Gate approval. Disabled by default."
+  },
+  {
+   "fieldname": "schedule_cron",
+   "label": "Schedule",
+   "fieldtype": "Data",
+   "description": "Informational cron expression. Scheduler jobs remain controlled by hooks.py."
+  },
+  {
+   "fieldname": "config_section",
+   "label": "Configuration",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "config_json",
+   "label": "Configuration JSON",
+   "fieldtype": "Code",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "model_state_json",
+   "label": "Model State JSON",
+   "fieldtype": "Code",
+   "options": "JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_section",
+   "label": "Status",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "last_run_at",
+   "label": "Last Run At",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_run_status",
+   "label": "Last Run Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error",
+   "label": "Last Error",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 0,
+ "issingle": 0,
+ "is_submittable": 0,
+ "links": [],
+ "modified": "2026-07-27 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel PMS",
+ "name": "Hotel Intelligence Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "delete": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "Hotel Manager",
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "title_field": "agent_type",
+ "search_fields": "property,agent_type"
+}

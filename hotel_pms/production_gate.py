@@ -60,6 +60,9 @@ CHECKS=(
  ("Operational Readiness","TRAINING","Department training completed","Manual",1),
  ("Operational Readiness","SOP_ESCALATION","SOP, support roster, and escalation approved","Manual",1),
  ("Operational Readiness","GO_LIVE_PLAN","Freeze, cutover, rollback, and decision points approved","Manual",1),
+ ("Intelligence & Control","INTELLIGENCE_GOVERNANCE","No unsafe autopilot configuration or unresolved critical intelligence finding","Automated",1),
+ ("Intelligence & Control","PAYMENT_CORRECTION_CONTROL","No failed or unapproved payment correction blocks","Automated",1),
+ ("Integrations","INTEGRATION_READINESS","Live integrations have shipped/adapter maturity and all mandatory checks passed","Automated",1),
 )
 
 def _require_manager():
@@ -167,6 +170,9 @@ def execute_automated_checks(run_name, from_date=None, to_date=None):
     _check(doc,"CASHIER_RECON","Passed" if acct['open_cashier_variances']==0 else "Failed",acct['open_cashier_variances'],"0 unresolved shifts")
     stock=stock_reconciliation(doc.property,from_date,to_date); _check(doc,"STOCK_RECON","Passed" if not stock['blockers'] else "Failed",stock['blockers'],"0 blockers",json.dumps(stock,default=str))
     sec=public_security_check(doc.property); _check(doc,"PUBLIC_SECURITY","Passed" if not sec['blockers'] else "Failed",sec['blockers'],"0 blockers",json.dumps(sec,default=str))
+    intel=intelligence_governance_check(doc.property); _check(doc,"INTELLIGENCE_GOVERNANCE","Passed" if not intel['blockers'] else "Failed",intel['blockers'],"0 blockers",json.dumps(intel,default=str))
+    corrections=payment_correction_control_check(doc.property); _check(doc,"PAYMENT_CORRECTION_CONTROL","Passed" if not corrections['blockers'] else "Failed",corrections['blockers'],"0 blockers",json.dumps(corrections,default=str))
+    integrations=integration_readiness_check(doc.property); _check(doc,"INTEGRATION_READINESS","Passed" if not integrations['blockers'] else "Failed",integrations['blockers'],"0 blockers",json.dumps(integrations,default=str))
     _update_summary(doc); doc.flags.production_gate_internal_update=True; doc.save(ignore_permissions=True); return doc.as_dict()
 
 def accounting_reconciliation(property_name=None, from_date=None, to_date=None, max_variance=1):
@@ -321,3 +327,32 @@ def restore_smoke_check():
     required=("Hotel Property","Hotel Reservation","Hotel Folio","Hotel Room","Hotel PMS Settings")
     missing=[d for d in required if not frappe.db.exists("DocType",d)]
     return {"site":frappe.local.site,"app_version":__version__,"missing_doctypes":missing,"properties":frappe.db.count("Hotel Property"),"reservations":frappe.db.count("Hotel Reservation"),"ok":not missing}
+
+
+def intelligence_governance_check(property_name=None):
+    filters={"property":property_name} if property_name else {}
+    unsafe=frappe.get_all("Hotel Intelligence Config",filters={**filters,"mode":"Autopilot","autopilot_allowed":0},fields=["name","property","agent_type"],limit_page_length=0)
+    findings=frappe.get_all("Hotel Night Audit Finding",filters={**filters,"severity":"Critical","status":["in",["Open","Acknowledged"]]},fields=["name","finding_type","reference_doctype","reference_name"],limit_page_length=100)
+    blockers=len(unsafe)+len(findings)
+    return {"unsafe_autopilot":unsafe,"open_critical_findings":findings,"blockers":blockers}
+
+
+def payment_correction_control_check(property_name=None):
+    filters={"property":property_name} if property_name else {}
+    failed=frappe.get_all("Hotel Payment Correction",filters={**filters,"status":"Failed"},fields=["name","payment_entry","requested_action","error_message"],limit_page_length=100)
+    approved=frappe.get_all("Hotel Payment Correction",filters={**filters,"status":"Approved"},fields=["name","payment_entry","requested_action"],limit_page_length=100)
+    blockers=len(failed)+len(approved)
+    return {"failed":failed,"approved_not_executed":approved,"blockers":blockers}
+
+
+def integration_readiness_check(property_name=None):
+    filters={"property":property_name,"status":"Live"} if property_name else {"status":"Live"}
+    rows=frappe.get_all("Hotel Integration Connection",filters=filters,fields=["name","property","integration","status"],limit_page_length=0)
+    problems=[]
+    for row in rows:
+        definition=frappe.get_doc("Hotel Integration Definition",row.integration)
+        connection=frappe.get_doc("Hotel Integration Connection",row.name)
+        failed=[x.check_code for x in connection.go_live_checks if x.mandatory and x.status!="Passed"]
+        if definition.maturity_status not in ("Shipped","Adapter") or failed:
+            problems.append({"connection":row.name,"maturity":definition.maturity_status,"failed_checks":failed})
+    return {"live_connections":len(rows),"problems":problems,"blockers":len(problems)}

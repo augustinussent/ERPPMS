@@ -1,5 +1,5 @@
 frappe.provide('hotel_pms');
-frappe.ready(async function(){
+$(document).ready(async function(){
  if(!frappe.boot || !frappe.boot.hotel_pms_property_scope) return;
  const scope=frappe.boot.hotel_pms_property_scope, props=scope.properties||[];
  hotel_pms.current_property=scope.current_property;

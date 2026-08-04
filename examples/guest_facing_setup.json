@@ -15,8 +15,8 @@
   "hotel_property": {
     "public_booking_enabled": 1,
     "public_slug": "the-batu-hotel",
-    "public_name": "The Batu Hotel & Villas",
-    "public_meta_title": "Book Direct - The Batu Hotel & Villas",
+    "public_name": "Spencer Green Hotel",
+    "public_meta_title": "Book Direct - Spencer Green Hotel",
     "public_meta_description": "Book rooms directly with live availability and hotel rates.",
     "public_terms": "Configure approved booking terms before enabling public booking.",
     "public_privacy_notice": "Configure the approved privacy notice before enabling public booking."

@@ -1,4 +1,4 @@
-# Copyright (c) 2026, The Batu Hotel & Villas and contributors
+# Copyright (c) 2026, Spencer Green Hotel and contributors
 # For license information, please see license.txt
 
 import frappe

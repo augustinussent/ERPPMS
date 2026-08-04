@@ -1,7 +1,7 @@
 {
   "doctype": "Hotel Group Booking",
   "booking_name": "Rapat Kerja PT Contoh",
-  "property": "THE BATU Hotel",
+  "property": "Spencer Green Hotel",
   "status": "Tentative",
   "customer": "PT Contoh",
   "contact_name": "Bapak Andi",
@@ -15,7 +15,7 @@
   "hold_until": "2026-07-25 17:00:00",
   "room_blocks": [
     {
-      "room_type": "THE BATU Hotel-Twin Room",
+      "room_type": "Spencer Green Hotel-Twin Room",
       "arrival_date": "2026-08-10",
       "departure_date": "2026-08-12",
       "rooms_blocked": 20,

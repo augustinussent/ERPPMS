@@ -1,6 +1,6 @@
 app_name = "hotel_pms"
 app_title = "Hotel PMS"
-app_publisher = "The Batu Hotel & Villas"
+app_publisher = "Spencer Green Hotel"
 app_description = "Native hotel property management system integrated with ERPNext"
 app_email = "admin@example.com"
 app_license = "GPL-3.0"

@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "hotel_pms"
 authors = [
-    { name = "The Batu Hotel & Villas", email = "admin@example.com"}
+    { name = "Spencer Green Hotel", email = "admin@example.com"}
 ]
 description = "Native hotel PMS integrated with ERPNext"
 requires-python = ">=3.10"

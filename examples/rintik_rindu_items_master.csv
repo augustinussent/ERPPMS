@@ -1,0 +1,44 @@
+item_code,item_name,item_group,stock_uom,is_stock_item,is_sales_item,standard_rate
+FOOD-NASGOR,Nasi Goreng,Food,Nos,0,1,35000
+FOOD-MIEGOR,Mie Goreng,Food,Nos,0,1,35000
+FOOD-FRIES,French Fries,Food,Nos,0,1,20000
+FOOD-CIRENG,Cireng Bumbu Rujak,Food,Nos,0,1,17000
+FOOD-ROTI-COK,Roti Bakar Cokelat,Food,Nos,0,1,15000
+FOOD-ROTI-KEJU,Roti Bakar Keju,Food,Nos,0,1,15000
+FOOD-JAGUNG-MANIS,Jagung Bakar Manis,Food,Nos,0,1,12000
+FOOD-JAGUNG-PEDAS,Jagung Bakar Pedas,Food,Nos,0,1,12000
+FOOD-JAGUNG-MENTEGA,Jagung Bakar Mentega,Food,Nos,0,1,12000
+FOOD-DONAT,Donat Gula,Food,Nos,0,1,8000
+DIM-UDANG-KEJU,Udang Keju (3),Dimsum,Nos,0,1,18000
+DIM-DRUMSTICK,Drumstick (3),Dimsum,Nos,0,1,18000
+DIM-UDANG-RAMBUTAN,Udang Rambutan (3),Dimsum,Nos,0,1,18000
+DIM-SIOMAY-AYAM,Siomay Ayam (3),Dimsum,Nos,0,1,15000
+DIM-SIOMAY-MOZZA,Siomay Mozza (3),Dimsum,Nos,0,1,15000
+DIM-GYOZA,Gyoza (3),Dimsum,Nos,0,1,15000
+COF-ESPRESSO-HOT,Espresso Hot,Coffee,Nos,0,1,18000
+COF-AMERICANO-HOT,Americano Hot,Coffee,Nos,0,1,18000
+COF-AMERICANO-ICE,Americano Ice,Coffee,Nos,0,1,20000
+COF-LONGBLCK-HOT,Longblack Hot,Coffee,Nos,0,1,25000
+COF-LONGBLCK-ICE,Longblack Ice,Coffee,Nos,0,1,27000
+COF-SIGNATURE-HOT,Signature Hot,Coffee,Nos,0,1,25000
+COF-SIGNATURE-ICE,Signature Ice,Coffee,Nos,0,1,28000
+COF-AREN-HOT,RR Gula Aren Hot,Coffee,Nos,0,1,23000
+COF-AREN-ICE,RR Gula Aren Ice,Coffee,Nos,0,1,25000
+COF-CAPPUCCINO-HOT,Cappuccino Hot,Coffee,Nos,0,1,25000
+COF-CAPPUCCINO-ICE,Cappuccino Ice,Coffee,Nos,0,1,27000
+COF-LATTE-HOT,Latte Hot,Coffee,Nos,0,1,23000
+COF-LATTE-ICE,Latte Ice,Coffee,Nos,0,1,25000
+COF-CARAMEL-HOT,Caramel Latte Hot,Coffee,Nos,0,1,25000
+COF-CARAMEL-ICE,Caramel Latte Ice,Coffee,Nos,0,1,27000
+NON-CHOCOLATE-HOT,Chocolate Hot,Non-Coffee,Nos,0,1,23000
+NON-CHOCOLATE-ICE,Chocolate Ice,Non-Coffee,Nos,0,1,25000
+NON-TEA-HOT,Tea Hot,Non-Coffee,Nos,0,1,15000
+NON-TEA-ICE,Tea Ice,Non-Coffee,Nos,0,1,17000
+NON-MILKTEA-HOT,Milk Tea Hot,Non-Coffee,Nos,0,1,17000
+NON-MILKTEA-ICE,Milk Tea Ice,Non-Coffee,Nos,0,1,19000
+NON-MATCHA-HOT,Matcha Latte Hot,Non-Coffee,Nos,0,1,23000
+NON-MATCHA-ICE,Matcha Latte Ice,Non-Coffee,Nos,0,1,25000
+SMO-MANGO,Tropical Mango,Beverage,Nos,0,1,28000
+SMO-BERRY,Berry Blast,Beverage,Nos,0,1,30000
+MILK-CHOCO,Choco Rindu,Beverage,Nos,0,1,28000
+MILK-BANANA,Banana Caramel,Beverage,Nos,0,1,30000

@@ -1,0 +1,40 @@
+outlet,item_code,menu_name,rate,kitchen_station,preparation_minutes,available,allow_qr_ordering
+Kenari Restaurant,FOOD-KEN-NASGOR-SPESIAL,Nasi Goreng Spesial,38000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-NASGOR-SEAFOOD,Nasi Goreng Seafood,28000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-NASGOR-SPENCER,Nasi Goreng Spencer,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-NASGOR-SOSIS,Nasi Goreng Sosis,28000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-BAKMIE-GOR,Bakmie Goreng,28000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-KWETIAW-GOR,Kwetiaw Goreng,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-BIHUN-GOR,Bihun Goreng,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-DORI-BBQ,Dori Schnitzel BBQ,43000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-DORI-BLKPEP,Dori Schnitzel Blackpepper,43000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-DORI-THAI,Dori Crispy Sc Thai,40000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-GARLIC-CHICKEN,Garlic Chicken,35000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-AYAM-PANGGANG,Ayam Panggang Ketumbar,35000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-CHICKEN-STEAK,Crispy Chicken Steak,40000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-SUP-IGA,Sup Iga,43000,Main Kitchen,20,1,1
+Kenari Restaurant,FOOD-KEN-SOTO-AYAM,Soto Ayam Spesial,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-BOWL-BLKPEP,Chicken Blackpepper,33000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-BOWL-MATAH,Chicken Sambal Matah,33000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-CHICKEN-SANDWICH,Chicken Sandwich,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-BEEF-SANDWICH,Fried Smoked Beef Sandwich,35000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-CHICKEN-BURGER,Chicken Burger,40000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-CAPCAY-GOR,Capcay Goreng,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-CAPCAY-KUAH,Capcay Kuah,30000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-FRIES,French Fries,20000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-ONION-RING,Onion Ring,20000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-LUMPIA-SAYUR,Lumpia Sayur,23000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-BITTERBALLEN,Bitterballen,23000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-MENDOAN,Tempe Mendoan,18000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-MIX-PLATTER,Mix Platter,28000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-PISANG-GORENG,Pisang Goreng Coklat Keju,23000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-TAPE-GORENG,Tape Goreng Susu Keju,23000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-FISH-FRIES,Fish & Fries,28000,Main Kitchen,15,1,1
+Kenari Restaurant,FOOD-KEN-CIRENG-AYAM,Cireng Ayam,18000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-PANGSIT-GORENG,Pangsit Goreng,23000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-NASI-PUTIH,Nasi Putih,10000,Main Kitchen,5,1,1
+Kenari Restaurant,FOOD-KEN-TELUR-CEPLOK,Telur Ceplok,10000,Main Kitchen,5,1,1
+Kenari Restaurant,FOOD-KEN-TELUR-REBUS,Telur Rebus,20000,Main Kitchen,5,1,1
+Kenari Restaurant,FOOD-KEN-OMELETTE,Omelette,20000,Main Kitchen,10,1,1
+Kenari Restaurant,FOOD-KEN-TELUR-MATA-SAPI,Telur Mata Sapi,20000,Main Kitchen,5,1,1
+Kenari Restaurant,FOOD-KEN-SLICED-FRUIT,Sliced Fruit,20000,Main Kitchen,5,1,1

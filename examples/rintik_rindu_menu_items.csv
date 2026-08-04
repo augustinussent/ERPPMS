@@ -1,0 +1,44 @@
+outlet,item_code,menu_name,rate,kitchen_station,preparation_minutes,available,allow_qr_ordering
+Rintik Rindu Pool Cafe,FOOD-NASGOR,Nasi Goreng,35000,Hot Kitchen,15,1,1
+Rintik Rindu Pool Cafe,FOOD-MIEGOR,Mie Goreng,35000,Hot Kitchen,15,1,1
+Rintik Rindu Pool Cafe,FOOD-FRIES,French Fries,20000,Hot Kitchen,10,1,1
+Rintik Rindu Pool Cafe,FOOD-CIRENG,Cireng Bumbu Rujak,17000,Hot Kitchen,10,1,1
+Rintik Rindu Pool Cafe,FOOD-ROTI-COK,Roti Bakar Cokelat,15000,Hot Kitchen,10,1,1
+Rintik Rindu Pool Cafe,FOOD-ROTI-KEJU,Roti Bakar Keju,15000,Hot Kitchen,10,1,1
+Rintik Rindu Pool Cafe,FOOD-JAGUNG-MANIS,Jagung Bakar Manis,12000,Hot Kitchen,12,1,1
+Rintik Rindu Pool Cafe,FOOD-JAGUNG-PEDAS,Jagung Bakar Pedas,12000,Hot Kitchen,12,1,1
+Rintik Rindu Pool Cafe,FOOD-JAGUNG-MENTEGA,Jagung Bakar Mentega,12000,Hot Kitchen,12,1,1
+Rintik Rindu Pool Cafe,FOOD-DONAT,Donat Gula,8000,Pastry / Snack,5,1,1
+Rintik Rindu Pool Cafe,DIM-UDANG-KEJU,Udang Keju (3),18000,Dimsum Station,12,1,1
+Rintik Rindu Pool Cafe,DIM-DRUMSTICK,Drumstick (3),18000,Dimsum Station,12,1,1
+Rintik Rindu Pool Cafe,DIM-UDANG-RAMBUTAN,Udang Rambutan (3),18000,Dimsum Station,12,1,1
+Rintik Rindu Pool Cafe,DIM-SIOMAY-AYAM,Siomay Ayam (3),15000,Dimsum Station,10,1,1
+Rintik Rindu Pool Cafe,DIM-SIOMAY-MOZZA,Siomay Mozza (3),15000,Dimsum Station,10,1,1
+Rintik Rindu Pool Cafe,DIM-GYOZA,Gyoza (3),15000,Dimsum Station,12,1,1
+Rintik Rindu Pool Cafe,COF-ESPRESSO-HOT,Espresso Hot,18000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-AMERICANO-HOT,Americano Hot,18000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-AMERICANO-ICE,Americano Ice,20000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-LONGBLCK-HOT,Longblack Hot,25000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-LONGBLCK-ICE,Longblack Ice,27000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-SIGNATURE-HOT,Signature Hot,25000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-SIGNATURE-ICE,Signature Ice,28000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-AREN-HOT,RR Gula Aren Hot,23000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-AREN-ICE,RR Gula Aren Ice,25000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,COF-CAPPUCCINO-HOT,Cappuccino Hot,25000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-CAPPUCCINO-ICE,Cappuccino Ice,27000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-LATTE-HOT,Latte Hot,23000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-LATTE-ICE,Latte Ice,25000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-CARAMEL-HOT,Caramel Latte Hot,25000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,COF-CARAMEL-ICE,Caramel Latte Ice,27000,Bar / Beverage,7,1,1
+Rintik Rindu Pool Cafe,NON-CHOCOLATE-HOT,Chocolate Hot,23000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-CHOCOLATE-ICE,Chocolate Ice,25000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-TEA-HOT,Tea Hot,15000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-TEA-ICE,Tea Ice,17000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-MILKTEA-HOT,Milk Tea Hot,17000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-MILKTEA-ICE,Milk Tea Ice,19000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-MATCHA-HOT,Matcha Latte Hot,23000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,NON-MATCHA-ICE,Matcha Latte Ice,25000,Bar / Beverage,5,1,1
+Rintik Rindu Pool Cafe,SMO-MANGO,Tropical Mango,28000,Bar / Beverage,8,1,1
+Rintik Rindu Pool Cafe,SMO-BERRY,Berry Blast,30000,Bar / Beverage,8,1,1
+Rintik Rindu Pool Cafe,MILK-CHOCO,Choco Rindu,28000,Bar / Beverage,8,1,1
+Rintik Rindu Pool Cafe,MILK-BANANA,Banana Caramel,30000,Bar / Beverage,8,1,1

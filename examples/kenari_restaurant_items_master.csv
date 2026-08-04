@@ -1,0 +1,40 @@
+item_code,item_name,item_group,stock_uom,is_stock_item,is_sales_item,standard_rate
+FOOD-KEN-NASGOR-SPESIAL,Nasi Goreng Spesial,Food,Nos,0,1,38000
+FOOD-KEN-NASGOR-SEAFOOD,Nasi Goreng Seafood,Food,Nos,0,1,28000
+FOOD-KEN-NASGOR-SPENCER,Nasi Goreng Spencer,Food,Nos,0,1,30000
+FOOD-KEN-NASGOR-SOSIS,Nasi Goreng Sosis,Food,Nos,0,1,28000
+FOOD-KEN-BAKMIE-GOR,Bakmie Goreng,Food,Nos,0,1,28000
+FOOD-KEN-KWETIAW-GOR,Kwetiaw Goreng,Food,Nos,0,1,30000
+FOOD-KEN-BIHUN-GOR,Bihun Goreng,Food,Nos,0,1,30000
+FOOD-KEN-DORI-BBQ,Dori Schnitzel BBQ,Food,Nos,0,1,43000
+FOOD-KEN-DORI-BLKPEP,Dori Schnitzel Blackpepper,Food,Nos,0,1,43000
+FOOD-KEN-DORI-THAI,Dori Crispy Sc Thai,Food,Nos,0,1,40000
+FOOD-KEN-GARLIC-CHICKEN,Garlic Chicken,Food,Nos,0,1,35000
+FOOD-KEN-AYAM-PANGGANG,Ayam Panggang Ketumbar,Food,Nos,0,1,35000
+FOOD-KEN-CHICKEN-STEAK,Crispy Chicken Steak,Food,Nos,0,1,40000
+FOOD-KEN-SUP-IGA,Sup Iga,Food,Nos,0,1,43000
+FOOD-KEN-SOTO-AYAM,Soto Ayam Spesial,Food,Nos,0,1,30000
+FOOD-KEN-BOWL-BLKPEP,Chicken Blackpepper,Food,Nos,0,1,33000
+FOOD-KEN-BOWL-MATAH,Chicken Sambal Matah,Food,Nos,0,1,33000
+FOOD-KEN-CHICKEN-SANDWICH,Chicken Sandwich,Food,Nos,0,1,30000
+FOOD-KEN-BEEF-SANDWICH,Fried Smoked Beef Sandwich,Food,Nos,0,1,35000
+FOOD-KEN-CHICKEN-BURGER,Chicken Burger,Food,Nos,0,1,40000
+FOOD-KEN-CAPCAY-GOR,Capcay Goreng,Food,Nos,0,1,30000
+FOOD-KEN-CAPCAY-KUAH,Capcay Kuah,Food,Nos,0,1,30000
+FOOD-KEN-FRIES,French Fries,Food,Nos,0,1,20000
+FOOD-KEN-ONION-RING,Onion Ring,Food,Nos,0,1,20000
+FOOD-KEN-LUMPIA-SAYUR,Lumpia Sayur,Food,Nos,0,1,23000
+FOOD-KEN-BITTERBALLEN,Bitterballen,Food,Nos,0,1,23000
+FOOD-KEN-MENDOAN,Tempe Mendoan,Food,Nos,0,1,18000
+FOOD-KEN-MIX-PLATTER,Mix Platter,Food,Nos,0,1,28000
+FOOD-KEN-PISANG-GORENG,Pisang Goreng Coklat Keju,Food,Nos,0,1,23000
+FOOD-KEN-TAPE-GORENG,Tape Goreng Susu Keju,Food,Nos,0,1,23000
+FOOD-KEN-FISH-FRIES,Fish & Fries,Food,Nos,0,1,28000
+FOOD-KEN-CIRENG-AYAM,Cireng Ayam,Food,Nos,0,1,18000
+FOOD-KEN-PANGSIT-GORENG,Pangsit Goreng,Food,Nos,0,1,23000
+FOOD-KEN-NASI-PUTIH,Nasi Putih,Food,Nos,0,1,10000
+FOOD-KEN-TELUR-CEPLOK,Telur Ceplok,Food,Nos,0,1,10000
+FOOD-KEN-TELUR-REBUS,Telur Rebus,Food,Nos,0,1,20000
+FOOD-KEN-OMELETTE,Omelette,Food,Nos,0,1,20000
+FOOD-KEN-TELUR-MATA-SAPI,Telur Mata Sapi,Food,Nos,0,1,20000
+FOOD-KEN-SLICED-FRUIT,Sliced Fruit,Food,Nos,0,1,20000

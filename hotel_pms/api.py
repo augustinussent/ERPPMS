@@ -239,3 +239,9 @@ def _get_or_create_folio(reservation) -> "frappe.model.document.Document":
             raise
         return frappe.get_doc("Hotel Folio", folio_name)
 
+
+@frappe.whitelist()
+def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+    from hotel_pms.setup_rintik_rindu import seed_rintik_rindu_pos as _seed
+    return _seed(property_name=property_name, company=company)
+

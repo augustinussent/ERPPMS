@@ -129,6 +129,23 @@ def setup_pos_profiles_and_cashier(
     cashier_username: str = "augustinussent@gmail.com",
 ) -> dict:
     """Setup default Customer, Bank/Cash payment accounts, POS Profiles, Cashier roles, and link Outlets."""
+    # 0. Ensure Contact custom fields required by ERPNext party lookup
+    if not frappe.db.exists("Custom Field", {"dt": "Contact", "fieldname": "is_billing_contact"}):
+        try:
+            cf = frappe.get_doc({
+                "doctype": "Custom Field",
+                "dt": "Contact",
+                "fieldname": "is_billing_contact",
+                "label": "Is Billing Contact",
+                "fieldtype": "Check",
+                "insert_after": "is_primary_contact",
+                "default": "0"
+            })
+            cf.flags.ignore_permissions = True
+            cf.insert()
+        except Exception:
+            pass
+
     property_name, company_name = _ensure_property_and_company(property_name, company)
 
     # 1. Bank Account if missing

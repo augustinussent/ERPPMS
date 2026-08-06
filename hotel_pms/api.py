@@ -245,3 +245,15 @@ def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: s
     from hotel_pms.setup_rintik_rindu import seed_rintik_rindu_pos as _seed
     return _seed(property_name=property_name, company=company)
 
+
+@frappe.whitelist()
+def seed_kenari_restaurant_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+    from hotel_pms.setup_rintik_rindu import seed_kenari_restaurant_pos as _seed
+    return _seed(property_name=property_name, company=company)
+
+
+@frappe.whitelist()
+def seed_all_outlets_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+    from hotel_pms.setup_rintik_rindu import seed_all_outlets_pos as _seed
+    return _seed(property_name=property_name, company=company)
+

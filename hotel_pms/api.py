@@ -241,19 +241,42 @@ def _get_or_create_folio(reservation) -> "frappe.model.document.Document":
 
 
 @frappe.whitelist()
-def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+def setup_pos_profiles_and_cashier(
+    property_name: str = "Spencer Green Hotel",
+    company: str | None = None,
+    cashier_username: str = "augustinussent@gmail.com",
+) -> dict:
+    from hotel_pms.setup_rintik_rindu import setup_pos_profiles_and_cashier as _setup
+    return _setup(property_name=property_name, company=company, cashier_username=cashier_username)
+
+
+@frappe.whitelist()
+def seed_rintik_rindu_pos(
+    property_name: str = "Spencer Green Hotel",
+    company: str | None = None,
+    cashier_username: str = "augustinussent@gmail.com",
+) -> dict:
     from hotel_pms.setup_rintik_rindu import seed_rintik_rindu_pos as _seed
-    return _seed(property_name=property_name, company=company)
+    return _seed(property_name=property_name, company=company, cashier_username=cashier_username)
 
 
 @frappe.whitelist()
-def seed_kenari_restaurant_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+def seed_kenari_restaurant_pos(
+    property_name: str = "Spencer Green Hotel",
+    company: str | None = None,
+    cashier_username: str = "augustinussent@gmail.com",
+) -> dict:
     from hotel_pms.setup_rintik_rindu import seed_kenari_restaurant_pos as _seed
-    return _seed(property_name=property_name, company=company)
+    return _seed(property_name=property_name, company=company, cashier_username=cashier_username)
 
 
 @frappe.whitelist()
-def seed_all_outlets_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+def seed_all_outlets_pos(
+    property_name: str = "Spencer Green Hotel",
+    company: str | None = None,
+    cashier_username: str = "augustinussent@gmail.com",
+) -> dict:
     from hotel_pms.setup_rintik_rindu import seed_all_outlets_pos as _seed
-    return _seed(property_name=property_name, company=company)
+    return _seed(property_name=property_name, company=company, cashier_username=cashier_username)
+
 

@@ -73,7 +73,7 @@ KENARI_MENU = [
     {"code": "FOOD-KEN-GARLIC-CHICKEN", "name": "Garlic Chicken", "group": "Food", "rate": 35000, "station": "Main Kitchen", "prep": 20, "course": "Main"},
     {"code": "FOOD-KEN-AYAM-PANGGANG", "name": "Ayam Panggang Ketumbar", "group": "Food", "rate": 35000, "station": "Main Kitchen", "prep": 20, "course": "Main"},
     {"code": "FOOD-KEN-CHICKEN-STEAK", "name": "Crispy Chicken Steak", "group": "Food", "rate": 40000, "station": "Main Kitchen", "prep": 20, "course": "Main"},
-    {"code": "FOOD-KEN-SUP-IGA", "name": "Sup Iga", "group": "Food", "rate": 43000, "station": "Main Kitchen", "prep": 20, "course": "Main"},
+    {"code": "FOOD-KEN-SUP-IGA", "name": "Soup Iga", "group": "Food", "rate": 43000, "station": "Main Kitchen", "prep": 20, "course": "Main"},
     {"code": "FOOD-KEN-SOTO-AYAM", "name": "Soto Ayam Spesial", "group": "Food", "rate": 30000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
     {"code": "FOOD-KEN-BOWL-BLKPEP", "name": "Chicken Blackpepper", "group": "Food", "rate": 33000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
     {"code": "FOOD-KEN-BOWL-MATAH", "name": "Chicken Sambal Matah", "group": "Food", "rate": 33000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
@@ -82,7 +82,7 @@ KENARI_MENU = [
     {"code": "FOOD-KEN-CHICKEN-BURGER", "name": "Chicken Burger", "group": "Food", "rate": 40000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
     {"code": "FOOD-KEN-CAPCAY-GOR", "name": "Capcay Goreng", "group": "Food", "rate": 30000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
     {"code": "FOOD-KEN-CAPCAY-KUAH", "name": "Capcay Kuah", "group": "Food", "rate": 30000, "station": "Main Kitchen", "prep": 15, "course": "Main"},
-    {"code": "FOOD-KEN-FRIES", "name": "French Fries", "group": "Food", "rate": 20000, "station": "Main Kitchen", "prep": 10, "course": "Starter"},
+    {"code": "FOOD-KEN-FRIES", "name": "French Fries Kenari", "group": "Food", "rate": 20000, "station": "Main Kitchen", "prep": 10, "course": "Starter"},
     {"code": "FOOD-KEN-ONION-RING", "name": "Onion Ring", "group": "Food", "rate": 20000, "station": "Main Kitchen", "prep": 10, "course": "Starter"},
     {"code": "FOOD-KEN-LUMPIA-SAYUR", "name": "Lumpia Sayur", "group": "Food", "rate": 23000, "station": "Main Kitchen", "prep": 10, "course": "Starter"},
     {"code": "FOOD-KEN-BITTERBALLEN", "name": "Bitterballen", "group": "Food", "rate": 23000, "station": "Main Kitchen", "prep": 10, "course": "Starter"},
@@ -123,7 +123,169 @@ def _ensure_property_and_company(property_name: str = "Spencer Green Hotel", com
 
 
 @frappe.whitelist()
-def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+def setup_pos_profiles_and_cashier(
+    property_name: str = "Spencer Green Hotel",
+    company: str | None = None,
+    cashier_username: str = "augustinussent@gmail.com",
+) -> dict:
+    """Setup default Customer, Bank/Cash payment accounts, POS Profiles, Cashier roles, and link Outlets."""
+    property_name, company_name = _ensure_property_and_company(property_name, company)
+
+    # 1. Bank Account if missing
+    bank_acc = frappe.db.get_value("Account", {"account_name": "Bank Operasional", "company": company_name}, "name")
+    if not bank_acc:
+        b_doc = frappe.get_doc({
+            "doctype": "Account",
+            "account_name": "Bank Operasional",
+            "account_number": "1120.001",
+            "parent_account": "1120.000 - Bank - SGH" if frappe.db.exists("Account", "1120.000 - Bank - SGH") else None,
+            "company": company_name,
+            "root_type": "Asset",
+            "account_type": "Bank",
+            "currency": "IDR",
+            "is_group": 0,
+        })
+        b_doc.flags.ignore_permissions = True
+        b_doc.insert()
+        bank_acc = b_doc.name
+
+    # 2. Mode of Payment Accounts
+    if frappe.db.exists("Mode of Payment", "Cash"):
+        m_cash = frappe.get_doc("Mode of Payment", "Cash")
+        m_cash.accounts = [a for a in m_cash.accounts if a.company != company_name]
+        m_cash.append("accounts", {"company": company_name, "default_account": "1111.001 - Kas Kecil - SGH"})
+        m_cash.flags.ignore_permissions = True
+        m_cash.save()
+
+    if frappe.db.exists("Mode of Payment", "Credit Card") and bank_acc:
+        m_cc = frappe.get_doc("Mode of Payment", "Credit Card")
+        m_cc.accounts = [a for a in m_cc.accounts if a.company != company_name]
+        m_cc.append("accounts", {"company": company_name, "default_account": bank_acc})
+        m_cc.flags.ignore_permissions = True
+        m_cc.save()
+
+    # 3. Default Customer
+    cust_name = "Walk-in Customer"
+    if not frappe.db.exists("Customer", cust_name):
+        c_doc = frappe.get_doc({
+            "doctype": "Customer",
+            "customer_name": cust_name,
+            "customer_group": "Commercial" if frappe.db.exists("Customer Group", "Commercial") else "All Customer Groups",
+            "territory": "Indonesia" if frappe.db.exists("Territory", "Indonesia") else "All Territories",
+            "customer_type": "Individual",
+        })
+        c_doc.flags.ignore_permissions = True
+        c_doc.insert()
+
+    # 4. Cashier Roles
+    roles_to_add = ["Restaurant Cashier", "Restaurant Captain", "Hotel Manager", "Cashier", "Sales User", "Accounts User"]
+    if frappe.db.exists("User", cashier_username):
+        for r in roles_to_add:
+            if frappe.db.exists("Role", r) and not frappe.db.exists("Has Role", {"parent": cashier_username, "role": r}):
+                frappe.get_doc({
+                    "doctype": "Has Role",
+                    "parent": cashier_username,
+                    "parentfield": "roles",
+                    "parenttype": "User",
+                    "role": r
+                }).insert(ignore_permissions=True)
+        frappe.clear_cache(user=cashier_username)
+
+    # 5. POS Profile: Rintik Rindu
+    pos_rr_name = "POS-Rintik-Rindu"
+    if frappe.db.exists("POS Profile", pos_rr_name):
+        frappe.delete_doc("POS Profile", pos_rr_name, force=1)
+
+    pos_rr = frappe.get_doc({
+        "doctype": "POS Profile",
+        "name": pos_rr_name,
+        "company": company_name,
+        "warehouse": "Stores - SGH" if frappe.db.exists("Warehouse", "Stores - SGH") else None,
+        "customer": cust_name,
+        "selling_price_list": "Standard Selling",
+        "currency": "IDR",
+        "income_account": "4110.000 - Penjualan - SGH",
+        "expense_account": "5110.020 - Penyesuaian Stock - SGH" if frappe.db.exists("Account", "5110.020 - Penyesuaian Stock - SGH") else None,
+        "write_off_account": "5510.009 - Selisih Pembayaran Customer - SGH" if frappe.db.exists("Account", "5510.009 - Selisih Pembayaran Customer - SGH") else "4110.000 - Penjualan - SGH",
+        "write_off_cost_center": "Main - SGH",
+        "cost_center": "Main - SGH",
+        "allow_discount_change": 1,
+        "allow_rate_change": 0,
+        "applicable_for_users": [{"user": cashier_username, "default": 1}],
+        "payments": [
+            {"mode_of_payment": "Cash", "default": 1},
+            {"mode_of_payment": "Credit Card", "default": 0}
+        ]
+    })
+    pos_rr.flags.ignore_permissions = True
+    pos_rr.insert()
+
+    # Link Outlet Rintik Rindu
+    if frappe.db.exists("Hotel Outlet", "Rintik Rindu Pool Cafe"):
+        outlet_rr = frappe.get_doc("Hotel Outlet", "Rintik Rindu Pool Cafe")
+        outlet_rr.pos_profile = pos_rr_name
+        outlet_rr.warehouse = "Stores - SGH"
+        outlet_rr.cost_center = "Main - SGH"
+        outlet_rr.income_account = "4110.000 - Penjualan - SGH"
+        outlet_rr.default_customer = cust_name
+        outlet_rr.default_mode_of_payment = "Cash"
+        outlet_rr.selling_price_list = "Standard Selling"
+        outlet_rr.require_pos_opening_entry = 0
+        outlet_rr.flags.ignore_permissions = True
+        outlet_rr.save()
+
+    # 6. POS Profile: Kenari Restaurant
+    pos_kn_name = "POS-Kenari-Restaurant"
+    if frappe.db.exists("POS Profile", pos_kn_name):
+        frappe.delete_doc("POS Profile", pos_kn_name, force=1)
+
+    pos_kn = frappe.get_doc({
+        "doctype": "POS Profile",
+        "name": pos_kn_name,
+        "company": company_name,
+        "warehouse": "Stores - SGH" if frappe.db.exists("Warehouse", "Stores - SGH") else None,
+        "customer": cust_name,
+        "selling_price_list": "Standard Selling",
+        "currency": "IDR",
+        "income_account": "4110.000 - Penjualan - SGH",
+        "expense_account": "5110.020 - Penyesuaian Stock - SGH" if frappe.db.exists("Account", "5110.020 - Penyesuaian Stock - SGH") else None,
+        "write_off_account": "5510.009 - Selisih Pembayaran Customer - SGH" if frappe.db.exists("Account", "5510.009 - Selisih Pembayaran Customer - SGH") else "4110.000 - Penjualan - SGH",
+        "write_off_cost_center": "Main - SGH",
+        "cost_center": "Main - SGH",
+        "allow_discount_change": 1,
+        "allow_rate_change": 0,
+        "applicable_for_users": [{"user": cashier_username, "default": 0}],
+        "payments": [
+            {"mode_of_payment": "Cash", "default": 1},
+            {"mode_of_payment": "Credit Card", "default": 0}
+        ]
+    })
+    pos_kn.flags.ignore_permissions = True
+    pos_kn.insert()
+
+    if frappe.db.exists("Hotel Outlet", "Kenari Restaurant"):
+        outlet_kn = frappe.get_doc("Hotel Outlet", "Kenari Restaurant")
+        outlet_kn.pos_profile = pos_kn_name
+        outlet_kn.warehouse = "Stores - SGH"
+        outlet_kn.cost_center = "Main - SGH"
+        outlet_kn.income_account = "4110.000 - Penjualan - SGH"
+        outlet_kn.default_customer = cust_name
+        outlet_kn.default_mode_of_payment = "Cash"
+        outlet_kn.selling_price_list = "Standard Selling"
+        outlet_kn.require_pos_opening_entry = 0
+        outlet_kn.flags.ignore_permissions = True
+        outlet_kn.save()
+
+    return {
+        "status": "success",
+        "cashier": cashier_username,
+        "pos_profiles": [pos_rr_name, pos_kn_name],
+        "default_customer": cust_name,
+    }
+
+
+@frappe.whitelist()
+def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: str | None = None, cashier_username: str = "augustinussent@gmail.com") -> dict:
     """Idempotently seed Rintik Rindu Pool Cafe outlet, stations, tables, items, and menu items."""
     property_name, company_name = _ensure_property_and_company(property_name, company)
 
@@ -255,6 +417,8 @@ def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: s
             m_doc.insert()
             created_menu_items += 1
 
+    pos_info = setup_pos_profiles_and_cashier(property_name, company_name, cashier_username)
+
     return {
         "status": "success",
         "outlet": outlet_name,
@@ -262,11 +426,12 @@ def seed_rintik_rindu_pos(property_name: str = "Spencer Green Hotel", company: s
         "created_items": created_items,
         "created_menu_items": created_menu_items,
         "tables_created": 10,
+        "pos_setup": pos_info,
     }
 
 
 @frappe.whitelist()
-def seed_kenari_restaurant_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
+def seed_kenari_restaurant_pos(property_name: str = "Spencer Green Hotel", company: str | None = None, cashier_username: str = "augustinussent@gmail.com") -> dict:
     """Idempotently seed Kenari Restaurant outlet, tables, items, and menu items."""
     property_name, company_name = _ensure_property_and_company(property_name, company)
 
@@ -402,11 +567,13 @@ def seed_kenari_restaurant_pos(property_name: str = "Spencer Green Hotel", compa
 
 
 @frappe.whitelist()
-def seed_all_outlets_pos(property_name: str = "Spencer Green Hotel", company: str | None = None) -> dict:
-    """Seed both Rintik Rindu Pool Cafe and Kenari Restaurant."""
-    rr = seed_rintik_rindu_pos(property_name, company)
-    kn = seed_kenari_restaurant_pos(property_name, company)
+def seed_all_outlets_pos(property_name: str = "Spencer Green Hotel", company: str | None = None, cashier_username: str = "augustinussent@gmail.com") -> dict:
+    """Seed both Rintik Rindu Pool Cafe and Kenari Restaurant with POS profiles."""
+    rr = seed_rintik_rindu_pos(property_name, company, cashier_username)
+    kn = seed_kenari_restaurant_pos(property_name, company, cashier_username)
+    pos_info = setup_pos_profiles_and_cashier(property_name, company, cashier_username)
     return {
         "rintik_rindu": rr,
         "kenari_restaurant": kn,
+        "pos_setup": pos_info,
     }
